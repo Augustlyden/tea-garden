@@ -1,5 +1,7 @@
 import pg from 'pg';
 import dotenv from 'dotenv';
+import fs from 'fs';
+import path from 'path';
 
 dotenv.config();
 
@@ -9,6 +11,14 @@ if (!connectionString) {
   throw new Error("DATABASE_URL is missing");
 }
 
+const caCertPath = path.join(process.cwd(), 'certs', 'ca.pem');
+const caCert = fs.readFileSync(caCertPath, 'utf8');
+
 export const pool = new pg.Pool({
-  connectionString: connectionString
+  connectionString: connectionString,
+
+  ssl: {
+    rejectUnauthorized: true,
+    ca: caCert
+  }
 });
