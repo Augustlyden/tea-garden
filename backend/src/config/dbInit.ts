@@ -1,6 +1,6 @@
 import fs from 'fs';
 import path from 'path';
-import { pool } from './database';
+import pool from './database';
 
 export const initDatabase = async (): Promise<void> => {
   try {

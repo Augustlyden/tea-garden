@@ -14,7 +14,7 @@ if (!connectionString) {
 const caCertPath = path.join(process.cwd(), 'certs', 'ca.pem');
 const caCert = fs.readFileSync(caCertPath, 'utf8');
 
-export const pool = new pg.Pool({
+const pool = new pg.Pool({
   connectionString: connectionString,
 
   ssl: {
@@ -22,3 +22,5 @@ export const pool = new pg.Pool({
     ca: caCert
   }
 });
+
+export default pool;
