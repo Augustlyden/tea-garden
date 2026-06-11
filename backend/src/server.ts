@@ -2,6 +2,7 @@ import express from "express";
 import cors from 'cors';
 import dotenv from 'dotenv';
 import { initDatabase } from "./config/dbInit";
+import adminProductRoutes from './routes/adminProductRoutes';
 
 dotenv.config();
 
@@ -10,6 +11,8 @@ const PORT = process.env.PORT || 5000;
 
 app.use(cors({ origin: 'http://localhost:5173' }));
 app.use(express.json());
+
+app.use('/api/admin/products', adminProductRoutes);
 
 app.get('/api/health', (req, res) => {
   res.json({ success: true, message: 'Server is running' });
