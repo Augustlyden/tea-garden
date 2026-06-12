@@ -26,7 +26,7 @@ CREATE TABLE IF NOT EXISTS products (
   category_id INT NOT NULL REFERENCES categories(id) ON DELETE RESTRICT,
   price NUMERIC(10, 2) NOT NULL,
   in_stock INT NOT NULL,
-  img_url VARCHAR(255),
+  img_url VARCHAR(255) NOT NULL,
   description TEXT,
   attributes JSONB,
   is_available BOOLEAN DEFAULT TRUE
