@@ -24,7 +24,7 @@ export const createProduct = async (
 
     productData.imgUrl = `/uploads/${file.filename}`;
 
-    if (productData.attributes) {
+    if (productData.attributes && typeof productData.attributes === 'string') {
       productData.attributes = JSON.parse(productData.attributes as any)
     }
 
