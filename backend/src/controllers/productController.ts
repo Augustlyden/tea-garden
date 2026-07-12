@@ -8,9 +8,24 @@ export const createProduct = async (
 ) => {
   try {
     const productData = req.body;
+    const file = req.file as Express.Multer.File;
+
+    if (!file) {
+      return res.status(400).json({ success: false, error: 'Produktbild krävs.' })
+    }
+
+      productData.price = Number(productData.price);
+      productData.inStock = Number(productData.inStock);
+      productData.categoryId = Number(productData.categoryId);
 
     if (productData.price < 0 || productData.inStock < 0) {
       return res.status(400).json({ success: false, error: 'Pris och/eller lager kan inte vara ett negativt tal.'});
+    }
+
+    productData.imgUrl = `/uploads/${file.filename}`;
+
+    if (productData.attributes && typeof productData.attributes === 'string') {
+      productData.attributes = JSON.parse(productData.attributes as any)
     }
 
     const newProduct = await Product.create(productData);
