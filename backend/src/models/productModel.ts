@@ -22,8 +22,30 @@ class Product {
     );
 
     const row = result.rows[0];
+    return formatProduct(row);
+  }
 
-    return formatProduct(row)
+  static async findAllAdmin(): Promise<ProductInstance[]> {
+    const result = await db.query(`
+      SELECT 
+        p.id,
+        p.product_name,
+        p.category_id,
+        p.price,
+        p.in_stock,
+        p.img_url,
+        p.description,
+        p.attributes,
+        p.is_available,
+        c.type AS type
+      FROM products p
+      JOIN categories c ON p.category_id = c.id
+      ORDER BY p.product_name;
+      `
+    );
+
+    const rows = result.rows;
+    return rows.map(row => formatProduct(row));
   }
 }
 

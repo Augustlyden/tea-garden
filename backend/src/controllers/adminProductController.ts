@@ -36,3 +36,13 @@ export const createProduct = async (
     res.status(500).json({ success: false, error: 'Misslyckades att skapa produkt' });
   }
 }
+
+export const getAllProducts = async (req: Request, res: Response) => {
+  try {
+    const products = await Product.findAllAdmin();
+    res.json({ success: true, data: products });
+  } catch (error) {
+    console.error('Error while fetching products:', error);
+    res.status(500).json({ success: false, error: 'Misslyckades att hämta produkter' });
+  }
+}
