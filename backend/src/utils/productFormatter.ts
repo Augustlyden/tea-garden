@@ -10,6 +10,7 @@ export const formatProduct = (data: ProductDatabaseRow) => {
     imgUrl: data.img_url,
     desc: data.description,
     attributes: data.attributes,
-    isAvailable: data.is_available
+    isAvailable: data.is_available,
+    categoryName: data.type
   }
 }

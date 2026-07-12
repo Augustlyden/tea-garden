@@ -36,3 +36,32 @@ export const createProduct = async (
     res.status(500).json({ success: false, error: 'Misslyckades att skapa produkt' });
   }
 }
+
+export const getAllProductsAdmin = async (req: Request, res: Response) => {
+  try {
+    const products = await Product.findAllAdmin();
+    res.json({ success: true, data: products });
+  } catch (error) {
+    console.error('Error while fetching products:', error);
+    res.status(500).json({ success: false, error: 'Misslyckades att hämta produkter' });
+  }
+}
+
+export const getProductByIdAdmin = async (
+  req: Request<{ id: string }>,
+  res: Response
+) => {
+  try {
+    const productId = Number(req.params.id);
+    const product = await Product.findByIdAdmin(productId);
+
+    if (!product) {
+      return res.status(404).json({ success: false, error: 'Produkten hittades inte.' });
+    }
+
+    res.json({ success: true, data: product });
+  } catch (error) {
+    console.error('Error while fetching product:', error);
+    return res.status(500).json({ success: false, error: 'Misslyckades att hämta produkt' });
+  }
+}

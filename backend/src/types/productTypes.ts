@@ -19,6 +19,7 @@ export interface ProductInstance {
   desc: string | null;
   attributes: Record<string, any> | null;
   isAvailable: boolean;
+  categoryName?: string;
 }
 
 export interface ProductDatabaseRow {
@@ -31,4 +32,5 @@ export interface ProductDatabaseRow {
   description: string | null;
   attributes: Record<string, any> | null;
   is_available: boolean;
+  type?: string;
 }
