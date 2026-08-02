@@ -14,6 +14,7 @@ class Product {
       p.description,
       p.attributes,
       p.is_available,
+      p.is_deleted,
       c.type AS type
     FROM products p
     JOIN categories c ON p.category_id = c.id
@@ -43,6 +44,7 @@ class Product {
   static async findAllAdmin(): Promise<ProductInstance[]> {
     const result = await db.query(`
       ${Product.BASE_ADMIN_SELECT}
+      WHERE is_deleted = false
       ORDER BY p.product_name;
       `
     );
@@ -91,6 +93,22 @@ class Product {
     const row = result.rows[0];
     if (!row) return null;
     return formatProduct(row)
+  }
+
+  static async delete(id: number) {
+    const result = await db.query(`
+      UPDATE products
+      SET 
+        is_available = false,
+        is_deleted = true 
+      WHERE id = $1
+      RETURNING *;
+      `, [id]
+    );
+
+    const row = result.rows[0];
+    if (!row) return null;
+    return formatProduct(row);
   }
 }
 

@@ -29,7 +29,8 @@ CREATE TABLE IF NOT EXISTS products (
   img_url VARCHAR(255) NOT NULL,
   description TEXT,
   attributes JSONB,
-  is_available BOOLEAN DEFAULT TRUE
+  is_available BOOLEAN DEFAULT TRUE,
+  is_deleted BOOLEAN DEFAULT FALSE
 );
 
 CREATE TABLE IF NOT EXISTS cart (
