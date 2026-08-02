@@ -1,5 +1,5 @@
 import db from '../config/database'
-import { ProductAttributes, ProductDatabaseRow, ProductInstance } from '../types/productTypes'
+import { ProductAttributes, ProductInstance } from '../types/productTypes'
 import { formatProduct } from '../utils/productFormatter';
 
 class Product {
@@ -61,6 +61,36 @@ class Product {
     const row = result.rows[0];
     if (!row) return null;
     return formatProduct(row);
+  }
+
+  static async update(id: number, productData: Partial<ProductAttributes>): Promise<ProductInstance | null> {
+    const result = await db.query(`
+      UPDATE products
+      SET 
+        product_name = COALESCE($1, product_name),
+        category_id = COALESCE($2, category_id),
+        price = COALESCE($3, price),
+        in_stock = COALESCE($4, in_stock),
+        img_url = COALESCE($5, img_url),
+        description = COALESCE($6, description),
+        attributes = COALESCE($7, attributes)
+      WHERE id = $8
+      RETURNING *;
+      `, [
+          productData.productName, 
+          productData.categoryId, 
+          productData.price, 
+          productData.inStock,
+          productData.imgUrl,
+          productData.desc,
+          productData.attributes,
+          id
+        ]
+    );
+
+    const row = result.rows[0];
+    if (!row) return null;
+    return formatProduct(row)
   }
 }
 

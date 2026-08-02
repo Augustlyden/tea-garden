@@ -14,18 +14,18 @@ export const createProduct = async (
       return res.status(400).json({ success: false, error: 'Produktbild krävs.' })
     }
 
-      productData.price = Number(productData.price);
-      productData.inStock = Number(productData.inStock);
-      productData.categoryId = Number(productData.categoryId);
+    productData.price = Number(productData.price);
+    productData.inStock = Number(productData.inStock);
+    productData.categoryId = Number(productData.categoryId);
 
     if (productData.price < 0 || productData.inStock < 0) {
-      return res.status(400).json({ success: false, error: 'Pris och/eller lager kan inte vara ett negativt tal.'});
+      return res.status(400).json({ success: false, error: 'Pris och/eller lagersaldo får inte vara negativt.'});
     }
 
     productData.imgUrl = `/uploads/${file.filename}`;
 
     if (productData.attributes && typeof productData.attributes === 'string') {
-      productData.attributes = JSON.parse(productData.attributes as any)
+      productData.attributes = JSON.parse(productData.attributes as any);
     }
 
     const newProduct = await Product.create(productData);
@@ -63,5 +63,47 @@ export const getProductByIdAdmin = async (
   } catch (error) {
     console.error('Error while fetching product:', error);
     return res.status(500).json({ success: false, error: 'Misslyckades att hämta produkt' });
+  }
+}
+
+export const updateProduct = async (
+  req: Request<{ id: string }, {}, Partial<ProductAttributes>>,
+  res: Response
+) => {
+  try {
+    const productId = Number(req.params.id);
+    const productData = req.body;
+    const file = req.file as Express.Multer.File;
+    const numberFields: (keyof ProductAttributes)[] = [
+      'price', 'inStock', 'categoryId'
+    ]
+
+    if (file) {
+      productData.imgUrl = `/uploads/${file.filename}`;
+    } 
+
+    for (const field of numberFields) {
+      if (productData[field] !== undefined) {
+        productData[field] = Number(productData[field]) as any;
+      }
+    }
+
+    if (productData.price !== undefined && productData.price < 0) {
+      return res.status(400).json({ success: false, error: 'Priset får inte vara negativt.'});
+    }
+    if (productData.inStock !== undefined && productData.inStock < 0) {
+      return res.status(400).json({ success: false, error: 'Lagersaldot får inte vara negativt.'});
+    }
+
+    if (productData.attributes !== undefined && typeof productData.attributes === 'string') {
+      productData.attributes = JSON.parse(productData.attributes as any);
+    }
+
+    const product = await Product.update(productId, productData);
+    res.json({ success: true, data: product });
+
+  } catch (error) {
+    console.error('Error while updating product:', error);
+    res.status(500).json({ success: false, error: 'Misslyckades att uppdatera produkt'})
   }
 }
