@@ -7,6 +7,7 @@ export interface ProductAttributes {
   desc: string | null;
   attributes: Record<string, any> | null;
   isAvailable?: boolean;
+  isDeleted?: boolean;
 }
 
 export interface ProductInstance {
@@ -20,6 +21,7 @@ export interface ProductInstance {
   attributes: Record<string, any> | null;
   isAvailable: boolean;
   categoryName?: string;
+  isDeleted: boolean;
 }
 
 export interface ProductDatabaseRow {
@@ -33,4 +35,10 @@ export interface ProductDatabaseRow {
   attributes: Record<string, any> | null;
   is_available: boolean;
   type?: string;
+  is_deleted: boolean;
+}
+
+export interface ValidationResult {
+  valid: boolean;
+  error?: string;
 }

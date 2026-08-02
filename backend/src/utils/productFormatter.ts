@@ -11,6 +11,7 @@ export const formatProduct = (data: ProductDatabaseRow) => {
     desc: data.description,
     attributes: data.attributes,
     isAvailable: data.is_available,
-    categoryName: data.type
+    categoryName: data.type,
+    isDeleted: data.is_deleted
   }
 }

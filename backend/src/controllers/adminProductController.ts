@@ -1,6 +1,7 @@
 import Product from "../models/productModel";
 import { Request, Response } from "express";
 import { ProductAttributes } from "../types/productTypes";
+import { parseProductAttributes, validateProductNumbers } from "../utils/productValidator";
 
 export const createProduct = async (
   req: Request<{}, {}, ProductAttributes>,
@@ -14,12 +15,14 @@ export const createProduct = async (
       return res.status(400).json({ success: false, error: 'Produktbild krävs.' })
     }
 
-    productData.price = Number(productData.price);
-    productData.inStock = Number(productData.inStock);
-    productData.categoryId = Number(productData.categoryId);
+    const numValidation = validateProductNumbers(productData);
+    if (!numValidation.valid) {
+      return res.status(400).json({ success: false, error: numValidation.error });
+    }
 
-    if (productData.price < 0 || productData.inStock < 0) {
-      return res.status(400).json({ success: false, error: 'Pris och/eller lagersaldo får inte vara negativt.'});
+    const attrValidation = parseProductAttributes(productData);
+    if (!attrValidation.valid) {
+      return res.status(400).json({ success: false, error: attrValidation.error });
     }
 
     productData.imgUrl = `/uploads/${file.filename}`;
@@ -53,6 +56,10 @@ export const getProductByIdAdmin = async (
 ) => {
   try {
     const productId = Number(req.params.id);
+    if (isNaN(productId)) {
+      return res.status(400).json({ success: false, error: 'Ogiltigt produkt-ID' });
+    } 
+
     const product = await Product.findByIdAdmin(productId);
 
     if (!product) {
@@ -72,38 +79,58 @@ export const updateProduct = async (
 ) => {
   try {
     const productId = Number(req.params.id);
+    if (isNaN(productId)) {
+      return res.status(400).json({ success: false, error: 'Ogiltigt produkt-ID' });
+    }
+
     const productData = req.body;
     const file = req.file as Express.Multer.File;
-    const numberFields: (keyof ProductAttributes)[] = [
-      'price', 'inStock', 'categoryId'
-    ]
 
     if (file) {
       productData.imgUrl = `/uploads/${file.filename}`;
     } 
 
-    for (const field of numberFields) {
-      if (productData[field] !== undefined) {
-        productData[field] = Number(productData[field]) as any;
-      }
+    const numValidation = validateProductNumbers(productData, true);
+    if (!numValidation.valid) {
+      return res.status(400).json({ success: false, error: numValidation.error });
     }
 
-    if (productData.price !== undefined && productData.price < 0) {
-      return res.status(400).json({ success: false, error: 'Priset får inte vara negativt.'});
-    }
-    if (productData.inStock !== undefined && productData.inStock < 0) {
-      return res.status(400).json({ success: false, error: 'Lagersaldot får inte vara negativt.'});
-    }
-
-    if (productData.attributes !== undefined && typeof productData.attributes === 'string') {
-      productData.attributes = JSON.parse(productData.attributes as any);
+    const attrValidation = parseProductAttributes(productData);
+    if (!attrValidation.valid) {
+      return res.status(400).json({ success: false, error: attrValidation.error });
     }
 
     const product = await Product.update(productId, productData);
-    res.json({ success: true, data: product });
+    if (!product) {
+      return res.status(404).json({ success: false, error: 'Produkten hittades ej' });
+    }
 
+    res.json({ success: true, data: product });
   } catch (error) {
     console.error('Error while updating product:', error);
     res.status(500).json({ success: false, error: 'Misslyckades att uppdatera produkt'})
+  }
+}
+
+export const deleteProduct = async ( 
+  req: Request<{ id: string }>,
+  res: Response
+) => {
+  try {
+    const productId = Number(req.params.id);
+
+    if (isNaN(productId)) {
+      return res.status(400).json({ success: false, error: 'Ogiltigt produkt-ID' });
+    }
+    const deletedProduct = await Product.delete(productId);
+
+    if (!deletedProduct) {
+      return res.status(404).json({ success: false, error: 'Produkten hittades ej' });
+    }
+
+    res.json({ success: true, message: 'Produkten raderad', data: deletedProduct });
+  } catch (error) {
+    console.error('Error while deleting product', error);
+    res.status(500).json({ success: false, error: 'Misslyckades att radera produkt' });
   }
 }
