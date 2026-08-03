@@ -1,4 +1,4 @@
-import Product from "../models/productModel";
+import Product from "../models/adminProductModel";
 import { Request, Response } from "express";
 import { ProductAttributes } from "../types/productTypes";
 import { parseProductAttributes, validateProductNumbers } from "../utils/productValidator";

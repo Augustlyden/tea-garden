@@ -1,5 +1,5 @@
-import db from '../config/database'
-import { ProductAttributes, ProductInstance } from '../types/productTypes'
+import db from '../config/database';
+import { ProductAttributes, ProductInstance } from '../types/productTypes';
 import { formatProduct } from '../utils/productFormatter';
 
 class Product {
@@ -18,7 +18,7 @@ class Product {
       c.type AS type
     FROM products p
     JOIN categories c ON p.category_id = c.id
-  `
+  `;
   static async create(productData: ProductAttributes): Promise<ProductInstance> {
     const result = await db.query(`
       INSERT INTO products
@@ -112,4 +112,4 @@ class Product {
   }
 }
 
-export default Product
+export default Product;
