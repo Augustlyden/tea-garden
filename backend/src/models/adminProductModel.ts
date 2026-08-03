@@ -1,5 +1,5 @@
-import db from '../config/database'
-import { ProductAttributes, ProductInstance } from '../types/productTypes'
+import db from '../config/database';
+import { ProductAttributes, ProductInstance } from '../types/productTypes';
 import { formatProduct } from '../utils/productFormatter';
 
 class Product {
@@ -18,7 +18,7 @@ class Product {
       c.type AS type
     FROM products p
     JOIN categories c ON p.category_id = c.id
-  `
+  `;
   static async create(productData: ProductAttributes): Promise<ProductInstance> {
     const result = await db.query(`
       INSERT INTO products
@@ -75,8 +75,9 @@ class Product {
         in_stock = COALESCE($4, in_stock),
         img_url = COALESCE($5, img_url),
         description = COALESCE($6, description),
-        attributes = COALESCE($7, attributes)
-      WHERE id = $8
+        attributes = COALESCE($7, attributes),
+        is_available = COALESCE($8, is_available)
+      WHERE id = $9
       RETURNING *;
       `, [
           productData.productName, 
@@ -86,6 +87,7 @@ class Product {
           productData.imgUrl,
           productData.desc,
           productData.attributes,
+          productData.isAvailable,
           id
         ]
     );
@@ -112,4 +114,4 @@ class Product {
   }
 }
 
-export default Product
+export default Product;

@@ -1,11 +1,10 @@
-import Product from "../models/productModel";
+import Product from "../models/adminProductModel";
 import { Request, Response } from "express";
 import { ProductAttributes } from "../types/productTypes";
 import { parseProductAttributes, validateProductNumbers } from "../utils/productValidator";
 
 export const createProduct = async (
-  req: Request<{}, {}, ProductAttributes>,
-  res: Response
+  req: Request<{}, {}, ProductAttributes>, res: Response
 ) => {
   try {
     const productData = req.body;
@@ -51,8 +50,7 @@ export const getAllProductsAdmin = async (req: Request, res: Response) => {
 }
 
 export const getProductByIdAdmin = async (
-  req: Request<{ id: string }>,
-  res: Response
+  req: Request<{ id: string }>, res: Response
 ) => {
   try {
     const productId = Number(req.params.id);
@@ -63,7 +61,7 @@ export const getProductByIdAdmin = async (
     const product = await Product.findByIdAdmin(productId);
 
     if (!product) {
-      return res.status(404).json({ success: false, error: 'Produkten hittades inte.' });
+      return res.status(404).json({ success: false, error: 'Produkten hittades ej.' });
     }
 
     res.json({ success: true, data: product });
@@ -113,8 +111,7 @@ export const updateProduct = async (
 }
 
 export const deleteProduct = async ( 
-  req: Request<{ id: string }>,
-  res: Response
+  req: Request<{ id: string }>, res: Response
 ) => {
   try {
     const productId = Number(req.params.id);
