@@ -16,4 +16,32 @@ class Cart {
     const row = result.rows[0];
     return formatCart(row);
   }
+
+  static async decrease(id: number, cartToken: string): Promise<CartInstance | null> {
+    const result = await db.query(`
+      UPDATE cart
+      SET quantity = quantity - 1
+      WHERE id = $1 AND cart_token = $2 AND quantity > 1
+      RETURNING *;
+      `, [id, cartToken]
+    );
+
+    const row = result.rows[0];
+    if (!row) return null;
+    return formatCart(row);
+  }
+
+  static async delete(id: number, cartToken: string): Promise<CartInstance | null> {
+    const result = await db.query(`
+      DELETE FROM cart WHERE id = $1 AND cart_token = $2
+      RETURNING *;
+      `, [id, cartToken]
+    );
+
+    const row = result.rows[0];
+    if (!row) return null;
+    return formatCart(row);
+  }
 }
+
+export default Cart;
