@@ -4,6 +4,7 @@ import dotenv from 'dotenv';
 import path from "path";
 import { initDatabase } from "./config/dbInit";
 import adminProductRoutes from './routes/adminProductRoutes';
+import userProductRoutes from './routes/userProductRoutes';
 
 dotenv.config();
 
@@ -16,6 +17,7 @@ app.use(express.json());
 app.use('/uploads', express.static(path.join(process.cwd(), 'public/uploads')));
 
 app.use('/api/admin/products', adminProductRoutes);
+app.use('/api/user/products', userProductRoutes);
 
 app.get('/api/health', (req, res) => {
   res.json({ success: true, message: 'Server is running' });

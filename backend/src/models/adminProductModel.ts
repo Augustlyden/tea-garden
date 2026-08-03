@@ -75,8 +75,9 @@ class Product {
         in_stock = COALESCE($4, in_stock),
         img_url = COALESCE($5, img_url),
         description = COALESCE($6, description),
-        attributes = COALESCE($7, attributes)
-      WHERE id = $8
+        attributes = COALESCE($7, attributes),
+        is_available = COALESCE($8, is_available)
+      WHERE id = $9
       RETURNING *;
       `, [
           productData.productName, 
@@ -86,6 +87,7 @@ class Product {
           productData.imgUrl,
           productData.desc,
           productData.attributes,
+          productData.isAvailable,
           id
         ]
     );

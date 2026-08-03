@@ -21,7 +21,7 @@ class Product {
   static async findAllUser(): Promise<ProductInstance[]> {
     const result = await db.query(`
       ${Product.BASE_USER_SELECT}
-      WHERE is_deleted = false AND is_avaible = true
+      WHERE is_deleted = false AND is_available = true
       ORDER BY p.product_name;
       `
     );
