@@ -7,7 +7,7 @@ export const getAllProductsUser = async (req: Request, res: Response) => {
     res.json({ success: true, data: products });
   } catch (error) {
     console.error('Error while fetching products:', error);
-    res.status(500).json({ success: false, error: 'Misslyckades att hämta produkter' });
+    return res.status(500).json({ success: false, error: 'Misslyckades att hämta produkter' });
   }
 }
 

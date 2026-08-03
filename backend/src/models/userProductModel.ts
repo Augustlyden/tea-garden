@@ -33,7 +33,7 @@ class Product {
   static async findByIdUser(id: number): Promise<ProductInstance | null> {
     const result = await db.query(`
       ${Product.BASE_USER_SELECT}
-      WHERE p.id = $1;
+      WHERE p.id = $1 AND is_deleted = false AND is_available = true;
       `, [id]
     );
 
