@@ -1,10 +1,10 @@
 import Cart from "../models/cartModel";
 import { Request, Response } from "express";
-import { CartInstance } from "../types/cartTypes";
+import { CartInstance, CartRequest } from "../types/cartTypes";
 import Product from "../models/adminProductModel";
 
 export const addToCart = async (
-  req: Request<{ id: string }, {}, CartInstance>, res: Response
+  req: CartRequest<{}, {}, CartInstance>, res: Response
 ) => {
   try {
     const cartData = req.body;
@@ -39,7 +39,7 @@ export const addToCart = async (
   }
 }
 
-export const getCartByToken = async (req: Request, res: Response) => {
+export const getCartByToken = async (req: CartRequest, res: Response) => {
   try {
     if (!req.cartToken) {
       return res.status(500).json({ success: false, error: 'Något gick fel' });
@@ -49,5 +49,55 @@ export const getCartByToken = async (req: Request, res: Response) => {
   } catch (error) {
     console.error('Error while fecthing cart:', error);
     res.status(500).json({ success: false, error: 'Misslyckades att hämta kundvagn' });
+  }
+}
+
+export const removeFromCart = async (req: CartRequest<{ id: string }>, res: Response) => {
+  try {
+    if (!req.cartToken) {
+      return res.status(500).json({ success: false, error: 'Något gick fel' });
+    }
+
+    const cartId = Number(req.params.id);
+    if (Number.isNaN(cartId)) {
+      return res.status(400).json({ success: false, error: 'Ogiltigt kundvagn-ID' });
+    }
+
+    const deleted = await Cart.delete(cartId, req.cartToken);
+    if (!deleted) {
+      return res.status(404).json({ success: false, error: 'Varan hittades ej' });
+    }
+
+    res.json({ success: true, message: 'Vara raderad', data: deleted });
+  } catch (error) {
+    console.error('Error while deleting cart', error);
+    res.status(500).json({ success: false, error: 'Misslyckades att radera vara' });
+  }
+}
+
+export const decreaseQuantity = async (req: CartRequest<{ id: string }>, res: Response) => {
+  try {
+    if (!req.cartToken) {
+      return res.status(500).json({ success: false, error: 'Något gick fel' });
+    }
+
+    const cartId = Number(req.params.id);
+    if (Number.isNaN(cartId)) {
+      return res.status(400).json({ success: false, error: 'Ogiltigt kundvagn-ID' });
+    }
+
+    const decreased = await Cart.decrease(cartId, req.cartToken);
+    if (decreased) {
+      return res.json({ success: true, data: decreased });
+    }
+
+    const deleted = await Cart.delete(cartId, req.cartToken);
+    if (!deleted) {
+      return res.status(404).json({ success: false, error: 'Varan hittades ej' });
+    }
+
+    res.json({ success: true, message: 'Vara raderad', data: deleted });
+  } catch (error) {
+    
   }
 }

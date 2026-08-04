@@ -1,7 +1,8 @@
 import crypto from 'crypto';
-import { Request, Response, NextFunction } from 'express';
+import { Response, NextFunction } from 'express';
+import { CartRequest } from '../types/cartTypes';
 
-export const cartToken = (req: Request, res: Response, next: NextFunction) => {
+export const cartToken = (req: CartRequest, res: Response, next: NextFunction) => {
   let cartToken = req.cookies.cart_token;
 
   if (!cartToken) {
