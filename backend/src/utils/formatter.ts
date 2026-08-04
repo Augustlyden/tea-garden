@@ -1,5 +1,14 @@
-import { CartDatabaseRow, CartInstance } from "../types/cartTypes"
-import { ProductDatabaseRow, ProductInstance, UserProductInstance } from "../types/productTypes"
+import { 
+  CartDatabaseRow, 
+  CartInstance, 
+  CartWithProduct, 
+  CartWithProductDatabaseRow 
+} from "../types/cartTypes";
+import { 
+  ProductDatabaseRow, 
+  ProductInstance, 
+  UserProductInstance 
+} from "../types/productTypes";
 
 export const formatProduct = (data: ProductDatabaseRow): ProductInstance => {
   return {
@@ -37,5 +46,20 @@ export const formatCart = (data: CartDatabaseRow): CartInstance => {
     productId: data.product_id,
     quantity: data.quantity,
     cartToken: data.cart_token
+  }
+}
+
+export const formatProductCart = (data: CartWithProductDatabaseRow): CartWithProduct => {
+  return {
+    cartId: data.id,
+    productId: data.product_id,
+    quantity: data.quantity,
+    cartToken: data.cart_token,
+    productName: data.product_name,
+    price: Number(data.price),
+    subTotal: Number(data.sub_total),
+    imgUrl: data.img_url,
+    isAvailable: data.is_available,
+    isDeleted: data.is_deleted
   }
 }
