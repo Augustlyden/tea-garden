@@ -7,7 +7,7 @@ export const getAllProductsUser = async (req: Request, res: Response) => {
     res.json({ success: true, data: products });
   } catch (error) {
     console.error('Error while fetching products:', error);
-    return res.status(500).json({ success: false, error: 'Misslyckades att hämta produkter' });
+    res.status(500).json({ success: false, error: 'Misslyckades att hämta produkter' });
   }
 }
 
@@ -29,6 +29,6 @@ export const getProductByIdUser = async (
     res.json({ success: true, data: product });
   } catch (error) {
     console.error('Error while fetching product:', error);
-    return res.status(500).json({ success: false, error: 'Misslyckades att hämta produkt' });
+    res.status(500).json({ success: false, error: 'Misslyckades att hämta produkt' });
   }
 }

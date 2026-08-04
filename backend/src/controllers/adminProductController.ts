@@ -63,7 +63,7 @@ export const getProductByIdAdmin = async (
     res.json({ success: true, data: product });
   } catch (error) {
     console.error('Error while fetching product:', error);
-    return res.status(500).json({ success: false, error: 'Misslyckades att hämta produkt' });
+    res.status(500).json({ success: false, error: 'Misslyckades att hämta produkt' });
   }
 }
 
