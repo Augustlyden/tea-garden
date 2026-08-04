@@ -98,6 +98,7 @@ export const decreaseQuantity = async (req: CartRequest<{ id: string }>, res: Re
 
     res.json({ success: true, message: 'Vara raderad', data: deleted });
   } catch (error) {
-    
+    console.error('Error while decreasing quantity', error);
+    res.status(500).json({ success: false, error: 'Misslyckades att minska antal' });
   }
 }

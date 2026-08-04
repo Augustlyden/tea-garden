@@ -1,7 +1,6 @@
-import { CANCELLED } from 'dns';
 import db from '../config/database';
-import { CartInstance } from '../types/cartTypes';
-import { formatCart } from '../utils/formatter';
+import { CartInstance, CartWithProduct } from '../types/cartTypes';
+import { formatCart, formatProductCart } from '../utils/formatter';
 
 class Cart {
   static async createOrUpdate(cartData: CartInstance): Promise<CartInstance> {
@@ -32,15 +31,27 @@ class Cart {
     return formatCart(row);
   }
 
-  static async findByCartToken(cartToken:string): Promise<CartInstance[]> {
+  static async findByCartToken(cartToken:string): Promise<CartWithProduct[]> {
     const result = await db.query(`
-      SELECT * FROM cart
-      WHERE cart_token = $1; 
+      SELECT 
+        c.id,
+        c.product_id,
+        c.quantity,
+        c.cart_token,
+        p.product_name,
+        p.price,
+        p.price * c.quantity AS sub_total,
+        p.img_url,
+        p.is_deleted,
+        p.is_available
+      FROM cart c
+      JOIN products p ON c.product_id = p.id
+      WHERE c.cart_token = $1; 
       `, [cartToken]
     );
 
     const rows = result.rows;
-    return rows.map(row => formatCart(row));
+    return rows.map(row => formatProductCart(row));
   }
 
   static async findByProductAndToken(
