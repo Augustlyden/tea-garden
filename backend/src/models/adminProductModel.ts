@@ -97,7 +97,7 @@ class Product {
     return formatProduct(row)
   }
 
-  static async delete(id: number) {
+  static async delete(id: number): Promise<ProductInstance | null> {
     const result = await db.query(`
       UPDATE products
       SET 

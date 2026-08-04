@@ -1,5 +1,5 @@
 import { CartDatabaseRow, CartInstance } from "../types/cartTypes"
-import { ProductDatabaseRow, ProductInstance } from "../types/productTypes"
+import { ProductDatabaseRow, ProductInstance, UserProductInstance } from "../types/productTypes"
 
 export const formatProduct = (data: ProductDatabaseRow): ProductInstance => {
   return {
@@ -14,6 +14,20 @@ export const formatProduct = (data: ProductDatabaseRow): ProductInstance => {
     isAvailable: data.is_available,
     categoryName: data.type,
     isDeleted: data.is_deleted
+  }
+}
+
+export const formatUserProduct = (data: ProductDatabaseRow): UserProductInstance => {
+  return {
+    productId: data.id,
+    productName: data.product_name,
+    categoryId: data.category_id,
+    price: Number(data.price),
+    inStock: data.in_stock,
+    imgUrl: data.img_url,
+    desc: data.description,
+    attributes: data.attributes,
+    categoryName: data.type,
   }
 }
 

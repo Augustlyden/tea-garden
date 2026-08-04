@@ -14,7 +14,7 @@ export interface ProductInstance {
   productId: number;
   productName: string;
   categoryId: number;
-  price: string | number;
+  price: number;
   inStock: number;
   imgUrl: string | null;
   desc: string | null;
@@ -22,6 +22,18 @@ export interface ProductInstance {
   isAvailable: boolean;
   categoryName?: string;
   isDeleted: boolean;
+}
+
+export interface UserProductInstance {
+  productId: number;
+  productName: string;
+  categoryId: number;
+  price: number;
+  inStock: number;
+  imgUrl: string | null;
+  desc: string | null;
+  attributes: Record<string, any> | null;
+  categoryName?: string;
 }
 
 export interface ProductDatabaseRow {

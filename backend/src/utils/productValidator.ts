@@ -32,11 +32,15 @@ export const validateProductNumbers = (
     }
 
     const parsedNumber = Number(value);
-    if (isNaN(parsedNumber)) {
+    if (Number.isNaN(parsedNumber)) {
       return { valid: false, error: `${displayField} måste vara ett giltig nummer.`};
     }
 
-    if ((field === 'price' || field === 'inStock') && parsedNumber < 0) {
+    if ((field === 'inStock' || field === 'categoryId') && !Number.isInteger(parsedNumber)) {
+      return { valid: false, error: `${displayField} måste vara ett heltal.`};
+    }
+
+    if (parsedNumber < 0) {
       return { valid: false, error: `${displayField} får inte vara negativt.`};
     }
 
