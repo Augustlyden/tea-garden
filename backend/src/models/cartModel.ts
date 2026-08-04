@@ -8,7 +8,7 @@ class Cart {
         INSERT INTO cart (product_id, quantity, cart_token)
         VALUES ($1, $2, $3)
         ON CONFLICT (product_id, cart_token)
-        DO UPDATE SET quantity = cart.quantity + EXCLUDED.quantity
+        DO UPDATE SET quantity = cart.quantity + 1
         RETURNING *;
       `, [cartData.productId, cartData.quantity, cartData.cartToken]
     );
