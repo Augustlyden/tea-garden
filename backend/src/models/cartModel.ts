@@ -1,3 +1,4 @@
+import { CANCELLED } from 'dns';
 import db from '../config/database';
 import { CartInstance } from '../types/cartTypes';
 import { formatCart } from '../utils/formatter';
@@ -24,6 +25,31 @@ class Cart {
       WHERE id = $1 AND cart_token = $2 AND quantity > 1
       RETURNING *;
       `, [id, cartToken]
+    );
+
+    const row = result.rows[0];
+    if (!row) return null;
+    return formatCart(row);
+  }
+
+  static async findByCartToken(cartToken:string): Promise<CartInstance[]> {
+    const result = await db.query(`
+      SELECT * FROM cart
+      WHERE cart_token = $1; 
+      `, [cartToken]
+    );
+
+    const rows = result.rows;
+    return rows.map(row => formatCart(row));
+  }
+
+  static async findByProductAndToken(
+    productId: number, cartToken: string
+  ): Promise<CartInstance | null> {
+    const result = await db.query(`
+      SELECT * FROM cart
+      WHERE product_id = $1 AND cart_token = $2;
+      `, [productId, cartToken]
     );
 
     const row = result.rows[0];
