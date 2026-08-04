@@ -16,7 +16,7 @@ export const getProductByIdUser = async (
 ) => {
   try {
     const productId = Number(req.params.id);
-    if (isNaN(productId)) {
+    if (Number.isNaN(productId)) {
       return res.status(400).json({ success: false, error: 'Ogiltigt produkt-ID' });
     }
 

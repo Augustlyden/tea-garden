@@ -26,10 +26,6 @@ export const createProduct = async (
 
     productData.imgUrl = `/uploads/${file.filename}`;
 
-    if (productData.attributes && typeof productData.attributes === 'string') {
-      productData.attributes = JSON.parse(productData.attributes as any);
-    }
-
     const newProduct = await Product.create(productData);
     res.status(201).json({ success: true, data: newProduct });
 
@@ -54,7 +50,7 @@ export const getProductByIdAdmin = async (
 ) => {
   try {
     const productId = Number(req.params.id);
-    if (isNaN(productId)) {
+    if (Number.isNaN(productId)) {
       return res.status(400).json({ success: false, error: 'Ogiltigt produkt-ID' });
     } 
 
@@ -77,7 +73,7 @@ export const updateProduct = async (
 ) => {
   try {
     const productId = Number(req.params.id);
-    if (isNaN(productId)) {
+    if (Number.isNaN(productId)) {
       return res.status(400).json({ success: false, error: 'Ogiltigt produkt-ID' });
     }
 
@@ -116,7 +112,7 @@ export const deleteProduct = async (
   try {
     const productId = Number(req.params.id);
 
-    if (isNaN(productId)) {
+    if (Number.isNaN(productId)) {
       return res.status(400).json({ success: false, error: 'Ogiltigt produkt-ID' });
     }
     const deletedProduct = await Product.delete(productId);
