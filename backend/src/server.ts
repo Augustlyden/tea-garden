@@ -5,6 +5,7 @@ import path from "path";
 import { initDatabase } from "./config/dbInit";
 import adminProductRoutes from './routes/adminProductRoutes';
 import userProductRoutes from './routes/userProductRoutes';
+import cartRoutes from './routes/cartRoutes';
 import cookieParser from "cookie-parser";
 
 dotenv.config();
@@ -20,6 +21,7 @@ app.use('/uploads', express.static(path.join(process.cwd(), 'public/uploads')));
 
 app.use('/api/admin/products', adminProductRoutes);
 app.use('/api/user/products', userProductRoutes);
+app.use('/api/cart', cartRoutes);
 
 app.get('/api/health', (req, res) => {
   res.json({ success: true, message: 'Server is running' });
