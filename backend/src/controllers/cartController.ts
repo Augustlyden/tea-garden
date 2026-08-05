@@ -1,5 +1,5 @@
 import Cart from "../models/cartModel";
-import { Request, Response } from "express";
+import { Response } from "express";
 import { CartInstance, CartRequest } from "../types/cartTypes";
 import Product from "../models/adminProductModel";
 
@@ -11,7 +11,7 @@ export const addToCart = async (
     const productId = Number(cartData.productId)
 
     if (!req.cartToken) {
-      return res.status(500).json({ success: false, error: 'Något gick fel' });
+      return res.status(400).json({ success: false, error: 'Något gick fel' });
     }
 
     if (Number.isNaN(productId)) {
@@ -42,25 +42,25 @@ export const addToCart = async (
 export const getCartByToken = async (req: CartRequest, res: Response) => {
   try {
     if (!req.cartToken) {
-      return res.status(500).json({ success: false, error: 'Något gick fel' });
+      return res.status(400).json({ success: false, error: 'Något gick fel' });
     }
     const cart = await Cart.findByCartToken(req.cartToken);
     res.json({ success: true, data: cart });
   } catch (error) {
     console.error('Error while fecthing cart:', error);
-    res.status(500).json({ success: false, error: 'Misslyckades att hämta kundvagn' });
+    res.status(500).json({ success: false, error: 'Misslyckades att hämta varukorg' });
   }
 }
 
 export const removeFromCart = async (req: CartRequest<{ id: string }>, res: Response) => {
   try {
     if (!req.cartToken) {
-      return res.status(500).json({ success: false, error: 'Något gick fel' });
+      return res.status(400).json({ success: false, error: 'Något gick fel' });
     }
 
     const cartId = Number(req.params.id);
     if (Number.isNaN(cartId)) {
-      return res.status(400).json({ success: false, error: 'Ogiltigt kundvagn-ID' });
+      return res.status(400).json({ success: false, error: 'Ogiltigt varukorg-ID' });
     }
 
     const deleted = await Cart.delete(cartId, req.cartToken);
@@ -78,12 +78,12 @@ export const removeFromCart = async (req: CartRequest<{ id: string }>, res: Resp
 export const decreaseQuantity = async (req: CartRequest<{ id: string }>, res: Response) => {
   try {
     if (!req.cartToken) {
-      return res.status(500).json({ success: false, error: 'Något gick fel' });
+      return res.status(400).json({ success: false, error: 'Något gick fel' });
     }
 
     const cartId = Number(req.params.id);
     if (Number.isNaN(cartId)) {
-      return res.status(400).json({ success: false, error: 'Ogiltigt kundvagn-ID' });
+      return res.status(400).json({ success: false, error: 'Ogiltigt varukorg-ID' });
     }
 
     const decreased = await Cart.decrease(cartId, req.cartToken);

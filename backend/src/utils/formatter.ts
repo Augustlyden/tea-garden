@@ -4,6 +4,7 @@ import {
   CartWithProduct, 
   CartWithProductDatabaseRow 
 } from "../types/cartTypes";
+import { ItemDatabaseRow, OrderDatabaseRow, OrderInstance, OrderProductItem } from "../types/orderTypes";
 import { 
   ProductDatabaseRow, 
   ProductInstance, 
@@ -61,5 +62,29 @@ export const formatProductCart = (data: CartWithProductDatabaseRow): CartWithPro
     imgUrl: data.img_url,
     isAvailable: data.is_available,
     isDeleted: data.is_deleted
+  }
+}
+
+export const formatOrder = (
+  orderData: OrderDatabaseRow, 
+  productData: ItemDatabaseRow[]
+): OrderInstance => {
+  const formattedProducts: OrderProductItem[] = productData.map(item => ({
+    productId: item.product_id,
+    productName: item.product_name,
+    quantity: item.quantity,
+    price: Number(item.price),
+    imgUrl: item.img_url
+  }));
+
+  return {
+    orderId: orderData.id,
+    totalAmount: Number(orderData.total_amount),
+    orderDate: orderData.order_date,
+    customerName: orderData.customer_name,
+    street: orderData.street,
+    zipCode: orderData.zip_code,
+    city: orderData.city,
+    products: formattedProducts
   }
 }
