@@ -11,7 +11,7 @@ export const addToCart = async (
     const productId = Number(cartData.productId)
 
     if (!req.cartToken) {
-      return res.status(500).json({ success: false, error: 'Något gick fel' });
+      return res.status(400).json({ success: false, error: 'Något gick fel' });
     }
 
     if (Number.isNaN(productId)) {
@@ -42,7 +42,7 @@ export const addToCart = async (
 export const getCartByToken = async (req: CartRequest, res: Response) => {
   try {
     if (!req.cartToken) {
-      return res.status(500).json({ success: false, error: 'Något gick fel' });
+      return res.status(400).json({ success: false, error: 'Något gick fel' });
     }
     const cart = await Cart.findByCartToken(req.cartToken);
     res.json({ success: true, data: cart });
@@ -55,7 +55,7 @@ export const getCartByToken = async (req: CartRequest, res: Response) => {
 export const removeFromCart = async (req: CartRequest<{ id: string }>, res: Response) => {
   try {
     if (!req.cartToken) {
-      return res.status(500).json({ success: false, error: 'Något gick fel' });
+      return res.status(400).json({ success: false, error: 'Något gick fel' });
     }
 
     const cartId = Number(req.params.id);
@@ -78,7 +78,7 @@ export const removeFromCart = async (req: CartRequest<{ id: string }>, res: Resp
 export const decreaseQuantity = async (req: CartRequest<{ id: string }>, res: Response) => {
   try {
     if (!req.cartToken) {
-      return res.status(500).json({ success: false, error: 'Något gick fel' });
+      return res.status(400).json({ success: false, error: 'Något gick fel' });
     }
 
     const cartId = Number(req.params.id);

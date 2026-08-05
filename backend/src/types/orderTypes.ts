@@ -1,5 +1,7 @@
 export interface OrderProductItem {
   productId: number;
+  productName: string;
+  imgUrl: string;
   quantity: number;
   price: number;
 }
@@ -9,7 +11,6 @@ export interface OrderAttributes {
   street: string;
   zipCode: string;
   city: string;
-  products: OrderProductItem[];
 }
 
 export interface OrderInstance {
@@ -20,6 +21,7 @@ export interface OrderInstance {
   street: string;
   zipCode: string;
   city: string;
+  products: OrderProductItem[];
 }
 
 export interface OrderDatabaseRow {
@@ -30,4 +32,12 @@ export interface OrderDatabaseRow {
   street: string;
   zip_code: string;
   city: string;
+}
+
+export interface ItemDatabaseRow {
+  product_id: number,
+  quantity: number,
+  price: number | string, 
+  product_name: string;
+  img_url: string;
 }
