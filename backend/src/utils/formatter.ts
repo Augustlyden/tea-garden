@@ -4,6 +4,7 @@ import {
   CartWithProduct, 
   CartWithProductDatabaseRow 
 } from "../types/cartTypes";
+import { OrderDatabaseRow, OrderInstance } from "../types/orderTypes";
 import { 
   ProductDatabaseRow, 
   ProductInstance, 
@@ -61,5 +62,17 @@ export const formatProductCart = (data: CartWithProductDatabaseRow): CartWithPro
     imgUrl: data.img_url,
     isAvailable: data.is_available,
     isDeleted: data.is_deleted
+  }
+}
+
+export const formatOrder = (data: OrderDatabaseRow): OrderInstance => {
+  return {
+    orderId: data.id,
+    totalAmount: Number(data.total_amount),
+    orderDate: data.order_date,
+    customerName: data.customer_name,
+    street: data.street,
+    zipCode: data.zip_code,
+    city: data.city
   }
 }
