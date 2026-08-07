@@ -1,6 +1,6 @@
 import db from '../config/database';
 import { ProductAttributes, ProductInstance } from '../types/productTypes';
-import { formatProduct } from '../utils/formatter';
+import { formatProduct } from '../utils/productCartFormatter';
 
 class Product {
   private static readonly BASE_ADMIN_SELECT = `
