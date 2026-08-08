@@ -43,7 +43,7 @@ class Product {
 
   static async findAllAdmin(): Promise<ProductInstance[]> {
     const result = await db.query(`
-      ${Product.BASE_ADMIN_SELECT}
+      ${this.BASE_ADMIN_SELECT}
       WHERE is_deleted = false
       ORDER BY p.product_name;
       `
@@ -55,7 +55,7 @@ class Product {
 
   static async findByIdAdmin(id: number): Promise<ProductInstance | null> {
     const result = await db.query(`
-      ${Product.BASE_ADMIN_SELECT}
+      ${this.BASE_ADMIN_SELECT}
       WHERE p.id = $1;
       `, [id]
     );
