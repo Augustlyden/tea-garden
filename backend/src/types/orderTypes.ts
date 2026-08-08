@@ -44,10 +44,10 @@ export interface AdminOrderDetail extends OrderSummary {
 
 export interface StatusUpdateResult {
   id: number;
+  orderId: number;
   status: string;
   changedAt: Date;
-  adminId: number;
-  admin: string;
+  adminId: number | null;
 }
 
 export interface OrderDatabaseRow {

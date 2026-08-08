@@ -1,4 +1,4 @@
-import { AdminOrderDetail, AdminOrderList, ItemDatabaseRow, OrderDatabaseRow, OrderInstance, OrderProductItem, OrderSummary, StatusDatabaseRow, StatusHistoryDatabaseRow, StatusHistoryItem } from "../types/orderTypes";
+import { AdminOrderDetail, AdminOrderList, ItemDatabaseRow, OrderDatabaseRow, OrderInstance, OrderProductItem, OrderSummary, StatusDatabaseRow, StatusHistoryDatabaseRow, StatusHistoryItem, StatusUpdateResult } from "../types/orderTypes";
 
 export const mapProductRows = (rows: ItemDatabaseRow[]): OrderProductItem[] => 
   rows.map(item => ({
@@ -51,4 +51,14 @@ export const formatOrderList = (
   ...orderSummary(orderData),
   history: mapStatusRows(statusRows)
 });
+
+export const formatStatusUpdate = (
+  data: StatusDatabaseRow
+): StatusUpdateResult => ({
+  id: data.id,
+  orderId: data.order_id,
+  status: data.status,
+  changedAt: data.changed_at,
+  adminId: data.admin_id
+})
 

@@ -1,7 +1,7 @@
 import db from '../config/database';
-import { AdminOrderDetail, AdminOrderList, OrderInput, OrderInstance, StatusHistoryDatabaseRow } from '../types/orderTypes';
+import { AdminOrderDetail, AdminOrderList, OrderInput, OrderInstance, StatusHistoryDatabaseRow, StatusUpdateResult } from '../types/orderTypes';
 import { InsufficientStockError, NotFoundError } from '../utils/error';
-import { formatOrder, formatOrderDetail, formatOrderList } from '../utils/orderFormatter';
+import { formatOrder, formatOrderDetail, formatOrderList, formatStatusUpdate } from '../utils/orderFormatter';
 
 class Order {
   private static readonly BASE_ORDER_SELECT = `
@@ -176,6 +176,18 @@ class Order {
     const statusRows = status.rows;
 
     return formatOrderDetail(orderData, productRows, statusRows);
+  }
+
+  static async update(orderId: number, status: string): Promise<StatusUpdateResult> {
+    const result = await db.query(`
+      INSERT INTO order_status (order_id, status)
+      VALUES ($1, $2)
+      RETURNING *; 
+      `, [orderId, status]
+    );
+
+    const row = result.rows[0];
+    return formatStatusUpdate(row);
   }
 }
 
