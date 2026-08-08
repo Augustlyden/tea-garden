@@ -55,3 +55,25 @@ export const getAllOrders = async (req: Request, res: Response) => {
     res.status(500).json({ success: false, error: 'Misslyckades att hämta beställningar' });
   }
 }
+
+export const getOrderById = async (
+  req: Request<{ id: string }>, res: Response
+) => {
+  try {
+    const orderId = Number(req.params.id);
+    if (Number.isNaN(orderId)) {
+      return res.status(400).json({ success: false, error: 'Ogiltigt order-ID' });
+    }
+
+    const order = await Order.findById(orderId);
+
+    if (!order) {
+      return res.status(404).json({ success: false, error: 'Beställningen hittades ej' });
+    }
+
+    res.json({ success: true, data: order });
+  } catch (error) {
+    console.error('Error while fetching order:', error);
+    res.status(500).json({ success: false, error: 'Misslyckades att hämta beställning' });
+  }
+}
