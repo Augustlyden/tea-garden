@@ -1,10 +1,10 @@
 import db from '../config/database';
-import { OrderAttributes, OrderInstance } from '../types/orderTypes';
+import { AdminOrderList, OrderInput, OrderInstance, StatusHistoryDatabaseRow } from '../types/orderTypes';
 import { InsufficientStockError, NotFoundError } from '../utils/error';
-import { formatOrder } from '../utils/formatter';
+import { formatOrder, formatOrderList } from '../utils/orderFormatter';
 
 class Order {
-  static async create(cartToken: string, orderData: OrderAttributes): Promise<OrderInstance> {
+  static async create(cartToken: string, orderData: OrderInput): Promise<OrderInstance> {
     const client = await db.connect();
     try {
       await client.query('BEGIN');
@@ -94,6 +94,45 @@ class Order {
     } finally {
       client.release();
     }
+  }
+
+  static async findAll(): Promise<AdminOrderList[]> {
+    const status = await db.query(`
+      SELECT
+        os.order_id, os.status, os.changed_at, a.username AS admin
+      FROM order_status os
+      LEFT JOIN admin a ON os.admin_id = a.id
+      ORDER BY os.order_id, os.changed_at ASC
+      `
+    );
+
+    const orders = await db.query(`
+      SELECT 
+        o.id,
+        o.customer_name, 
+        o.total_amount, 
+        o.order_date,
+        o.street,
+        o.zip_code,
+        o.city
+      FROM orders o
+      ORDER BY o.order_date DESC;
+      `
+    );
+
+    const statusRows = status.rows;
+    const orderData = orders.rows;
+
+    const statusByOrderId = new Map<number, StatusHistoryDatabaseRow[]>();
+    for (const row of statusRows) {
+      const existing = statusByOrderId.get(row.order_id) ?? [];
+      existing.push(row);
+      statusByOrderId.set(row.order_id, existing);
+    }
+
+    return orderData.map(order =>
+      formatOrderList(order, statusByOrderId.get(order.id) ?? [])
+    );
   }
 }
 
