@@ -6,14 +6,20 @@ export interface OrderProductItem {
   price: number;
 }
 
-export interface OrderAttributes {
+export interface StatusHistoryItem {
+  status: string;
+  changedAt: Date;
+  admin: string | null;
+}
+
+export interface OrderInput {
   customerName: string;
   street: string;
   zipCode: string;
   city: string;
 }
 
-export interface OrderInstance {
+export interface OrderSummary {
   orderId: number;
   totalAmount: number;
   orderDate: Date;
@@ -21,7 +27,27 @@ export interface OrderInstance {
   street: string;
   zipCode: string;
   city: string;
+}
+
+export interface OrderInstance extends OrderSummary {
   products: OrderProductItem[];
+}  
+
+export interface AdminOrderList extends OrderSummary {
+  history: StatusHistoryItem[];
+}
+
+export interface AdminOrderDetail extends OrderSummary {
+  products: OrderProductItem[];
+  history: StatusHistoryItem[];
+}
+
+export interface StatusUpdateResult {
+  id: number;
+  status: string;
+  changedAt: Date;
+  adminId: number;
+  admin: string;
 }
 
 export interface OrderDatabaseRow {
@@ -40,4 +66,16 @@ export interface ItemDatabaseRow {
   price: number | string, 
   product_name: string;
   img_url: string;
+}
+
+export interface StatusDatabaseRow {
+  id: number;
+  order_id: number;
+  status: string;
+  changed_at: Date;
+  admin_id: number | null;
+}
+
+export interface StatusHistoryDatabaseRow extends StatusDatabaseRow {
+  admin: string | null;
 }

@@ -1,6 +1,6 @@
 import db from '../config/database';
 import { CartInstance, CartWithProduct } from '../types/cartTypes';
-import { formatCart, formatProductCart } from '../utils/formatter';
+import { formatCart, formatProductCart } from '../utils/productCartFormatter';
 
 class Cart {
   static async createOrUpdate(cartData: CartInstance): Promise<CartInstance> {
