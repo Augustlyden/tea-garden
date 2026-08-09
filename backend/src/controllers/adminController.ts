@@ -42,3 +42,17 @@ export const loginAdmin = async (
     res.status(500).json({ success: false, error: 'Inloggning misslyckades'});
   }
 }
+
+export const logoutAdmin = async (req: Request, res: Response) => {
+  try {
+    res.clearCookie('token', {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'lax'
+    });
+    res.json({ success: true, message: 'Utloggad' });
+  } catch (error) {
+    console.error('Logout failed:', error);
+    res.status(500).json({ success: false, error: 'Utloggning misslyckades' });
+  }
+}
