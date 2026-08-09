@@ -10,7 +10,7 @@ export const cartToken = (req: CartRequest, res: Response, next: NextFunction) =
 
     res.cookie('cart_token', cartToken, {
       httpOnly: true,
-      secure: true,
+      secure: process.env.NODE_ENV === 'production',
       sameSite: 'lax',
       maxAge: 1000 * 60 * 60 * 24 * 30
     });

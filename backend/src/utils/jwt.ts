@@ -1,5 +1,6 @@
 import jwt from 'jsonwebtoken';
-import { AdminPayload, AuthRequest } from '../types/tokenTypes';
+import type { SignOptions } from 'jsonwebtoken';
+import { AdminPayload} from '../types/tokenTypes';
 
 const jwtSecret = process.env.JWT_SECRET;
 
@@ -11,7 +12,7 @@ export const generateToken = (adminId: number, username: string) => {
   return jwt.sign(
     { id: adminId, username },
     jwtSecret,
-    { expiresIn: '24h'}
+    { expiresIn: (process.env.JWT_EXPIRES_IN || '24h') as SignOptions['expiresIn'] }
   );
 }
 

@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { OrderInput, StatusUpdateResult } from "../types/orderTypes";
+import { OrderInput } from "../types/orderTypes";
 import { CartRequest } from "../types/tokenTypes";
 import Order from "../models/Order";
 import { NotFoundError, InsufficientStockError } from "../utils/error";

@@ -1,0 +1,44 @@
+import { Request, Response } from "express";
+import Admin from "../models/Admin";
+import bcrypt from 'bcrypt';
+import { generateToken } from "../utils/jwt";
+
+const verifyPassword = async (plainPassword: string, hashedPassword: string) => {
+  return await bcrypt.compare(plainPassword, hashedPassword);
+}
+
+export const loginAdmin = async (
+  req: Request<{ username: string, password: string }>, res: Response
+) => {
+  try {
+    const { username, password } = req.body;
+
+    if (!username || !password) {
+      return res.status(400).json({ success: false, error: 'Användarnamn och lösenord krävs' });
+    }
+
+    const admin = await Admin.findByUsername(username);
+    if (!admin) {
+      return res.status(401).json({ success: false, error: 'Ogiltiga inloggningsuppgifter' });
+    }
+
+    const isValid = await verifyPassword(password, admin.password);
+    if (!isValid) {
+      return res.status(401).json({ success: false, error: 'Ogiltiga inloggningsuppgifter' });
+    }
+
+    const token = generateToken(admin.id, admin.username);
+
+    res.cookie('token', token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'lax',
+      maxAge: 24 * 60 * 60 * 1000
+    });
+
+    res.json({ success: true, data: { id: admin.id, username: admin.username }});
+  } catch (error) {
+    console.error('Login failed:', error);
+    res.status(500).json({ success: false, error: 'Inloggning misslyckades'});
+  }
+}

@@ -6,12 +6,12 @@ export const authenticateAdmin = (req: AuthRequest, res: Response, next: NextFun
   const token = req.cookies.token;
 
   if (!token) {
-    return res.status(401).json({ success: false, error: 'Access denied' });
+    return res.status(401).json({ success: false, error: 'Access token required' });
   }
 
   const decoded = verifyToken(token);
   if (!decoded) {
-    return res.status(403).json({ success: false, error: 'Access denied' });
+    return res.status(403).json({ success: false, error: 'Invalid or expired token' });
   }
 
   req.admin = decoded;
