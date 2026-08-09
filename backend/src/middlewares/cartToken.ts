@@ -1,6 +1,6 @@
 import crypto from 'crypto';
 import { Response, NextFunction } from 'express';
-import { CartRequest } from '../types/cartTypes';
+import { CartRequest } from '../types/tokenTypes';
 
 export const cartToken = (req: CartRequest, res: Response, next: NextFunction) => {
   let cartToken = req.cookies.cart_token;
@@ -10,7 +10,7 @@ export const cartToken = (req: CartRequest, res: Response, next: NextFunction) =
 
     res.cookie('cart_token', cartToken, {
       httpOnly: true,
-      secure: true,
+      secure: process.env.NODE_ENV === 'production',
       sameSite: 'lax',
       maxAge: 1000 * 60 * 60 * 24 * 30
     });

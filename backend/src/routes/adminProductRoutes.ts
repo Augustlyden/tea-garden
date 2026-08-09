@@ -7,8 +7,11 @@ import {
   updateProduct 
 } from "../controllers/adminProductController";
 import { upload } from "../middlewares/upload";
+import { authenticateAdmin } from "../middlewares/authToken";
 
 const router = express.Router();
+
+router.use(authenticateAdmin);
 
 router.post('/', upload.single('image'), createProduct);
 router.get('/', getAllProductsAdmin);

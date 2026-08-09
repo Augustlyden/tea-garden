@@ -1,7 +1,8 @@
-import Cart from "../models/cartModel";
+import Cart from "../models/Cart";
 import { Response } from "express";
-import { CartInstance, CartRequest } from "../types/cartTypes";
-import Product from "../models/adminProductModel";
+import { CartInstance } from "../types/cartTypes";
+import { CartRequest } from "../types/tokenTypes";
+import Product from "../models/AdminProduct";
 
 export const addToCart = async (
   req: CartRequest<{}, {}, CartInstance>, res: Response

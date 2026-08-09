@@ -178,12 +178,12 @@ class Order {
     return formatOrderDetail(orderData, productRows, statusRows);
   }
 
-  static async update(orderId: number, status: string): Promise<StatusUpdateResult> {
+  static async update(orderId: number, status: string, adminId: number): Promise<StatusUpdateResult> {
     const result = await db.query(`
-      INSERT INTO order_status (order_id, status)
-      VALUES ($1, $2)
+      INSERT INTO order_status (order_id, status, admin_id)
+      VALUES ($1, $2, $3)
       RETURNING *; 
-      `, [orderId, status]
+      `, [orderId, status, adminId]
     );
 
     const row = result.rows[0];
