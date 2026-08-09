@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import { OrderInput, StatusUpdateResult } from "../types/orderTypes";
-import { CartRequest } from "../types/cartTypes";
-import Order from "../models/orderModel";
+import { CartRequest } from "../types/tokenTypes";
+import Order from "../models/Order";
 import { NotFoundError, InsufficientStockError } from "../utils/error";
 
 export const createOrder = async (

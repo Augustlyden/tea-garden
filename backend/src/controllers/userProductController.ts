@@ -1,4 +1,4 @@
-import UserProduct from "../models/userProductModel";
+import UserProduct from "../models/UserProduct";
 import { Request, Response } from "express";
 
 export const getAllProductsUser = async (req: Request, res: Response) => {
