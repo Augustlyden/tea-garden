@@ -19,5 +19,5 @@ export interface AuthRequest <
   ResBody = any,
   ReqBody = any
 > extends Request<P, {}, ReqBody, any> {
-  admin: AdminPayload;
+  admin?: AdminPayload;
 }

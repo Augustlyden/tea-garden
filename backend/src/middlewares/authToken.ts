@@ -1,8 +1,8 @@
-import { NextFunction, Response } from "express";
+import { NextFunction, Request, Response } from "express";
 import { AuthRequest } from "../types/tokenTypes";
 import { verifyToken } from "../utils/jwt";
 
-export const authenticateAdmin = (req: AuthRequest, res: Response, next: NextFunction) => {
+export const authenticateAdmin = (req: Request, res: Response, next: NextFunction) => {
   const token = req.cookies.token;
 
   if (!token) {
@@ -14,6 +14,6 @@ export const authenticateAdmin = (req: AuthRequest, res: Response, next: NextFun
     return res.status(403).json({ success: false, error: 'Invalid or expired token' });
   }
 
-  req.admin = decoded;
+  (req as AuthRequest).admin = decoded;
   next();
 }

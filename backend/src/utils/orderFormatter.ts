@@ -60,5 +60,5 @@ export const formatStatusUpdate = (
   status: data.status,
   changedAt: data.changed_at,
   adminId: data.admin_id
-})
+});
 
