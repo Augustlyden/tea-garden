@@ -19,4 +19,4 @@ export const cartToken = (req: CartRequest, res: Response, next: NextFunction) =
   req.cartToken = cartToken;
 
   next();
-}
+};

@@ -16,4 +16,4 @@ export const authenticateAdmin = (req: Request, res: Response, next: NextFunctio
 
   (req as AuthRequest).admin = decoded;
   next();
-}
+};

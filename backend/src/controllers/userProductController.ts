@@ -9,7 +9,7 @@ export const getAllProductsUser = async (req: Request, res: Response) => {
     console.error('Error while fetching products:', error);
     res.status(500).json({ success: false, error: 'Misslyckades att hämta produkter' });
   }
-}
+};
 
 export const getProductByIdUser = async (
   req: Request<{ id: string }>, res: Response
@@ -31,4 +31,4 @@ export const getProductByIdUser = async (
     console.error('Error while fetching product:', error);
     res.status(500).json({ success: false, error: 'Misslyckades att hämta produkt' });
   }
-}
+};

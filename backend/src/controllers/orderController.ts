@@ -44,7 +44,7 @@ export const createOrder = async (
     console.error('Error while creating order:', error);
     res.status(500).json({ success: false, error: 'Misslyckades att lägga en beställning' });
   }
-}
+};
 
 export const getAllOrders = async (req: Request, res: Response) => {
   try {
@@ -54,7 +54,7 @@ export const getAllOrders = async (req: Request, res: Response) => {
     console.error('Error while fetching orders:', error);
     res.status(500).json({ success: false, error: 'Misslyckades att hämta beställningar' });
   }
-}
+};
 
 export const getOrderById = async (
   req: Request<{ id: string }>, res: Response
@@ -76,7 +76,7 @@ export const getOrderById = async (
     console.error('Error while fetching order:', error);
     res.status(500).json({ success: false, error: 'Misslyckades att hämta beställning' });
   }
-}
+};
 
 export const updateStatus = async (
   req: AuthRequest<{ id: string }, {}, { status: string }>, res: Response
@@ -108,4 +108,4 @@ export const updateStatus = async (
     console.error('Error while updating status:', error);
     res.status(500).json({ success: false, error: 'Misslyckades att uppdatera status' });
   }
-}
+};

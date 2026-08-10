@@ -33,7 +33,7 @@ export const createProduct = async (
     console.error('Error while creating product:', error);
     res.status(500).json({ success: false, error: 'Misslyckades att skapa produkt' });
   }
-}
+};
 
 export const getAllProductsAdmin = async (req: Request, res: Response) => {
   try {
@@ -43,7 +43,7 @@ export const getAllProductsAdmin = async (req: Request, res: Response) => {
     console.error('Error while fetching products:', error);
     res.status(500).json({ success: false, error: 'Misslyckades att hämta produkter' });
   }
-}
+};
 
 export const getProductByIdAdmin = async (
   req: Request<{ id: string }>, res: Response
@@ -65,7 +65,7 @@ export const getProductByIdAdmin = async (
     console.error('Error while fetching product:', error);
     res.status(500).json({ success: false, error: 'Misslyckades att hämta produkt' });
   }
-}
+};
 
 export const updateProduct = async (
   req: Request<{ id: string }, {}, Partial<ProductAttributes>>,
@@ -104,7 +104,7 @@ export const updateProduct = async (
     console.error('Error while updating product:', error);
     res.status(500).json({ success: false, error: 'Misslyckades att uppdatera produkt'})
   }
-}
+};
 
 export const deleteProduct = async ( 
   req: Request<{ id: string }>, res: Response
@@ -126,4 +126,4 @@ export const deleteProduct = async (
     console.error('Error while deleting product', error);
     res.status(500).json({ success: false, error: 'Misslyckades att radera produkt' });
   }
-}
+};
