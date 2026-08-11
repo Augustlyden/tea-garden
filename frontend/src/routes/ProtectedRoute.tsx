@@ -12,5 +12,6 @@ export const ProtectedRoute = ({children}: { children: ReactNode}) => {
   if (!admin) {
     return <Navigate to="/admin/login" replace/>;
   }
+  
   return children;
 };

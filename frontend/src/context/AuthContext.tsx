@@ -1,6 +1,6 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import type { ReactNode } from 'react';
-import adminService from "../services/adminService";
+import { adminService } from "../services/adminService";
 import type { AdminData, AuthContextType } from "../types/adminTypes";
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -11,7 +11,7 @@ export const useAuth = () => {
     throw new Error('useAuth must be used within an AuthProvider');
   }
   return context;
-}
+};
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [admin, setAdmin] = useState<AdminData | null>(null);
@@ -40,10 +40,10 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
       setAdmin(data.data);
       setIsAuthenticated(true);
-      return { success: true };
       
+      return { success: true };
     } catch (error) {
-      return { success: false, error: error instanceof Error ? error.message : ''}
+      return { success: false, error: error instanceof Error ? error.message : 'Kunde inte ansluta till servern' };
     }
   };
 
@@ -70,5 +70,5 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     <AuthContext.Provider value={value}>
       {children}
     </AuthContext.Provider>
-  )
+  );
 };

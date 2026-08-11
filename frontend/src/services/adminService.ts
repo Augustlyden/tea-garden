@@ -1,21 +1,18 @@
 import api from "../config/api";
 import type { AdminLoginResponse } from "../types/adminTypes";
 
-const adminService = {
+export const adminService = {
   login: async (username: string, password: string): Promise<AdminLoginResponse> => {
-    const response = await api.post('/admin/login', { username, password });
+    const response = await api.post<AdminLoginResponse>('/admin/login', { username, password });
     return response.data;
   },
 
   logout: async () => {
-    const  response = await api.post('/admin/logout');
-    return response.data;
+    await api.post('/admin/logout');
   },
 
-  checkMe: async () => {
-    const response = await api.get('/admin/me');
+  checkMe: async (): Promise<AdminLoginResponse> => {
+    const response = await api.get<AdminLoginResponse>('/admin/me');
     return response.data;
   }
-}
-
-export default adminService;
+};
