@@ -31,30 +31,39 @@ export const LoginPage = () => {
   return (
     <div className={styles.container}>
       <div className={styles.loginBox}>
-        <h2 className={styles.title}>Login</h2>
+        <h1 className={styles.title}>Tea Garden</h1>
+        {/* <h2 className={styles.title}>Lock In</h2> */}
         <form className={styles.form} onSubmit={handleSubmit}>
           <div className={styles.inputGroup}>
-            <label className={styles.label} htmlFor="">Användarnamn:</label>
+            <label className={styles.label} htmlFor="username">
+              <span className={styles.asterisk}>*</span>
+              Användarnamn:
+            </label>
             <input 
               type="text"
               value={username}
               onChange={(e) => setUsername(e.target.value)}
               required
               className={styles.input}
+              id="username"
             />
           </div>
           <div className={styles.inputGroup}>
-            <label className={styles.label} htmlFor="">Lösenord:</label>
+            <label className={styles.label} htmlFor="password"> 
+              <span className={styles.asterisk}>*</span>
+              Lösenord:
+            </label>
             <input 
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
               className={styles.input}
+              id="password"
             />
           </div>
-          {error && <p className={error}>{error}</p>}
-          <button className={styles.button} type="submit"> Logga in </button>
+          {error && <p className={styles.error}>{error}</p>}
+          <button className={styles.button} type="submit"> Lock In </button>
         </form>
       </div>
     </div>
