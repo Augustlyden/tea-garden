@@ -1,6 +1,7 @@
 import { useState } from "react"
 import { useAuth } from "../../context/AuthContext";
 import { Navigate } from "react-router-dom";
+import styles from "../../css/login.module.css";
 
 export const LoginPage = () => {
   const [username, setUsername] = useState('');
@@ -28,30 +29,32 @@ export const LoginPage = () => {
   }
 
   return (
-    <div>
-      <div>
-        <h2>Login</h2>
-        <form onSubmit={handleSubmit}>
-          <div>
-            <label htmlFor="">Användarnamn:</label>
+    <div className={styles.container}>
+      <div className={styles.loginBox}>
+        <h2 className={styles.title}>Login</h2>
+        <form className={styles.form} onSubmit={handleSubmit}>
+          <div className={styles.inputGroup}>
+            <label className={styles.label} htmlFor="">Användarnamn:</label>
             <input 
               type="text"
               value={username}
               onChange={(e) => setUsername(e.target.value)}
               required
+              className={styles.input}
             />
           </div>
-          <div>
-            <label htmlFor="">Lösenord:</label>
+          <div className={styles.inputGroup}>
+            <label className={styles.label} htmlFor="">Lösenord:</label>
             <input 
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
+              className={styles.input}
             />
           </div>
-          {error && <p>{error}</p>}
-          <button type="submit"> Logga in </button>
+          {error && <p className={error}>{error}</p>}
+          <button className={styles.button} type="submit"> Logga in </button>
         </form>
       </div>
     </div>
