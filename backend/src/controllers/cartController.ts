@@ -38,7 +38,7 @@ export const addToCart = async (
     console.error('Error while adding product to cart:', error);
     res.status(500).json({ success: false, error: 'Misslyckades att lägga till produkt i varukorgen' });
   }
-}
+};
 
 export const getCartByToken = async (req: CartRequest, res: Response) => {
   try {
@@ -51,7 +51,7 @@ export const getCartByToken = async (req: CartRequest, res: Response) => {
     console.error('Error while fecthing cart:', error);
     res.status(500).json({ success: false, error: 'Misslyckades att hämta varukorg' });
   }
-}
+};
 
 export const removeFromCart = async (req: CartRequest<{ id: string }>, res: Response) => {
   try {
@@ -74,7 +74,7 @@ export const removeFromCart = async (req: CartRequest<{ id: string }>, res: Resp
     console.error('Error while deleting cart', error);
     res.status(500).json({ success: false, error: 'Misslyckades att radera vara' });
   }
-}
+};
 
 export const decreaseQuantity = async (req: CartRequest<{ id: string }>, res: Response) => {
   try {
@@ -102,4 +102,4 @@ export const decreaseQuantity = async (req: CartRequest<{ id: string }>, res: Re
     console.error('Error while decreasing quantity', error);
     res.status(500).json({ success: false, error: 'Misslyckades att minska antal' });
   }
-}
+};

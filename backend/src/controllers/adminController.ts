@@ -2,10 +2,11 @@ import { Request, Response } from "express";
 import Admin from "../models/Admin";
 import bcrypt from 'bcrypt';
 import { generateToken } from "../utils/jwt";
+import { AuthRequest } from "../types/tokenTypes";
 
 const verifyPassword = async (plainPassword: string, hashedPassword: string) => {
   return await bcrypt.compare(plainPassword, hashedPassword);
-}
+};
 
 export const loginAdmin = async (
   req: Request<{ username: string, password: string }>, res: Response
@@ -41,7 +42,7 @@ export const loginAdmin = async (
     console.error('Login failed:', error);
     res.status(500).json({ success: false, error: 'Inloggning misslyckades'});
   }
-}
+};
 
 export const logoutAdmin = async (req: Request, res: Response) => {
   try {
@@ -55,4 +56,8 @@ export const logoutAdmin = async (req: Request, res: Response) => {
     console.error('Logout failed:', error);
     res.status(500).json({ success: false, error: 'Utloggning misslyckades' });
   }
-}
+};
+
+export const getMe = async (req: AuthRequest, res: Response) => {
+  res.json({ success: true, data: { id: req.admin!.id, username: req.admin!.username} });
+};
