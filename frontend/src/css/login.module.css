@@ -8,8 +8,8 @@
 
 .loginBox {
   padding: 2rem;
-  border-radius: 8px;
-  box-shadow: var(--shadow-medium);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-lg);
   width: 100%;
   max-width: 400px;
   transition: background-color 0.3s ease, box-shadow 0.3s ease;
@@ -19,6 +19,7 @@
   text-align: center;
   margin-bottom: 1.5rem;
   transition: color 0.3s ease;
+  font-size: var(--text-3xl);
 }
 
 .form {
@@ -36,30 +37,48 @@
 .label {
   font-weight: 500;
   transition: color 0.3s ease;
+  font-size: var(--text-sm);
+}
+
+.asterisk {
+  color: var(--color-primary);
+  font-size: var(--text-base);
 }
 
 .input {
   padding: 0.75rem;
   font-size: 1rem;
   transition: all 0.3s ease;
+  border: 1px solid var(--color-primary-pale);
+  border-radius: var(--radius-md);
+  background-color: var(--color-primary-pale);
 }
 
 .input:focus {
   outline: none;
+  border-color: var(--color-primary-light);
 }
 
 .button {
   padding: 0.75rem;
-  color: white;
+  background-color: var(--color-primary);
+  color: var(--color-bg-main);
   border: none;
-  border-radius: 4px;
-  font-size: 1rem;
+  border-radius: var(--radius-md);
+  font-size: var(--text-base);
   cursor: pointer;
   margin-top: 0.5rem;
   transition: background-color 0.3s ease;
 }
 
+.button:hover {
+  background-color: var(--color-primary-light);
+}
+
 .error {
-  margin: 0;
-  font-size: 0.9rem;
+  font-size: var(--text-sm);
+  font-weight: 500;
+  margin-top: 0.25rem;
+  display: block;
+  color: var(--color-error);
 }

@@ -1,0 +1,62 @@
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300..700;1,300..700&family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&display=swap');
+
+:root {
+  /* --- PRIMÄRA GRÖNA FÄRGER --- */
+  --color-primary-dark: #0D3E26;    /* Djup smaragdgrön för huvudsaklig text och tunga element */
+  --color-primary: #1C5D3B;         /* Standard smaragdgrön för rubriker, menyer och profil */
+  --color-primary-light: #348B58;   /* Ljusare grön för hover-effekter och sekundära element */
+  --color-primary-pale: #EAF4EE;    /* Mycket ljus grön för bakgrunder och sektioner */
+
+  /* --- ACCENTFÄRG --- */
+  --color-accent: #FFE67C;          /* Varm gul för knappar (CTA), köpknappar och highlights */
+  --color-accent-hover: #F2D55C;    /* Mörkare gul för hover-läge på knappar */
+
+  /* --- NEUTRALA FÄRGER --- */
+  --color-bg-main: #FAFAF7;         /* Off-white/te-papperston för hela sajtens bakgrund */
+  --color-text-main: #222B26;       /* Mjukt mörkröd/svartgrön för brödtext (bättre än ren svart) */
+  --color-text-muted: #606F66;      /* Grågrön för sekundär text, datum och produktinfo */
+  --color-border: #D1DFD7;          /* Ljus linjefärg för produktkort och tabeller */
+
+  /* --- TYPSNITT --- */
+  --font-heading: 'Cormorant Garamond', serif;
+  --font-body: 'Plus Jakarta Sans', sans-serif;
+
+  /* --- ERROR / FELMEDDELANDEN --- */
+  --color-error: #C2412E;           /* En varm, jordig röd som syns tydligt men passar temat */
+  --color-error-bg: #FDF2F0;        /* Superljus röd/rosa bakgrund för felmeddelande-rutor */
+  --color-error-border: #F1C4BE;    /* Ram för felmeddelande-rutor */
+
+  /* --- BORDER RADIUS --- */
+  --radius-sm: 4px;       /* För små element som taggar, badges eller små knappar */
+  --radius-md: 8px;       /* Standard för produktkort, inputfält och normala knappar */
+  --radius-lg: 16px;      /* För större element som varningsrutor, menyer eller banners */
+  --radius-full: 9999px;  /* För helt runda knappar eller ikoner */
+
+  /* --- BOX SHADOWS --- */
+  --shadow-sm: 0 1px 3px rgba(34, 43, 38, 0.08), 0 1px 2px rgba(34, 43, 38, 0.04);
+  --shadow-md: 0 4px 12px rgba(34, 43, 38, 0.08), 0 2px 4px rgba(34, 43, 38, 0.04);
+  --shadow-lg: 0 12px 24px rgba(34, 43, 38, 0.08), 0 4px 8px rgba(34, 43, 38, 0.04);
+  
+  /* --- TEXTSTORLEKAR --- */
+  --text-xs: 0.75rem;     /* 12px - För väldigt liten text, t.ex. lagerstatus eller momsinfo */
+  --text-sm: 0.875rem;    /* 14px - Sekundär text, produktinfo, brödsmulor (breadcrumbs) */
+  --text-base: 1rem;      /* 16px - Standard brödtext, läsbar och bra på alla skärmar */
+  --text-md: 1.125rem;    /* 18px - Lite större text, t.ex. korta produktbeskrivningar */
+  --text-lg: 1.25rem;     /* 20px - Små rubriker, prislappar på produktsidor */
+  --text-xl: 1.5rem;      /* 24px - H3-rubriker eller priser i listor */
+  --text-2xl: 2rem;       /* 32px - H2-rubriker, t.ex. sektionsrubriker */
+  --text-3xl: 2.75rem;    /* 44px - H1-rubriker, huvudrubriken på landningssidan */
+}
+
+body {
+  font-family: var(--font-body);
+  color: var(--color-text-main);
+  background-color: var(--color-bg-main);
+}
+
+h1, h2, h3, h4 {
+  font-family: var(--font-heading);
+  font-weight: 700;
+  color: var(--color-primary-dark);
+}
+
