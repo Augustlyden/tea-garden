@@ -62,7 +62,7 @@ export const LoginPage = () => {
               id="password"
             />
           </div>
-          {error && <p className={styles.error}>{error}</p>}
+          {error && <p className="error">{error}</p>}
           <button className={styles.button} type="submit"> Lock In </button>
         </form>
       </div>

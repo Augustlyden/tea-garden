@@ -1,0 +1,226 @@
+.inputGroup {
+  display: inline-flex;
+  background-color: var(--color-primary-pale);
+  padding: 0.35rem;
+  border-radius: var(--radius-full);
+  gap: 0.25rem;
+  margin: 2.5rem auto;
+  display: flex;
+  max-width: fit-content;
+  box-shadow: inset 0 1px 3px rgba(34, 43, 38, 0.06);
+}
+
+.radio {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.label {
+  font-family: var(--font-body);
+  font-size: var(--text-sm);
+  font-weight: 500;
+  color: var(--color-primary-dark);
+  padding: 0.6rem 1.2rem;
+  border-radius: var(--radius-full);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  user-select: none;
+}
+
+.label:hover {
+  background-color: rgba(28, 93, 59, 0.08);
+  color: var(--color-primary);
+}
+
+.radio:checked + .label {
+  background-color: var(--color-primary);
+  color: var(--color-bg-main);
+  box-shadow: var(--shadow-sm);
+}
+
+.radio:focus-visible + .label {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+}
+
+.filterWrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  margin: 2rem auto;
+}
+
+.selectContainer {
+  position: relative;
+  min-width: 180px;
+}
+
+.select {
+  appearance: none; 
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  width: 100%;
+  font-family: var(--font-body);
+  font-size: var(--text-sm);
+  font-weight: 500;
+  color: var(--color-primary-dark);
+  background-color: var(--color-bg-main);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+  padding: 0.6rem 2.5rem 0.6rem 1rem; 
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.select:hover {
+  border-color: var(--color-primary-light);
+  box-shadow: var(--shadow-md);
+}
+
+.select:focus {
+  outline: none;
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px rgba(28, 93, 59, 0.15);
+}
+
+.selectContainer::after {
+  content: "";
+  position: absolute;
+  right: 1rem;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 0;
+  height: 0;
+  border-left: 5px solid transparent;
+  border-right: 5px solid transparent;
+  border-top: 6px solid var(--color-primary-dark);
+  pointer-events: none;
+}
+
+.visuallyHidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  border: 0;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  max-width: 800px;
+  margin: 2rem auto;
+  padding: 0 1rem;
+}
+
+.card {
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+  overflow: hidden;
+}
+
+.card a {
+  display: flex;
+  flex-direction: row;
+  text-decoration: none;
+  color: inherit;
+  width: 100%;
+}
+
+.card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+  border-color: var(--color-primary-light);
+}
+
+.title {
+  font-size: var(--text-xl);
+  color: var(--color-primary-dark);
+  margin: 0 0 0.25rem 0;
+}
+
+.category {
+  font-family: var(--font-body);
+  font-size: var(--text-sm);
+  color: var(--color-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin: 0;
+}
+
+.imgContainer {
+  width: 180px;     
+  min-width: 180px;  
+  height: 180px;     
+  background-color: var(--color-primary-pale);
+}
+
+.img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.contentContainer {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 1.5rem;
+  flex-grow: 1;
+}
+
+.productInfo {
+  display: flex;
+  gap: 1.5rem; 
+  flex-wrap: wrap;
+  border-top: 1px solid var(--color-bg-main);
+  padding-top: 0.75rem;
+  margin-top: 1rem;
+}
+
+.paragraph {
+  font-size: var(--text-sm);
+  color: var(--color-text-muted);
+  margin: 0;
+}
+
+.span {
+  font-weight: 600;
+  color: var(--color-text-main);
+}
+
+@media (max-width: 550px) {
+  .card a {
+    flex-direction: column;
+  }
+  .imgContainer {
+    width: 100%;
+    height: 200px;
+  }
+  .productInfo {
+    flex-direction: column; 
+    gap: 0.5rem;
+  }
+}
+
+@media (min-width: 600px) {
+  .filterWrapper {
+    flex-direction: row;
+    justify-content: space-between;
+    max-width: 800px;
+    padding: 0 1rem;
+  }
+
+  .inputGroup { margin: 0; } 
+}
+

@@ -54,3 +54,8 @@ export interface ValidationResult {
   valid: boolean;
   error?: string;
 }
+
+export interface CategoryInstance {
+  id: number;
+  type: string;
+}

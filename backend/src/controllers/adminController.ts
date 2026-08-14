@@ -30,12 +30,16 @@ export const loginAdmin = async (
 
     const token = generateToken(admin.id, admin.username);
 
+    const COOKIE_MAX_AGE = process.env.NODE_ENV === 'production'
+      ? 24 * 60 * 60 * 1000
+      : 7 * 24 * 60 * 60 * 1000;
+
     res.cookie('token', token, {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
       sameSite: 'lax',
-      maxAge: 24 * 60 * 60 * 1000
-    });
+      maxAge: COOKIE_MAX_AGE
+    }); 
 
     res.json({ success: true, data: { id: admin.id, username: admin.username }});
   } catch (error) {
