@@ -12,6 +12,19 @@ export interface AdminProductResponse {
   isDeleted: boolean;
 }
 
+export interface AdminProductInput {
+  productId?: number;
+  productName: string;
+  categoryId: number;
+  price: number;
+  inStock: number;
+  imgUrl: string | null;
+  desc: string | null;
+  attributes: Record<string, any> | null;
+  isAvailable?: boolean;
+  isDeleted?: boolean;
+}
+
 export interface ProductListProps {
   products: AdminProductResponse[];
 }
