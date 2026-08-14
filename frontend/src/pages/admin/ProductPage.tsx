@@ -13,7 +13,7 @@ export const ProductPage = () => {
   const [categoryFilter, setCategoryFilter] = useState<string | 'all'>('all')
 
   useEffect(() => {
-    const fetchAllItems = async () => {
+    const fetchAllProducts = async () => {
       try {
         const [productsData, categoriesData] = await Promise.all([
           productService.getAllProducts(),
@@ -28,7 +28,7 @@ export const ProductPage = () => {
         setIsLoading(false);
       }
     };
-    fetchAllItems();
+    fetchAllProducts();
   }, []);
 
   if (isLoading) {
