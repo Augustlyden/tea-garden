@@ -29,3 +29,8 @@ export interface CategoryResponse {
   id: number;
   type: string;
 }
+
+export interface ProductDetailProps {
+  product: AdminProductResponse;
+  onClick: () => void;
+}
