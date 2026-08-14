@@ -9,6 +9,7 @@ import orderRoutes from './routes/orderRoutes';
 import cartRoutes from './routes/cartRoutes';
 import adminRoutes from './routes/adminRoutes';
 import cookieParser from "cookie-parser";
+import categoryRoutes from './routes/categoryRoutes';
 
 dotenv.config();
 
@@ -29,6 +30,7 @@ app.use('/api/user/products', userProductRoutes);
 app.use('/api/cart', cartRoutes);
 app.use('/api/orders', orderRoutes);
 app.use('/api/admin', adminRoutes);
+app.use('/api/categories', categoryRoutes);
 
 app.get('/api/health', (req, res) => {
   res.json({ success: true, message: 'Server is running' });

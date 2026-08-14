@@ -45,6 +45,73 @@
   outline-offset: 2px;
 }
 
+.filterWrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  margin: 2rem auto;
+}
+
+.selectContainer {
+  position: relative;
+  min-width: 180px;
+}
+
+.select {
+  appearance: none; 
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  width: 100%;
+  font-family: var(--font-body);
+  font-size: var(--text-sm);
+  font-weight: 500;
+  color: var(--color-primary-dark);
+  background-color: var(--color-bg-main);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+  padding: 0.6rem 2.5rem 0.6rem 1rem; 
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.select:hover {
+  border-color: var(--color-primary-light);
+  box-shadow: var(--shadow-md);
+}
+
+.select:focus {
+  outline: none;
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px rgba(28, 93, 59, 0.15);
+}
+
+.selectContainer::after {
+  content: "";
+  position: absolute;
+  right: 1rem;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 0;
+  height: 0;
+  border-left: 5px solid transparent;
+  border-right: 5px solid transparent;
+  border-top: 6px solid var(--color-primary-dark);
+  pointer-events: none;
+}
+
+.visuallyHidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  border: 0;
+}
+
 .container {
   display: flex;
   flex-direction: column;
@@ -144,5 +211,16 @@
     flex-direction: column; 
     gap: 0.5rem;
   }
+}
+
+@media (min-width: 600px) {
+  .filterWrapper {
+    flex-direction: row;
+    justify-content: space-between;
+    max-width: 800px;
+    padding: 0 1rem;
+  }
+
+  .inputGroup { margin: 0; } 
 }
 

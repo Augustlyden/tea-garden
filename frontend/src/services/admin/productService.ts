@@ -1,5 +1,5 @@
 import api from "../../config/api";
-import { type ApiResponse, type AdminProductResponse } from "../../types/productTypes";
+import { type ApiResponse, type AdminProductResponse, type CategoryResponse } from "../../types/productTypes";
 
 export const productService = {
   getAllProducts: async (): Promise<ApiResponse<AdminProductResponse[]>> => {
@@ -11,4 +11,9 @@ export const productService = {
     const response = await api.get<ApiResponse<AdminProductResponse>>(`/admin/products/${id}`);
     return response.data;
   },
+
+  getAllCategories: async (): Promise<ApiResponse<CategoryResponse[]>> => {
+    const response = await api.get<ApiResponse<CategoryResponse[]>>('/categories/');
+    return response.data;
+  }
 };

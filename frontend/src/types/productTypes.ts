@@ -24,3 +24,8 @@ export interface ApiResponse<T> {
   success: boolean;
   data: T;
 }
+
+export interface CategoryResponse {
+  id: number;
+  type: string;
+}

@@ -13,14 +13,12 @@ function App() {
         <AuthProvider>
           <Routes>
             <Route path='/admin/login' element={<LoginPage />} />
-          </Routes>
-          <Routes>
+
             <Route path='/admin/products' element={
               <ProtectedRoute>
                 <ProductPage />
               </ProtectedRoute>
-            }>
-          </Route>
+            }/>
           </Routes>
         </AuthProvider>
       </BrowserRouter>
