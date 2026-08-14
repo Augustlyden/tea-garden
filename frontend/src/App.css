@@ -1,0 +1,20 @@
+.error {
+  font-size: var(--text-sm);
+  font-weight: 500;
+  margin-top: 0.25rem;
+  display: block;
+  color: var(--color-error);
+}
+
+.error-alert-box {
+  background-color: var(--color-error-bg);
+  border: 1px solid var(--color-error-border);
+  color: var(--color-error);
+  padding: 1rem;
+  border-radius: 6px;
+  font-size: 0.95rem;
+  margin: 1rem 0;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}

@@ -38,12 +38,33 @@ export const ProductPage = () => {
   return (
     <main>
       <div className={styles.inputGroup}>
-        <input className={styles.radio} type="radio" name="availability" onChange={() => {setFilter('all')}}/>
-        <label className={styles.label} htmlFor="">Alla</label>
-        <input className={styles.radio} type="radio" name="availability" onChange={() => {setFilter('available')}}/>
-        <label className={styles.label} htmlFor="">I lager</label>
-        <input className={styles.radio} type="radio" name="availability" onChange={() => {setFilter('unavailable')}}/>
-        <label className={styles.label} htmlFor="">Ej i lager</label>
+        <input 
+          className={styles.radio} 
+          type="radio" 
+          id="filter-all" 
+          name="availability" 
+          defaultChecked 
+          onChange={() => setFilter('all')}
+        />
+        <label className={styles.label} htmlFor="filter-all">Alla</label>
+
+        <input 
+          className={styles.radio} 
+          type="radio" 
+          id="filter-available" 
+          name="availability" 
+          onChange={() => setFilter('available')}
+        />
+        <label className={styles.label} htmlFor="filter-available">I lager</label>
+
+        <input 
+          className={styles.radio} 
+          type="radio" 
+          id="filter-unavailable" 
+          name="availability" 
+          onChange={() => setFilter('unavailable')}
+        />
+        <label className={styles.label} htmlFor="filter-unavailable">Ej i lager</label>
       </div>
       <ProductList products={filteredProducts}/>
       {error && <p className="error">{error}</p>}
