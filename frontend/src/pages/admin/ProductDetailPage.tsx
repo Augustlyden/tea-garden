@@ -9,7 +9,6 @@ export const ProductDetailPage = () => {
   const { id } = useParams();
   const [isEditing, setIsEditing] = useState(false);
   const [product, setProduct] = useState<AdminProductResponse>();
-  const [updatedProduct, setUpdatedProduct] = useState<AdminProductResponse>();
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(true);
 

@@ -1,5 +1,5 @@
 import api from "../../config/api";
-import { type ApiResponse, type AdminProductResponse, type CategoryResponse, type AdminProductInput } from "../../types/productTypes";
+import { type ApiResponse, type AdminProductResponse, type CategoryResponse } from "../../types/productTypes";
 
 export const productService = {
   getAllProducts: async (): Promise<ApiResponse<AdminProductResponse[]>> => {

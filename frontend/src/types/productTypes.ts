@@ -25,6 +25,13 @@ export interface AdminProductInput {
   isDeleted?: boolean;
 }
 
+export interface ProductFormProps {
+  initialData?: AdminProductResponse;
+  onSubmit: (FormData: FormData) => Promise<void>;
+  onCancel: () => void;
+  submitLabel: string;
+}
+
 export interface ProductListProps {
   products: AdminProductResponse[];
 }
@@ -41,6 +48,12 @@ export interface ApiResponse<T> {
 export interface CategoryResponse {
   id: number;
   type: string;
+}
+
+export interface CategorySelectProps {
+  value: number | 'all' | '';
+  onChange: (categoryId: string) => void;
+  includeAll: boolean;
 }
 
 export interface ProductDetailProps {
