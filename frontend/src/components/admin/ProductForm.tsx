@@ -31,6 +31,11 @@ export const ProductForm = ({ initialData, onSubmit, onCancel }: ProductFormProp
       setError('Lagersaldo får inte vara mindre än 0');
       return;
     }
+
+    if (formValues.categoryId === 0) {
+      setError('Välj en kategori');
+      return;
+    }
     setError('');
 
     const data = new FormData();
@@ -43,6 +48,8 @@ export const ProductForm = ({ initialData, onSubmit, onCancel }: ProductFormProp
     if (imageFile) {
       data.append('image', imageFile);
     }
+
+    console.log(formValues.productId)
     
     setIsLoading(true);
     try {

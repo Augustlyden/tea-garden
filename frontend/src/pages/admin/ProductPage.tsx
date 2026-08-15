@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { productService } from "../../services/admin/productService";
 import { ProductList } from "../../components/admin/ProductList";
-import type { AdminProductResponse, CategoryResponse } from "../../types/productTypes";
+import type { AdminProductResponse } from "../../types/productTypes";
 import styles from '../../css/product.module.css';
 import { CategorySelect } from "../../components/shared/CategorySelect";
 
@@ -80,7 +80,7 @@ export const ProductPage = () => {
           <label htmlFor="category-select" className={styles.visuallyHidden}>
             Välj kategori
           </label>
-          <CategorySelect value={Number(categoryFilter)} onChange={setCategoryFilter} includeAll={true}/>
+          <CategorySelect value={Number(categoryFilter)} onChange={setCategoryFilter} includeAll={true} disabled={false}/>
         </div>
 
       </div>
