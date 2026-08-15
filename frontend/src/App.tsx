@@ -5,6 +5,7 @@ import { AuthProvider } from './context/AuthContext'
 import { ProtectedRoute } from './routes/ProtectedRoute'
 import { ProductPage } from './pages/admin/ProductPage'
 import { ProductDetailPage } from './pages/admin/ProductDetailPage'
+import { CreateProductPage } from './pages/admin/CreateProductPage'
 
 function App() {
 
@@ -22,6 +23,11 @@ function App() {
             <Route path='/admin/products/:id' element={
               <ProtectedRoute>
                 <ProductDetailPage />
+              </ProtectedRoute>
+            }/>
+            <Route path='/admin/products/create' element={
+              <ProtectedRoute>
+                <CreateProductPage />
               </ProtectedRoute>
             }/>
           </Routes>

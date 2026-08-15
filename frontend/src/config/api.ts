@@ -12,8 +12,6 @@ const api = axios.create({
 api.interceptors.request.use(
   (config) => {
     if (config.data instanceof FormData) {
-      /* Bortkommenterade så länge tills jag vet vilken som fungerar vid ett create product anrop */
-      // delete config.headers['Content-Type'];
       config.headers.delete('Content-Type');
     }
     return config;
