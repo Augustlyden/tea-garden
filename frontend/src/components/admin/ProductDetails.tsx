@@ -1,7 +1,8 @@
 import type { ProductDetailProps } from "../../types/productTypes";
 import styles from '../../css/productDetail.module.css';
+import { Pencil, Trash2 } from 'lucide-react';
 
-export const ProductDetails = ( {product, onClick}: ProductDetailProps ) => {
+export const ProductDetails = ( {product, onClick, onDelete, disabled}: ProductDetailProps ) => {
   return (
     <>
       <section className={styles.mediaColumn}>
@@ -42,8 +43,27 @@ export const ProductDetails = ( {product, onClick}: ProductDetailProps ) => {
           </div>
 
           <div className={styles.buttonContainer}>
-            <button className={styles.editButton} onClick={onClick}>
-              Redigera Produkt
+            <button 
+              className={`${styles.iconButton} ${styles.editButton}`}   
+              onClick={onClick} 
+              title="Redigera produkt" 
+              aria-label="Redigera produkt"
+            >
+              <Pencil size={18} strokeWidth={2.2}/>
+            </button>
+
+            <button
+              className={`${styles.iconButton} ${styles.deleteButton}`}
+              title="Radera produkt"
+              aria-label="Radera produkt"
+              disabled={disabled}
+              onClick={() => {
+                if (window.confirm(`Är du säker på att du vill radera ${product.productName}?`)) {
+                  onDelete();
+                }
+              }}
+            >
+              <Trash2 size={18} strokeWidth={2.2}/>  
             </button>
           </div>
         </div>
