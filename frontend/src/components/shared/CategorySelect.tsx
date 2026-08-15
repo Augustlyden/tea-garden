@@ -3,7 +3,7 @@ import type { CategoryResponse, CategorySelectProps } from "../../types/productT
 import { productService } from "../../services/admin/productService";
 import styles from '../../css/product.module.css';
 
-export const CategorySelect = ({ value, onChange, includeAll}: CategorySelectProps ) => {
+export const CategorySelect = ({ value, onChange, includeAll, disabled}: CategorySelectProps ) => {
   const [categories, setCategories] = useState<CategoryResponse[]>([]);
 
   useEffect(() => {
@@ -18,7 +18,7 @@ export const CategorySelect = ({ value, onChange, includeAll}: CategorySelectPro
     fetchAllCategories()
   }, []);
   return (
-    <select className={styles.select} value={value} onChange={(e) => onChange(e.target.value)}>
+    <select disabled={disabled} className={styles.select} value={value} onChange={(e) => onChange(e.target.value)}>
       {includeAll && <option value="all">Alla kategorier</option>}
       {categories.map(c => (
         <option key={c.id} value={c.id}>{c.type}</option>

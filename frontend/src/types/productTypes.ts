@@ -54,6 +54,7 @@ export interface CategorySelectProps {
   value: number | 'all' | '';
   onChange: (categoryId: string) => void;
   includeAll: boolean;
+  disabled: boolean;
 }
 
 export interface ProductDetailProps {
