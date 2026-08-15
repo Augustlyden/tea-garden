@@ -29,7 +29,6 @@ export interface ProductFormProps {
   initialData?: AdminProductResponse;
   onSubmit: (FormData: FormData) => Promise<void>;
   onCancel: () => void;
-  submitLabel: string;
 }
 
 export interface ProductListProps {

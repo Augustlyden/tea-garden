@@ -18,7 +18,7 @@ export const productService = {
   },
 
   updateProduct: async (id: number, data: FormData): Promise<ApiResponse<AdminProductResponse>> => {
-    const response = await api.patch<ApiResponse<AdminProductResponse>>('/admin/products/', {data, id});
+    const response = await api.patch<ApiResponse<AdminProductResponse>>(`/admin/products/${id}`, data);
     return response.data;
   },
 

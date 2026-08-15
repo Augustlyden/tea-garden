@@ -14,7 +14,7 @@ api.interceptors.request.use(
     if (config.data instanceof FormData) {
       /* Bortkommenterade så länge tills jag vet vilken som fungerar vid ett create product anrop */
       // delete config.headers['Content-Type'];
-      // config.headers.delete('Content-Type');
+      config.headers.delete('Content-Type');
     }
     return config;
   },

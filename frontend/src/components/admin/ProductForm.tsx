@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { type AdminProductInput, type ProductFormProps } from "../../types/productTypes";
 import { CategorySelect } from "../shared/CategorySelect";
+import styles from "../../css/productForm.module.css";
 
 const emptyProduct: AdminProductInput = {
   productName: '',
@@ -64,80 +65,112 @@ export const ProductForm = ({ initialData, onSubmit, onCancel }: ProductFormProp
     setImageFile(file);
   };
   return (
-    <>
-      <form onSubmit={handleSubmit}>
-        <h1>{initialData ? 'Redigera Produkt' : 'Skapa Produkt'}</h1>
-
-        <label htmlFor="productName">Produkt namn</label>
-        <input 
-          type="text" 
-          name="productName" 
-          onChange={handleChange} 
-          value={formValues.productName} 
-          id="productName"
-          disabled={isLoading}
-        />
-
-        <CategorySelect 
-          value={formValues.categoryId} 
-          includeAll={false} 
-          onChange={(categoryId) => setFormValues(prev => ({ ...prev, categoryId: Number(categoryId)}))} 
-          disabled={isLoading}
-        />
-        <label htmlFor="price">Pris</label>
-        <input 
-          type="number" 
-          name="price" 
-          value={formValues.price} 
-          onChange={handleChange}
-          id="price"
-          disabled={isLoading}
-        />
-
-        <label htmlFor="inStock">Antal i lager</label>
-        <input 
-          type="number" 
-          name="inStock" 
-          value={formValues.inStock} 
-          onChange={handleChange}
-          id="inStock" 
-          disabled={isLoading} 
-        />
-
-        <label htmlFor="desc">Beskrivning</label>
-        <textarea
-          name="desc" 
-          onChange={handleChange} 
-          value={formValues.desc ?? ''}
-          id="desc" 
-          disabled={isLoading} 
-        />
-
-        <label htmlFor="attributes">Egenskaper</label>
-        <textarea 
-          id="attributes" 
-          name="attributes"
-          placeholder='{"Smak": "Citron"}'
-          onChange={handleChange}
-          disabled={isLoading}
+    <div className={styles.container}>
+      <h1 className={styles.title}>{initialData ? 'Redigera Produkt' : 'Skapa Produkt'}</h1>
+      <form onSubmit={handleSubmit} className={styles.form}>
+        <div className={styles.inputGroup}>
+          <label className={styles.label} htmlFor="productName">Produkt namn</label>
+          <input 
+            type="text" 
+            name="productName" 
+            onChange={handleChange} 
+            value={formValues.productName} 
+            id="productName"
+            disabled={isLoading}
+            className={styles.input}
           />
+        </div>
 
-        <label htmlFor="image">Bild</label>
-        <input 
-          type="file" 
-          name="image" 
-          id="image" 
-          onChange={handleFileChange} 
-          accept="image/*"
-          disabled={isLoading}
-        />
+        <div className={styles.formRow}>
+          <div className={styles.inputGroup}>
+            <label className={styles.label}>Kategori</label>
+            <CategorySelect 
+              value={formValues.categoryId} 
+              includeAll={false} 
+              onChange={(categoryId) => setFormValues(prev => ({ 
+                ...prev, categoryId: Number(categoryId)
+              }))} 
+              disabled={isLoading}
+            />
+          </div>
+
+          <div className={styles.inputGroup}>
+            <label className={styles.label} htmlFor="price">Pris</label>
+            <input 
+              type="number" 
+              name="price" 
+              value={formValues.price} 
+              onChange={handleChange}
+              id="price"
+              disabled={isLoading}
+              className={styles.input}
+              min={0}
+            />
+          </div>
+
+          <div className={styles.inputGroup}>
+            <label className={styles.label} htmlFor="inStock">Antal i lager</label>
+            <input 
+              type="number" 
+              name="inStock" 
+              value={formValues.inStock} 
+              onChange={handleChange}
+              id="inStock" 
+              disabled={isLoading} 
+              className={styles.input}
+              min={0}
+            />
+          </div>
+        </div>
+
+        <div className={styles.inputGroup}>
+          <label className={styles.label} htmlFor="desc">Beskrivning</label>
+          <textarea
+            name="desc" 
+            onChange={handleChange} 
+            value={formValues.desc ?? ''}
+            id="desc" 
+            disabled={isLoading} 
+            className={`${styles.input} ${styles.textarea}`}
+          />
+        </div>
+        
+        <div className={styles.inputGroup}>
+          <label className={styles.label} htmlFor="attributes">Egenskaper</label>
+          <textarea 
+            id="attributes" 
+            name="attributes"
+            placeholder='{"Smak": "Citron"}'
+            onChange={handleChange}
+            disabled={isLoading}
+            className={`${styles.input} ${styles.textarea} ${styles.codeFont}`}
+          />
+        </div>
+
+        <div className={styles.inputGroup}>
+          <label className={styles.label} htmlFor="image">Bild</label>
+          <input 
+            type="file" 
+            name="image" 
+            id="image" 
+            onChange={handleFileChange} 
+            accept="image/*"
+            disabled={isLoading}
+            className={`${styles.input} ${styles.fileInput}`}
+          />
+        </div>
 
         {error && <p className="error">{error}</p>}
-        <div>
-          <button disabled={isLoading} type="submit">{initialData ? 'Spara' : 'Skapa'}</button>
-          <button disabled={isLoading} onClick={onCancel}>Avbryt</button>
+
+        <div className={styles.buttonGroup}>
+          <button className={styles.button} disabled={isLoading} type="submit">
+            {initialData ? 'Spara' : 'Skapa'}
+          </button>
+          <button className={styles.cancel} disabled={isLoading} onClick={onCancel}>
+            Avbryt
+          </button>
         </div>
       </form>
-    </>
+    </div>
   );
 };
