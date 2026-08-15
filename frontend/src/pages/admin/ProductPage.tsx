@@ -11,7 +11,7 @@ export const ProductPage = () => {
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(true);
   const [filter, setFilter] = useState<'all' | 'available' | 'unavailable'>('all');
-  const [categoryFilter, setCategoryFilter] = useState<string | 'all'>('all')
+  const [categoryFilter, setCategoryFilter] = useState<number | 'all'>('all')
 
   useEffect(() => {
     const fetchAllProducts = async () => {
@@ -39,7 +39,7 @@ export const ProductPage = () => {
       (filter === 'unavailable' && !p.isAvailable);
 
     const macthedCategory =
-      categoryFilter === 'all' || p.categoryId === Number(categoryFilter)
+      categoryFilter === 'all' || p.categoryId === categoryFilter
 
     return matchesAvailability && macthedCategory;
   });
@@ -82,7 +82,12 @@ export const ProductPage = () => {
           <label htmlFor="category-select" className={styles.visuallyHidden}>
             Välj kategori
           </label>
-          <CategorySelect value={Number(categoryFilter)} onChange={setCategoryFilter} includeAll={true} disabled={false}/>
+          <CategorySelect 
+            value={categoryFilter} 
+            onChange={setCategoryFilter} 
+            includeAll={true} 
+            disabled={false}
+          />
         </div>
 
       </div>

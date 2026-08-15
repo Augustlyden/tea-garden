@@ -41,6 +41,7 @@ export interface ProductProps {
 
 export interface ApiResponse<T> {
   success: boolean;
+  message?: string;
   data: T;
 }
 
@@ -50,8 +51,8 @@ export interface CategoryResponse {
 }
 
 export interface CategorySelectProps {
-  value: number | 'all' | '';
-  onChange: (categoryId: string) => void;
+  value: number | 'all' | 0;
+  onChange: (categoryId: number | 'all') => void;
   includeAll: boolean;
   disabled: boolean;
 }
@@ -59,4 +60,6 @@ export interface CategorySelectProps {
 export interface ProductDetailProps {
   product: AdminProductResponse;
   onClick: () => void;
+  onDelete: () => void;
+  disabled: boolean;
 }

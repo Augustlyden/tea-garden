@@ -25,5 +25,10 @@ export const productService = {
   createProduct: async (data: FormData): Promise<ApiResponse<AdminProductResponse>> => {
     const response = await api.post<ApiResponse<AdminProductResponse>>('/admin/products/', data);
     return response.data;
+  },
+
+  deleteProduct: async (id: number): Promise<ApiResponse<AdminProductResponse>> => {
+    const response = await api.delete<ApiResponse<AdminProductResponse>>(`admin/products/${id}`);
+    return response.data;
   }
 };

@@ -71,6 +71,12 @@ export const ProductForm = ({ initialData, onSubmit, onCancel }: ProductFormProp
     const file = e.target.files?.[0] ?? null;
     setImageFile(file);
   };
+
+  const handleCategoryChange = (categoryId: number | 'all') => {
+    if (categoryId === 'all') return;
+    setFormValues(prev => ({...prev, categoryId: categoryId}));
+  }
+
   return (
     <div className={styles.container}>
       <h1 className={styles.title}>{initialData ? 'Redigera Produkt' : 'Skapa Produkt'}</h1>
@@ -94,9 +100,7 @@ export const ProductForm = ({ initialData, onSubmit, onCancel }: ProductFormProp
             <CategorySelect 
               value={formValues.categoryId} 
               includeAll={false} 
-              onChange={(categoryId) => setFormValues(prev => ({ 
-                ...prev, categoryId: Number(categoryId)
-              }))} 
+              onChange={handleCategoryChange}
               disabled={isLoading}
             />
           </div>
