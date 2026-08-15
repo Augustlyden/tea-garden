@@ -5,6 +5,7 @@ import { productService } from "../../services/admin/productService";
 import { ProductDetails } from "../../components/admin/ProductDetails";
 import styles from '../../css/productDetail.module.css';
 import { ProductForm } from "../../components/admin/ProductForm";
+import { Sidebar } from "../../components/admin/Sidebar";
 
 export const ProductDetailPage = () => {
   const { id } = useParams();
@@ -46,17 +47,20 @@ export const ProductDetailPage = () => {
   }
 
   return (
-    <main className={!isEditing ? `${styles.detailContainer}` : ""} >
-      {!isEditing ? (
-        <>
-          <ProductDetails 
-            product={product}
-            onClick={() => setIsEditing(true)} />
-        </>
-      ) : (
-        <ProductForm initialData={product} onCancel={() => {setIsEditing(false)}} onSubmit={handleUpdate}/>
-      )}
-      {error && <p className="error">{error}</p>}
+    <main>
+      <Sidebar />
+      <section className={!isEditing ? `${styles.detailContainer}` : ""}>
+        {!isEditing ? (
+          <>
+            <ProductDetails 
+              product={product}
+              onClick={() => setIsEditing(true)} />
+          </>
+        ) : (
+          <ProductForm initialData={product} onCancel={() => {setIsEditing(false)}} onSubmit={handleUpdate}/>
+        )}
+        {error && <p className="error">{error}</p>}
+      </section>
     </main>
   );
 };

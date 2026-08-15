@@ -4,6 +4,7 @@ import { ProductList } from "../../components/admin/ProductList";
 import type { AdminProductResponse } from "../../types/productTypes";
 import styles from '../../css/product.module.css';
 import { CategorySelect } from "../../components/shared/CategorySelect";
+import { Sidebar } from "../../components/admin/Sidebar";
 
 export const ProductPage = () => {
   const [products, setProducts] = useState<AdminProductResponse[]>([]);
@@ -45,6 +46,7 @@ export const ProductPage = () => {
 
   return (
     <main>
+      <Sidebar />
       <div className={styles.filterWrapper}>
         <div className={styles.inputGroup}>
           <input 
