@@ -1,0 +1,152 @@
+.container {
+  max-width: 700px;
+  margin: 3rem auto;
+  padding: 2.5rem;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md);
+}
+
+.title {
+  margin: 0 0 2rem 0;
+  text-align: center;
+  font-size: var(--text-2xl);
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.inputGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  width: 100%;
+}
+
+.formRow {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.label {
+  font-weight: 500;
+  color: var(--color-primary-dark);
+  font-size: var(--text-sm);
+}
+
+.input {
+  font-size: var(--text-base);
+  color: var(--color-text-main);
+  padding: 0.6rem 2.5rem 0.6rem 1rem; 
+  background-color: var(--color-bg-main);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  transition: all 0.2s ease;
+  width: 100%;
+  box-sizing: border-box;
+  box-shadow: var(--shadow-sm);
+}
+
+.input:focus {
+  outline: none;
+  background-color: #ffffff;
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px rgba(28, 93, 59, 0.12); 
+}
+
+.textarea {
+  min-height: 100px;
+  resize: vertical;
+}
+
+.codeFont {
+  font-family: 'Courier New', Courier, monospace;
+  font-size: var(--text-sm);
+  background-color: #f8f9fa;
+}
+
+.fileInput {
+  padding: 0.6rem;
+  background-color: transparent;
+  border: 1px dashed var(--color-border);
+}
+
+.fileInput::file-selector-button {
+  font-family: var(--font-body);
+  font-size: var(--text-xs);
+  font-weight: 600;
+  background-color: var(--color-primary-pale);
+  color: var(--color-primary-dark);
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  margin-right: 1rem;
+  transition: background-color 0.2s;
+}
+
+.fileInput::file-selector-button:hover {
+  background-color: var(--color-border);
+}
+
+.buttonGroup {
+  display: flex;
+  gap: 1rem;
+  justify-content: flex-end;
+  margin-top: 1rem;
+  border-top: 1px solid var(--color-bg-main);
+  padding-top: 1.5rem;
+}
+
+.button {
+  font-family: var(--font-body);
+  font-size: var(--text-sm);
+  font-weight: 600;
+  color: var(--color-primary);
+  background-color: var(--color-accent);
+  border: none;
+  padding: 0.75rem 2rem;
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.button:hover:not(:disabled) {
+  background-color: var(--color-accent-hover);
+  box-shadow: var(--shadow-md);
+}
+
+.cancel {
+  font-family: var(--font-body);
+  font-size: var(--text-sm);
+  font-weight: 500;
+  color: var(--color-text-muted);
+  background-color: transparent;
+  border: 1px solid var(--color-border);
+  padding: 0.75rem 1.5rem;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.cancel:hover:not(:disabled) {
+  background-color: var(--color-error-bg);
+  color: var(--color-error);
+  border-color: var(--color-error-border);
+}
+
+.input:disabled, .button:disabled, .cancel:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+@media (min-width: 600px) {
+  .formRow {
+    flex-direction: row;
+  }
+}
