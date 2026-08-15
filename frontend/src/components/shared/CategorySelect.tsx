@@ -19,6 +19,7 @@ export const CategorySelect = ({ value, onChange, includeAll, disabled}: Categor
   }, []);
   return (
     <select disabled={disabled} className={styles.select} value={value} onChange={(e) => onChange(e.target.value)}>
+      <option value="0">Välj kategori</option>
       {includeAll && <option value="all">Alla kategorier</option>}
       {categories.map(c => (
         <option key={c.id} value={c.id}>{c.type}</option>
