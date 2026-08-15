@@ -15,5 +15,15 @@ export const productService = {
   getAllCategories: async (): Promise<ApiResponse<CategoryResponse[]>> => {
     const response = await api.get<ApiResponse<CategoryResponse[]>>('/categories/');
     return response.data;
+  },
+
+  updateProduct: async (id: number, data: FormData): Promise<ApiResponse<AdminProductResponse>> => {
+    const response = await api.patch<ApiResponse<AdminProductResponse>>(`/admin/products/${id}`, data);
+    return response.data;
+  },
+
+  createProduct: async (data: FormData): Promise<ApiResponse<AdminProductResponse>> => {
+    const response = await api.post<ApiResponse<AdminProductResponse>>('/admin/products/', data);
+    return response.data;
   }
 };

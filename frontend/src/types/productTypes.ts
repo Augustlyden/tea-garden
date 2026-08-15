@@ -12,6 +12,25 @@ export interface AdminProductResponse {
   isDeleted: boolean;
 }
 
+export interface AdminProductInput {
+  productId?: number;
+  productName: string;
+  categoryId: number;
+  price: number;
+  inStock: number;
+  imgUrl: string | null;
+  desc: string | null;
+  attributes: Record<string, any> | null;
+  isAvailable?: boolean;
+  isDeleted?: boolean;
+}
+
+export interface ProductFormProps {
+  initialData?: AdminProductResponse;
+  onSubmit: (FormData: FormData) => Promise<void>;
+  onCancel: () => void;
+}
+
 export interface ProductListProps {
   products: AdminProductResponse[];
 }
@@ -28,6 +47,13 @@ export interface ApiResponse<T> {
 export interface CategoryResponse {
   id: number;
   type: string;
+}
+
+export interface CategorySelectProps {
+  value: number | 'all' | '';
+  onChange: (categoryId: string) => void;
+  includeAll: boolean;
+  disabled: boolean;
 }
 
 export interface ProductDetailProps {
