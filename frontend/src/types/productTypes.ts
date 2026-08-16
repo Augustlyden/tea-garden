@@ -8,7 +8,7 @@ export interface AdminProductResponse {
   desc: string | null;
   attributes: Record<string, any> | null;
   isAvailable: boolean;
-  categoryName: string;
+  categoryName: 'Te' | 'Tillbehör';
   isDeleted: boolean;
 }
 
