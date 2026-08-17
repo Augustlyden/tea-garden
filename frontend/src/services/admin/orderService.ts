@@ -4,12 +4,12 @@ import type { ApiResponse } from "../../types/productTypes";
 
 export const orderService = {
   getAllOrders: async (): Promise<ApiResponse<AdminOrderResponse[]>> => {
-    const response = await api.get<ApiResponse<AdminOrderResponse[]>>('/admin/orders/');
+    const response = await api.get<ApiResponse<AdminOrderResponse[]>>('/orders/');
     return response.data;
   },
 
   getHistoryById: async (id: number): Promise<ApiResponse<StatusHistoryResponse[]>> => {
-    const response = await api.get<ApiResponse<StatusHistoryResponse[]>>(`admin/orders/${id}/history`);
+    const response = await api.get<ApiResponse<StatusHistoryResponse[]>>(`/orders/${id}/history`);
     return response.data;
   },
 };
