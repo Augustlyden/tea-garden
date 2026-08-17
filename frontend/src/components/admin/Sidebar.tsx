@@ -50,6 +50,7 @@ export const Sidebar = () => {
         <nav aria-label="Admin Meny" className={styles.navLinks}>
           <Link className={styles.link} to="/admin/products">Produkter</Link>
           <Link className={styles.link} to="/admin/products/create">Skapa Produkt</Link>
+          <Link className={styles.link} to="/admin/orders">Beställningar</Link>
           <button disabled={isLoading} onClick={logoutAdmin} className={styles.logout}>
             Logga Ut
           </button>

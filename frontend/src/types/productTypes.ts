@@ -35,7 +35,7 @@ export interface ProductListProps {
   products: AdminProductResponse[];
 }
 
-export interface ProductProps {
+export interface ProductCardProps {
   product: AdminProductResponse;
 }
 

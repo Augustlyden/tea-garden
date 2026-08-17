@@ -78,6 +78,24 @@ export const getOrderById = async (
   }
 };
 
+export const getStatusHistoryById = async (
+  req: Request<{ id: string }>, res: Response
+) => {
+  try {
+    const orderId = Number(req.params.id);
+    if (Number.isNaN(orderId)) {
+      return res.status(400).json({ success: false, error: 'Ogiltigt order-ID' });
+    }
+
+    const history = await Order.findHistoryByOrderId(orderId);
+
+    res.json({ success: true, data: history });
+  } catch (error) {
+    console.error('Error while fetching order:', error);
+    res.status(500).json({ success: false, error: 'Misslyckades att hämta historik' });
+  }
+}
+
 export const updateStatus = async (
   req: AuthRequest<{ id: string }, {}, { status: string }>, res: Response
 ) => {

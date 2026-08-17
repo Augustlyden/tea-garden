@@ -1,7 +1,20 @@
 import db from '../config/database';
-import { AdminOrderDetail, AdminOrderList, OrderInput, OrderInstance, StatusHistoryDatabaseRow, StatusUpdateResult } from '../types/orderTypes';
+import { 
+  AdminOrderDetail, 
+  OrderInput, 
+  OrderInstance, 
+  OrderSummary, 
+  StatusHistoryItem, 
+  StatusUpdateResult 
+} from '../types/orderTypes';
 import { InsufficientStockError, NotFoundError } from '../utils/error';
-import { formatOrder, formatOrderDetail, formatOrderList, formatStatusUpdate } from '../utils/orderFormatter';
+import { 
+  formatOrder, 
+  formatOrderDetail, 
+  formatStatusUpdate, 
+  mapStatusRows, 
+  orderSummary 
+} from '../utils/orderFormatter';
 
 class Order {
   private static readonly BASE_ORDER_SELECT = `
@@ -12,13 +25,14 @@ class Order {
       o.order_date,
       o.street,
       o.zip_code,
-      o.city
+      o.city,
+      os.current_status
     FROM orders o
   `;
 
   private static readonly BASE_STATUS_SELECT = `
     SELECT
-      os.order_id, os.status, os.changed_at, a.username AS admin
+      os.id, os.order_id, os.status, os.changed_at, a.username AS admin
     FROM order_status os
     LEFT JOIN admin a ON os.admin_id = a.id
   `;
@@ -115,32 +129,31 @@ class Order {
     }
   }
 
-  static async findAll(): Promise<AdminOrderList[]> {
-    const status = await db.query(`
-      ${this.BASE_STATUS_SELECT}
-      ORDER BY os.order_id, os.changed_at ASC
-      `
-    );
-
-    const orders = await db.query(`
+  static async findAll(): Promise<OrderSummary[]> {
+    const result = await db.query(`
       ${this.BASE_ORDER_SELECT}
+      LEFT JOIN (
+        SELECT DISTINCT ON (order_id) order_id, status AS current_status
+        FROM order_status
+        ORDER BY order_id, changed_at DESC
+      ) os ON os.order_id = o.id
       ORDER BY o.order_date DESC;
       `
     );
 
-    const statusRows = status.rows;
-    const orderData = orders.rows;
+    const rows = result.rows;
+    return rows.map(orderSummary);
+  }
 
-    const statusByOrderId = new Map<number, StatusHistoryDatabaseRow[]>();
-    for (const row of statusRows) {
-      const existing = statusByOrderId.get(row.order_id) ?? [];
-      existing.push(row);
-      statusByOrderId.set(row.order_id, existing);
-    }
-
-    return orderData.map(order =>
-      formatOrderList(order, statusByOrderId.get(order.id) ?? [])
+  static async findHistoryByOrderId(id: number): Promise<StatusHistoryItem[]> {
+    const result = await db.query(`
+      ${this.BASE_STATUS_SELECT}
+      WHERE os.order_id = $1;
+      `, [id]
     );
+
+    const rows = result.rows;
+    return mapStatusRows(rows);
   }
 
   static async findById(id: number): Promise<AdminOrderDetail | null> {

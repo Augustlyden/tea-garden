@@ -7,6 +7,7 @@ export interface OrderProductItem {
 }
 
 export interface StatusHistoryItem {
+  id: number;
   status: string;
   changedAt: Date;
   admin: string | null;
@@ -27,15 +28,12 @@ export interface OrderSummary {
   street: string;
   zipCode: string;
   city: string;
+  currentStatus: string;
 }
 
 export interface OrderInstance extends OrderSummary {
   products: OrderProductItem[];
 }  
-
-export interface AdminOrderList extends OrderSummary {
-  history: StatusHistoryItem[];
-}
 
 export interface AdminOrderDetail extends OrderSummary {
   products: OrderProductItem[];
@@ -58,6 +56,7 @@ export interface OrderDatabaseRow {
   street: string;
   zip_code: string;
   city: string;
+  current_status: string;
 }
 
 export interface ItemDatabaseRow {
