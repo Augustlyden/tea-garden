@@ -1,14 +1,14 @@
-import { BrowserRouter, Route, Routes } from 'react-router-dom'
-import './App.css'
-import LoginPage from './pages/admin/LoginPage'
-import { AuthProvider } from './context/AuthContext'
-import { ProtectedRoute } from './routes/ProtectedRoute'
-import { ProductPage } from './pages/admin/ProductPage'
-import { ProductDetailPage } from './pages/admin/ProductDetailPage'
-import { CreateProductPage } from './pages/admin/CreateProductPage'
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import './App.css';
+import LoginPage from './pages/admin/LoginPage';
+import { AuthProvider } from './context/AuthContext';
+import { ProtectedRoute } from './routes/ProtectedRoute';
+import { ProductPage } from './pages/admin/ProductPage';
+import { ProductDetailPage } from './pages/admin/ProductDetailPage';
+import { CreateProductPage } from './pages/admin/CreateProductPage';
+import { OrderPage } from './pages/admin/OrderPage';
 
 function App() {
-
   return (
     <>
       <BrowserRouter>
@@ -28,6 +28,11 @@ function App() {
             <Route path='/admin/products/create' element={
               <ProtectedRoute>
                 <CreateProductPage />
+              </ProtectedRoute>
+            }/>
+            <Route path='/admin/orders' element={
+              <ProtectedRoute>
+                <OrderPage />
               </ProtectedRoute>
             }/>
           </Routes>
