@@ -1,4 +1,15 @@
-import { AdminOrderDetail, AdminOrderList, ItemDatabaseRow, OrderDatabaseRow, OrderInstance, OrderProductItem, OrderSummary, StatusDatabaseRow, StatusHistoryDatabaseRow, StatusHistoryItem, StatusUpdateResult } from "../types/orderTypes";
+import { 
+  AdminOrderDetail,
+  ItemDatabaseRow, 
+  OrderDatabaseRow, 
+  OrderInstance, 
+  OrderProductItem, 
+  OrderSummary, 
+  StatusDatabaseRow, 
+  StatusHistoryDatabaseRow, 
+  StatusHistoryItem, 
+  StatusUpdateResult 
+} from "../types/orderTypes";
 
 export const mapProductRows = (rows: ItemDatabaseRow[]): OrderProductItem[] => 
   rows.map(item => ({
@@ -23,7 +34,8 @@ export const orderSummary = (data: OrderDatabaseRow): OrderSummary => ({
   customerName: data.customer_name,
   street: data.street,
   zipCode: data.zip_code,
-  city: data.city
+  city: data.city,
+  currentStatus: data.current_status
 });
 
 export const formatOrder = (
@@ -41,14 +53,6 @@ export const formatOrderDetail = (
 ): AdminOrderDetail => ({
   ...orderSummary(orderData),
   products: mapProductRows(productRows),
-  history: mapStatusRows(statusRows)
-});
-
-export const formatOrderList = (
-  orderData: OrderDatabaseRow,
-  statusRows: StatusHistoryDatabaseRow[]
-): AdminOrderList => ({
-  ...orderSummary(orderData),
   history: mapStatusRows(statusRows)
 });
 
