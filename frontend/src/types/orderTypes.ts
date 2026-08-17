@@ -12,5 +12,13 @@ export interface AdminOrderResponse {
   street: string;
   zipCode: string;
   city: string;
-  currentStatus: string;
+  currentStatus: 'Beställd' | 'Behandlad' | 'Levererad' | 'Återbetald';
+}
+
+export interface OrderListProps {
+  orders: AdminOrderResponse[];
+}
+
+export interface OrderCardProps {
+  order: AdminOrderResponse;
 }
