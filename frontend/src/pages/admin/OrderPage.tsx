@@ -35,7 +35,7 @@ export const OrderPage = () => {
   return (
     <main>
       <Sidebar />
-      <div className={styles.filterWrapper}>
+      <div className={styles.filter}>
         <div className={styles.inputGroup}>
           <input 
             type="radio"
@@ -83,7 +83,7 @@ export const OrderPage = () => {
           /> 
           <label htmlFor="filter-refunded" className={styles.label}>Återbetald</label>
         </div>
-      </div>
+      </div> 
       <OrderList orders={filteredOrders}/>
       {error && <p className="error">{error}</p>}
     </main>

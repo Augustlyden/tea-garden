@@ -7,6 +7,7 @@ export interface OrderProductItem {
 }
 
 export interface StatusHistoryItem {
+  id: number;
   status: string;
   changedAt: Date;
   admin: string | null;

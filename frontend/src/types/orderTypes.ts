@@ -1,13 +1,14 @@
 export interface StatusHistoryResponse {
+  id: number;
   status: string;
-  changedAt: Date;
+  changedAt: string;
   admin: string;
 }
 
 export interface AdminOrderResponse {
   orderId: number;
   totalAmount: number;
-  orderDate: Date;
+  orderDate: string;
   customerName: string;
   street: string;
   zipCode: string;

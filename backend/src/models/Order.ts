@@ -32,7 +32,7 @@ class Order {
 
   private static readonly BASE_STATUS_SELECT = `
     SELECT
-      os.order_id, os.status, os.changed_at, a.username AS admin
+      os.id, os.order_id, os.status, os.changed_at, a.username AS admin
     FROM order_status os
     LEFT JOIN admin a ON os.admin_id = a.id
   `;

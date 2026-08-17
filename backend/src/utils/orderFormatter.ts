@@ -22,6 +22,7 @@ export const mapProductRows = (rows: ItemDatabaseRow[]): OrderProductItem[] =>
 
 export const mapStatusRows = (rows: StatusHistoryDatabaseRow[]): StatusHistoryItem[] =>
   rows.map(item => ({
+    id: item.id,
     status: item.status,
     changedAt: item.changed_at,
     admin: item.admin
