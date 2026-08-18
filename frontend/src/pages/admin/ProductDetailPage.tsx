@@ -20,6 +20,7 @@ export const ProductDetailPage = () => {
   useEffect(() => {
     const fetchProduct = async () => {
       try {
+        setError('');
         const data = await productService.getProductById(Number(id));
         setProduct(data.data);
       } catch (error) {
@@ -30,14 +31,6 @@ export const ProductDetailPage = () => {
     };
     fetchProduct();
   }, [id]);
-
-  if (isLoading) {
-    return <div>Laddar...</div>
-  }
-
-  if (!product) {
-  return <p>Produkten kunde inte hittas.</p>;
-  }
 
   const handleUpdate = async (formData: FormData) => {
     try {
@@ -60,6 +53,14 @@ export const ProductDetailPage = () => {
     } finally {
       setIsDeleting(false);
     }
+  }
+
+  if (isLoading) {
+    return <div>Laddar...</div>
+  }
+
+  if (!product) {
+  return <p>Produkten kunde inte hittas.</p>;
   }
 
   return (

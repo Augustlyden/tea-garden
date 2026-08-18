@@ -1,3 +1,5 @@
+export type OrderStatus = 'Beställd' | 'Behandlad' | 'Levererad' | 'Återbetald';
+
 export interface OrderProductItem {
   productId: number;
   productName: string;
@@ -8,7 +10,7 @@ export interface OrderProductItem {
 
 export interface StatusHistoryItem {
   id: number;
-  status: string;
+  status: OrderStatus;
   changedAt: Date;
   admin: string | null;
 }
@@ -28,7 +30,7 @@ export interface OrderSummary {
   street: string;
   zipCode: string;
   city: string;
-  currentStatus: string;
+  currentStatus: OrderStatus;
 }
 
 export interface OrderInstance extends OrderSummary {
@@ -43,7 +45,7 @@ export interface AdminOrderDetail extends OrderSummary {
 export interface StatusUpdateResult {
   id: number;
   orderId: number;
-  status: string;
+  status: OrderStatus;
   changedAt: Date;
   adminId: number | null;
 }
@@ -56,7 +58,7 @@ export interface OrderDatabaseRow {
   street: string;
   zip_code: string;
   city: string;
-  current_status: string;
+  current_status: OrderStatus;
 }
 
 export interface ItemDatabaseRow {
@@ -70,7 +72,7 @@ export interface ItemDatabaseRow {
 export interface StatusDatabaseRow {
   id: number;
   order_id: number;
-  status: string;
+  status: OrderStatus;
   changed_at: Date;
   admin_id: number | null;
 }

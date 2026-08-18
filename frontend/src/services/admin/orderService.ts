@@ -1,5 +1,5 @@
 import api from "../../config/api";
-import type { AdminOrderResponse, StatusHistoryResponse } from "../../types/orderTypes";
+import type { AdminOrderDetail, AdminOrderResponse, StatusHistoryResponse } from "../../types/orderTypes";
 import type { ApiResponse } from "../../types/productTypes";
 
 export const orderService = {
@@ -12,4 +12,14 @@ export const orderService = {
     const response = await api.get<ApiResponse<StatusHistoryResponse[]>>(`/orders/${id}/history`);
     return response.data;
   },
+
+  getOrderById: async (id: number): Promise<ApiResponse<AdminOrderDetail>> => {
+    const response = await api.get<ApiResponse<AdminOrderDetail>>(`/orders/${id}`);
+    return response.data;
+  },
+
+  updateStatus: async (id: number, status: string): Promise<ApiResponse<StatusHistoryResponse>> => {
+    const response = await api.patch<ApiResponse<StatusHistoryResponse>>(`/orders/${id}`, {status});
+    return response.data;
+  }
 };
