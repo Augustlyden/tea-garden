@@ -1,4 +1,5 @@
 import type { AccessoriesAttributes, TeaAttributes } from "../types/attributesTypes";
+import { isAccessory, isTea } from "../types/attributesTypes";
 
 const teaCategory = (data: TeaAttributes) => ({
   ekologiskt: data.organic ? 'Ja' : 'Nej',
@@ -24,3 +25,14 @@ export const formatAttributes = (data: AccessoriesAttributes | TeaAttributes) =>
     return teaCategory(data);
   }
 }
+
+export const attributes = (attributes: Record<string, any> | null, categoryName: 'Te' | 'Tillbehör') => {
+    if (!attributes) return '';
+    const newAttributes = {...attributes, category: categoryName}
+    
+    if (isTea(newAttributes) || isAccessory(newAttributes)) {
+      return formatAttributes(newAttributes) 
+    } else {
+      return '';
+    }
+  };

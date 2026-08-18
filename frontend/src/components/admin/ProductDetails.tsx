@@ -1,22 +1,9 @@
 import type { ProductDetailProps } from "../../types/productTypes";
 import styles from '../../css/productDetail.module.css';
 import { Pencil, Trash2 } from 'lucide-react';
-import { formatAttributes } from "../../utils/attributesFormatter";
-import { isAccessory, isTea } from "../../types/attributesTypes";
-
+import { attributes } from "../../utils/attributesFormatter";
 
 export const ProductDetails = ( {product, onClick, onDelete, disabled}: ProductDetailProps ) => {
-  const attributes = (attributes: Record<string, any> | null, categoryName: 'Te' | 'Tillbehör') => {
-    if (!attributes) return '';
-    const newAttributes = {...attributes, category: categoryName}
-    
-    if (isTea(newAttributes) || isAccessory(newAttributes)) {
-      return formatAttributes(newAttributes) 
-    } else {
-      return '';
-    }
-  };
-
   const productAttributes = attributes(product.attributes, product.categoryName);
   
   return (

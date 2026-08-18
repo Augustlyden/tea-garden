@@ -1,3 +1,5 @@
+export type Categories = 'Te' | 'Tillbehör';
+
 export interface AdminProductResponse {
   productId: number;
   productName: string;
@@ -8,7 +10,7 @@ export interface AdminProductResponse {
   desc: string | null;
   attributes: Record<string, any> | null;
   isAvailable: boolean;
-  categoryName: 'Te' | 'Tillbehör';
+  categoryName: Categories;
   isDeleted: boolean;
 }
 
@@ -21,7 +23,7 @@ export interface UserProductResponse {
   imgUrl: string;
   desc: string;
   attributes: Record<string, any> | null;
-  categoryName?: string;
+  categoryName: Categories;
 }
 
 export interface AdminProductInput {
