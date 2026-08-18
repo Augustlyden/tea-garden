@@ -1,0 +1,59 @@
+import { useEffect, useState } from "react";
+import type { UserProductResponse } from "../../types/productTypes";
+import { productService } from "../../services/admin/productService";
+import styles from '../../css/product.module.css';
+import { CategorySelect } from "../../components/shared/CategorySelect";
+import { UserProductList } from "../../components/user/UserProductList";
+
+export const UserProductPage = () => {
+  const [products, setProducts] = useState<UserProductResponse[]>([]);
+  const [error, setError] = useState('');
+  const [isLoading, setIsLoading] = useState(true);
+  const [categoryFilter, setCategoryFilter] = useState<number | 'all'>('all');
+
+  useEffect(() => {
+    const fetchAllProducts = async () => {
+      try {
+        const data = await productService.getAllUserProducts();
+        setProducts(data.data);
+        setError('');
+      } catch (error) {
+        setError(error instanceof Error ? error.message : 'Något gick fel');
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    fetchAllProducts();
+  }, []);
+
+  if (isLoading) {
+    return <div>Laddar...</div>
+  }
+
+  const filteredProducts = products.filter(p =>
+    categoryFilter === 'all' || p.categoryId === categoryFilter
+  );
+
+  return (
+    <main>
+      <div className={styles.filter}>
+        <div className={styles.selectContainer}>
+          <label htmlFor="category-select" className={styles.visuallyHidden}>
+            Välj kategori
+          </label>
+          <CategorySelect 
+            value={categoryFilter} 
+            onChange={setCategoryFilter} 
+            includeAll={true} 
+            disabled={false}
+          />
+        </div>
+      </div>
+
+      <UserProductList products={filteredProducts}/>
+
+      {error && <p className="error">{error}</p>}
+    </main>
+  );
+};
+
