@@ -11,12 +11,12 @@ export const ProductPage = () => {
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(true);
   const [filter, setFilter] = useState<'all' | 'available' | 'unavailable'>('all');
-  const [categoryFilter, setCategoryFilter] = useState<number | 'all'>('all')
+  const [categoryFilter, setCategoryFilter] = useState<number | 'all'>('all');
 
   useEffect(() => {
     const fetchAllProducts = async () => {
       try {
-        const productsData = await productService.getAllProducts()
+        const productsData = await productService.getAllProducts();
         setProducts(productsData.data);
         setError('');
       } catch (error) {
