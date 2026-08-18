@@ -9,6 +9,7 @@ import { CreateProductPage } from './pages/admin/CreateProductPage';
 import { OrderPage } from './pages/admin/OrderPage';
 import { OrderDetailPage } from './pages/admin/OrderDetailPage';
 import { UserProductPage } from './pages/user/UserProductPage';
+import { UserProductDetailPage } from './pages/user/UserProductDetailPage';
 
 function App() {
   return (
@@ -45,6 +46,9 @@ function App() {
 
             <Route path='/shop/products' element={
               <UserProductPage />
+            }/>
+            <Route path='/shop/products/:id' element={
+              <UserProductDetailPage />
             }/>
           </Routes>
         </AuthProvider>
