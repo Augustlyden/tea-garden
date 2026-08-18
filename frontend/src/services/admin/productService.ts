@@ -36,4 +36,9 @@ export const productService = {
     const response = await api.get<ApiResponse<UserProductResponse[]>>('/user/products/');
     return response.data;
   },
+
+  getUserProductById: async (id: number): Promise<ApiResponse<UserProductResponse>> => {
+    const response = await api.get<ApiResponse<UserProductResponse>>(`/user/products/${id}`);
+    return response.data;
+  }
 };
