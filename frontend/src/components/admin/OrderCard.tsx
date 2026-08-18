@@ -3,6 +3,7 @@ import { ScrollText } from 'lucide-react';
 import { type StatusHistoryResponse, type OrderCardProps } from '../../types/orderTypes';
 import { useState } from 'react';
 import { orderService } from '../../services/admin/orderService';
+import { formatDate } from '../../utils/formater';
 
 export const OrderCard = ({ order }: OrderCardProps) => {
   const [history, setHistory] = useState<StatusHistoryResponse[] | null>(null);
@@ -25,10 +26,6 @@ export const OrderCard = ({ order }: OrderCardProps) => {
       setIsLoading(false);
     }
   }
-
-  const formatDate = (date: string) => {
-    return new Date(date).toLocaleDateString('sv-Se');
-  };
 
   const renderHistoryContent = () => {
     if (isLoading) {

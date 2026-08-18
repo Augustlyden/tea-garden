@@ -28,6 +28,11 @@ class Order {
       o.city,
       os.current_status
     FROM orders o
+    LEFT JOIN (
+        SELECT DISTINCT ON (order_id) order_id, status AS current_status
+        FROM order_status
+        ORDER BY order_id, changed_at DESC
+      ) os ON os.order_id = o.id
   `;
 
   private static readonly BASE_STATUS_SELECT = `
@@ -132,11 +137,6 @@ class Order {
   static async findAll(): Promise<OrderSummary[]> {
     const result = await db.query(`
       ${this.BASE_ORDER_SELECT}
-      LEFT JOIN (
-        SELECT DISTINCT ON (order_id) order_id, status AS current_status
-        FROM order_status
-        ORDER BY order_id, changed_at DESC
-      ) os ON os.order_id = o.id
       ORDER BY o.order_date DESC;
       `
     );
@@ -160,7 +160,7 @@ class Order {
     const status = await db.query(`
       ${this.BASE_STATUS_SELECT}
       WHERE os.order_id = $1
-      ORDER BY os.order_id, os.changed_at ASC;
+      ORDER BY os.order_id, os.changed_at DESC;
       `, [id]
     );
 

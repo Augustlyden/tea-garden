@@ -1,8 +1,10 @@
+export type OrderStatus = 'Beställd' | 'Behandlad' | 'Levererad' | 'Återbetald';
+
 export interface StatusHistoryResponse {
   id: number;
-  status: string;
+  status: OrderStatus;
   changedAt: string;
-  admin: string;
+  admin?: string;
 }
 
 export interface AdminOrderResponse {
@@ -13,7 +15,20 @@ export interface AdminOrderResponse {
   street: string;
   zipCode: string;
   city: string;
-  currentStatus: 'Beställd' | 'Behandlad' | 'Levererad' | 'Återbetald';
+  currentStatus: OrderStatus;
+}
+
+export interface OrderProductItem {
+  productId: number;
+  productName: string;
+  imgUrl: string;
+  quantity: number;
+  price: number;
+}
+
+export interface AdminOrderDetail extends AdminOrderResponse{
+  products: OrderProductItem[];
+  history: StatusHistoryResponse[];
 }
 
 export interface OrderListProps {
@@ -22,4 +37,9 @@ export interface OrderListProps {
 
 export interface OrderCardProps {
   order: AdminOrderResponse;
+}
+
+export interface OrderDetailProps {
+  order: AdminOrderDetail;
+  onUpdate: (status: OrderStatus) => void;
 }

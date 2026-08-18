@@ -7,6 +7,7 @@ import { ProductPage } from './pages/admin/ProductPage';
 import { ProductDetailPage } from './pages/admin/ProductDetailPage';
 import { CreateProductPage } from './pages/admin/CreateProductPage';
 import { OrderPage } from './pages/admin/OrderPage';
+import { OrderDetailPage } from './pages/admin/OrderDetailPage';
 
 function App() {
   return (
@@ -33,6 +34,11 @@ function App() {
             <Route path='/admin/orders' element={
               <ProtectedRoute>
                 <OrderPage />
+              </ProtectedRoute>
+            }/>
+            <Route path='/admin/orders/:id' element={
+              <ProtectedRoute>
+                <OrderDetailPage />
               </ProtectedRoute>
             }/>
           </Routes>
