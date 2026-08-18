@@ -12,6 +12,18 @@ export interface AdminProductResponse {
   isDeleted: boolean;
 }
 
+export interface UserProductResponse {
+  productId: number;
+  productName: string;
+  categoryId: number;
+  price: number;
+  inStock: number;
+  imgUrl: string;
+  desc: string;
+  attributes: Record<string, any> | null;
+  categoryName?: string;
+}
+
 export interface AdminProductInput {
   productId?: number;
   productName: string;
@@ -35,8 +47,16 @@ export interface ProductListProps {
   products: AdminProductResponse[];
 }
 
+export interface UserProductListProps {
+  products: UserProductResponse[];
+}
+
 export interface ProductCardProps {
   product: AdminProductResponse;
+}
+
+export interface UserProductCardProps {
+  product: UserProductResponse;
 }
 
 export interface ApiResponse<T> {

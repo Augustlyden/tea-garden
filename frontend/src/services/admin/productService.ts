@@ -1,5 +1,5 @@
 import api from "../../config/api";
-import { type ApiResponse, type AdminProductResponse, type CategoryResponse } from "../../types/productTypes";
+import { type ApiResponse, type AdminProductResponse, type CategoryResponse, type UserProductResponse } from "../../types/productTypes";
 
 export const productService = {
   getAllProducts: async (): Promise<ApiResponse<AdminProductResponse[]>> => {
@@ -30,5 +30,10 @@ export const productService = {
   deleteProduct: async (id: number): Promise<ApiResponse<AdminProductResponse>> => {
     const response = await api.delete<ApiResponse<AdminProductResponse>>(`admin/products/${id}`);
     return response.data;
-  }
+  },
+
+  getAllUserProducts: async (): Promise<ApiResponse<UserProductResponse[]>> => {
+    const response = await api.get<ApiResponse<UserProductResponse[]>>('/user/products/');
+    return response.data;
+  },
 };
