@@ -5,6 +5,7 @@ import { productService } from "../../services/admin/productService";
 import { ChevronLeft } from 'lucide-react';
 import styles from '../../css/productDetail.module.css';
 import { UserProductDetails } from "../../components/user/UserProductDetails";
+import { Header } from "../../components/user/Header";
 
 export const UserProductDetailPage = () => {
   const { id } = useParams();
@@ -36,14 +37,17 @@ export const UserProductDetailPage = () => {
   }
 
   return (
-    <main>
-      <Link className={styles.back} to={'/shop/products'}>
-        <ChevronLeft size={18} strokeWidth={2.5} /> Tillbaka
-      </Link>
-      <section className={styles.detailContainer}>
-        <UserProductDetails product={product}/>
-        {error && <p className="error">{error}</p>}
-      </section>
-    </main>
+    <>
+      <Header />
+      <main>
+        <Link className={styles.back} to={'/shop/products'}>
+          <ChevronLeft size={18} strokeWidth={2.5} /> Tillbaka
+        </Link>
+        <section className={styles.detailContainer}>
+          <UserProductDetails product={product}/>
+          {error && <p className="error">{error}</p>}
+        </section>
+      </main>
+    </>
   );
 };

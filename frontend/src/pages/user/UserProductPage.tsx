@@ -4,6 +4,7 @@ import { productService } from "../../services/admin/productService";
 import styles from '../../css/product.module.css';
 import { CategorySelect } from "../../components/shared/CategorySelect";
 import { UserProductList } from "../../components/user/UserProductList";
+import { Header } from "../../components/user/Header";
 
 export const UserProductPage = () => {
   const [products, setProducts] = useState<UserProductResponse[]>([]);
@@ -35,25 +36,28 @@ export const UserProductPage = () => {
   );
 
   return (
-    <main>
-      <div className={styles.filter}>
-        <div className={styles.selectContainer}>
-          <label htmlFor="category-select" className={styles.visuallyHidden}>
-            Välj kategori
-          </label>
-          <CategorySelect 
-            value={categoryFilter} 
-            onChange={setCategoryFilter} 
-            includeAll={true} 
-            disabled={false}
-          />
+    <>
+      <Header />
+      <main>
+        <div className={styles.filter}>
+          <div className={styles.selectContainer}>
+            <label htmlFor="category-select" className={styles.visuallyHidden}>
+              Välj kategori
+            </label>
+            <CategorySelect 
+              value={categoryFilter} 
+              onChange={setCategoryFilter} 
+              includeAll={true} 
+              disabled={false}
+            />
+          </div>
         </div>
-      </div>
 
-      <UserProductList products={filteredProducts}/>
+        <UserProductList products={filteredProducts}/>
 
-      {error && <p className="error">{error}</p>}
-    </main>
+        {error && <p className="error">{error}</p>}
+      </main>
+    </>
   );
 };
 
