@@ -12,12 +12,13 @@ export const UserProductDetails = ( {product}: UserProductCardProps ) => {
 
   const handleAddToCart = async (productId: number) => {
     try {
-      await addToCart(product.productId);
+      await addToCart(productId);
       setError('');
     } catch (error) {
       setError(error instanceof Error ? error.message : 'Något gick fel');
     }
   }
+
   return (
     <>
       <section className={styles.mediaColumn}>
