@@ -37,7 +37,7 @@ export const Sidebar = () => {
         <span className={`${styles.bar} ${isOpen ? styles.barOpen : ''}`}></span>
       </button>
 
-      {isOpen && <div className={styles.backdrop} onClick={toggleMenu} />}
+      <div className={`${styles.backdrop} ${isOpen ? styles.visible : ''}`} onClick={toggleMenu} />
 
       <aside className={`${styles.sidebar} ${isOpen ? styles.sidebarOpen : ''}`}>
         <div className={styles.sidebarHeader}>
