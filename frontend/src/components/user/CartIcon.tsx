@@ -2,6 +2,7 @@ import { ShoppingBasket } from 'lucide-react';
 import { useState } from 'react';
 import { useCart } from '../../context/CartContext';
 import styles from '../../css/header.module.css';
+import { MiniCart } from './MiniCart';
 
 export const CartIcon = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -18,7 +19,7 @@ export const CartIcon = () => {
         {totalItems > 0 && <p className={styles.totalItems}>{totalItems}</p>}
         <ShoppingBasket className={styles.basket} width={30} strokeWidth={1.5}/>
       </button>
-      {isOpen && <div>Öppen!</div>}
+      <MiniCart isOpen={isOpen} onClose={() => setIsOpen(false)}/>
     </>
   );
 };

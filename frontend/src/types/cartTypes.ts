@@ -28,3 +28,8 @@ export interface CartContextType {
   decreaseQuantity: (id: number) => Promise<void>;
   removeFromCart: (id: number) => Promise<void>;
 }
+
+export interface MiniCartProps {
+  isOpen: boolean;
+  onClose: () => void;
+}
