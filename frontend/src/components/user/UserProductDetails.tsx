@@ -2,9 +2,22 @@ import type { UserProductCardProps } from "../../types/productTypes";
 import { attributes } from "../../utils/attributesFormatter";
 import styles from '../../css/productDetail.module.css';
 import { ShoppingBasket } from 'lucide-react';
+import { useCart } from "../../context/CartContext";
+import { useState } from "react";
 
 export const UserProductDetails = ( {product}: UserProductCardProps ) => {
   const productAttributes = attributes(product.attributes, product.categoryName);
+  const { addToCart } = useCart();
+  const [error, setError] = useState('');
+
+  const handleAddToCart = async (productId: number) => {
+    try {
+      await addToCart(product.productId);
+      setError('');
+    } catch (error) {
+      setError(error instanceof Error ? error.message : 'Något gick fel');
+    }
+  }
   return (
     <>
       <section className={styles.mediaColumn}>
@@ -31,7 +44,7 @@ export const UserProductDetails = ( {product}: UserProductCardProps ) => {
               <span className={styles.price}>{product.price} kr</span>
               <span className={styles.vatInfo}>inkl. moms</span>
             </div>
-
+            {error && <p className="error">{error}</p>}
             <div className={styles.statusWrapper}>
               {product.inStock > 0 ? (
                 <span className={`${styles.statusBadge} ${styles.inStock}`}>
@@ -51,6 +64,7 @@ export const UserProductDetails = ( {product}: UserProductCardProps ) => {
               className={`${styles.iconButton} ${styles.editButton}`}
               title="Lägg i varukorgen"
               aria-label="Lägg i varukorgen"
+              onClick={() => handleAddToCart(product.productId)}
             >
               <ShoppingBasket size={18} strokeWidth={2.2}/>   {/* Lägg i varukorgen */}
             </button>

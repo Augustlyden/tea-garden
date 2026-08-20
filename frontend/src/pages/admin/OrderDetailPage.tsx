@@ -49,7 +49,7 @@ export const OrderDetailPage = () => {
         ]
       } : prev);
     } catch (error) {
-      setError(error instanceof Error ? error.message : 'Något gick fel')
+      setError(error instanceof Error ? error.message : 'Något gick fel');
     }
   }
   
