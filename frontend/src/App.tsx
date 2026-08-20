@@ -1,4 +1,4 @@
-import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import { BrowserRouter, Outlet, Route, Routes } from 'react-router-dom';
 import './App.css';
 import LoginPage from './pages/admin/LoginPage';
 import { AuthProvider } from './context/AuthContext';
@@ -10,13 +10,14 @@ import { OrderPage } from './pages/admin/OrderPage';
 import { OrderDetailPage } from './pages/admin/OrderDetailPage';
 import { UserProductPage } from './pages/user/UserProductPage';
 import { UserProductDetailPage } from './pages/user/UserProductDetailPage';
+import { CartProvider } from './context/CartContext';
 
 function App() {
   return (
     <>
       <BrowserRouter>
-        <AuthProvider>
-          <Routes>
+        <Routes>
+          <Route element={<AuthProvider><Outlet /></AuthProvider>}>
             <Route path='/admin/login' element={<LoginPage />} />
             <Route path='/admin/products' element={
               <ProtectedRoute>
@@ -43,18 +44,20 @@ function App() {
                 <OrderDetailPage />
               </ProtectedRoute>
             }/>
-
+          </Route>
+          
+          <Route element={<CartProvider><Outlet /></CartProvider>}>
             <Route path='/shop/products' element={
               <UserProductPage />
             }/>
             <Route path='/shop/products/:id' element={
               <UserProductDetailPage />
             }/>
-          </Routes>
-        </AuthProvider>
+          </Route>
+        </Routes>
       </BrowserRouter>
     </>
-  )
-}
+  );
+};
 
 export default App
