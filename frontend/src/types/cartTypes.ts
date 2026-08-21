@@ -6,7 +6,7 @@ export interface CartResponse {
 }
 
 export interface CartWithProductResponse {
-  cartId?: number;
+  cartId: number;
   productId: number;
   quantity: number;
   cartToken: string;
@@ -27,4 +27,13 @@ export interface CartContextType {
   fetchCart: () => Promise<void>;
   decreaseQuantity: (id: number) => Promise<void>;
   removeFromCart: (id: number) => Promise<void>;
+}
+
+export interface MiniCartProps {
+  isOpen: boolean;
+  onClose: () => void;
+}
+
+export interface CartItemProps {
+  item: CartWithProductResponse;
 }
