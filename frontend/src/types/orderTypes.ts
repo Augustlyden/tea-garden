@@ -26,9 +26,20 @@ export interface OrderProductItem {
   price: number;
 }
 
-export interface AdminOrderDetail extends AdminOrderResponse{
+export interface OrderInput {
+  customerName: string;
+  street: string;
+  zipCode: string;
+  city: string;
+}
+
+export interface AdminOrderDetail extends AdminOrderResponse {
   products: OrderProductItem[];
   history: StatusHistoryResponse[];
+}
+
+export interface OrderInputResponse extends AdminOrderResponse {
+  products: OrderProductItem[];
 }
 
 export interface OrderListProps {

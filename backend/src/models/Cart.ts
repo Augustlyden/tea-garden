@@ -46,7 +46,8 @@ class Cart {
         p.is_available
       FROM cart c
       JOIN products p ON c.product_id = p.id
-      WHERE c.cart_token = $1; 
+      WHERE c.cart_token = $1
+      ORDER BY c.id;
       `, [cartToken]
     );
 
