@@ -6,7 +6,7 @@ export interface CartResponse {
 }
 
 export interface CartWithProductResponse {
-  cartId?: number;
+  cartId: number;
   productId: number;
   quantity: number;
   cartToken: string;
@@ -32,4 +32,8 @@ export interface CartContextType {
 export interface MiniCartProps {
   isOpen: boolean;
   onClose: () => void;
+}
+
+export interface CartItemProps {
+  item: CartWithProductResponse;
 }

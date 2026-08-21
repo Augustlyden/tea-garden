@@ -1,7 +1,8 @@
-import styles from '../../css/cart.module.css'
+import styles from '../../css/cart.module.css';
 import { useCart } from "../../context/CartContext";
 import type { MiniCartProps } from "../../types/cartTypes";
 import { Link } from 'react-router-dom';
+import { CartItem } from './CartItem';
 
 export const MiniCart = ( {isOpen, onClose }: MiniCartProps ) => {
   const { cart, totalPrice, isLoading } = useCart();
@@ -26,8 +27,7 @@ export const MiniCart = ( {isOpen, onClose }: MiniCartProps ) => {
             <p className={styles.emptyCart}>Din varukorg är tom</p>
           ) : (
             <>
-            <p>Öppen!</p>
-            {/* {cart.map(item => <CartItem key={item.cartId} item={item} />)} */}
+            {cart.map(item => <CartItem key={item.cartId} item={item} />)}
             </>
           )}
         </div>

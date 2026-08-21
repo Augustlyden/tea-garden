@@ -53,7 +53,7 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
     }
   };
 
-  const decreaseQuantity = async (id:number) => {
+  const decreaseQuantity = async (id: number) => {
     try {
       await cartService.decreaseQuantity(id);
       await fetchCart();
