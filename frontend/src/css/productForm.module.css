@@ -93,6 +93,12 @@
   background-color: var(--color-border);
 }
 
+.radio {
+  accent-color: var(--color-primary);
+  width: 0.875rem;
+  height: 0.875rem;
+}
+
 .buttonGroup {
   display: flex;
   gap: 1rem;

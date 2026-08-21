@@ -45,6 +45,7 @@ export const ProductForm = ({ initialData, onSubmit, onCancel }: ProductFormProp
     data.append('inStock', String(formValues.inStock));
     data.append('desc', formValues.desc ?? '');
     data.append('attributes', JSON.stringify(formValues.attributes ?? {}));
+    data.append('isAvailable', String(formValues.isAvailable));
     if (imageFile) {
       data.append('image', imageFile);
     }
@@ -169,6 +170,34 @@ export const ProductForm = ({ initialData, onSubmit, onCancel }: ProductFormProp
             disabled={isLoading}
             className={`${styles.input} ${styles.fileInput}`}
           />
+        </div>
+
+        <div className={styles.inputGroup}>
+          <label className={styles.label}>Tillgänglig</label>
+          <label className={styles.label}>
+            <input 
+              type="radio" 
+              name="isAvailable"
+              value="true"
+              checked={formValues.isAvailable === true}
+              onChange={() => setFormValues(prev => ({ ...prev, isAvailable: true }))}
+              disabled={isLoading}
+              className={styles.radio}
+            />
+            Ja
+          </label>
+          <label className={styles.label}>
+            <input 
+              type="radio"
+              name="isAvailable"
+              value="false"
+              checked={formValues.isAvailable === false}
+              onChange={() => setFormValues(prev => ({ ...prev, isAvailable: false }))}
+              disabled={isLoading}  
+              className={styles.radio} 
+            />
+            Nej
+          </label>
         </div>
 
         {error && <p className="error">{error}</p>}

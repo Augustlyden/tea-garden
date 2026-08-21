@@ -6,7 +6,7 @@ export interface ProductAttributes {
   imgUrl: string | null;
   desc: string | null;
   attributes: Record<string, any> | null;
-  isAvailable?: boolean;
+  isAvailable?: boolean | string;
   isDeleted?: boolean;
 }
 
