@@ -38,7 +38,7 @@
   color: var(--color-bg-main);
 }
 
-.link:not(.logo)::after {
+.link::after {
   content: '';
   position: absolute;
   bottom: 0;
@@ -51,7 +51,7 @@
   transition: transform 0.25s ease-out;
 }
 
-.link:not(.logo):hover::after {
+.link:hover::after {
   transform: scaleX(1);
   transform-origin: bottom left;
 }
