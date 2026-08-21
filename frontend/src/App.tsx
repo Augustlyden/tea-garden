@@ -11,6 +11,7 @@ import { OrderDetailPage } from './pages/admin/OrderDetailPage';
 import { UserProductPage } from './pages/user/UserProductPage';
 import { UserProductDetailPage } from './pages/user/UserProductDetailPage';
 import { CartProvider } from './context/CartContext';
+import { CheckoutPage } from './pages/user/CheckoutPage';
 
 function App() {
   return (
@@ -52,6 +53,9 @@ function App() {
             }/>
             <Route path='/shop/products/:id' element={
               <UserProductDetailPage />
+            }/>
+            <Route path='/shop/checkout' element={
+              <CheckoutPage />
             }/>
           </Route>
         </Routes>

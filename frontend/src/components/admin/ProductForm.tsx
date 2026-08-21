@@ -49,8 +49,6 @@ export const ProductForm = ({ initialData, onSubmit, onCancel }: ProductFormProp
     if (imageFile) {
       data.append('image', imageFile);
     }
-
-    console.log(formValues.productId)
     
     setIsLoading(true);
     try {
@@ -76,7 +74,7 @@ export const ProductForm = ({ initialData, onSubmit, onCancel }: ProductFormProp
   const handleCategoryChange = (categoryId: number | 'all') => {
     if (categoryId === 'all') return;
     setFormValues(prev => ({...prev, categoryId: categoryId}));
-  }
+  };
 
   return (
     <div className={styles.container}>

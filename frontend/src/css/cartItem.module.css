@@ -151,7 +151,7 @@
   border: none;
   color: var(--color-text-muted);
   cursor: pointer;
-  padding: 0.35rem;
+  margin: 0.75rem;
   border-radius: var(--radius-sm);
   transition: all 0.2s ease;
   display: flex;

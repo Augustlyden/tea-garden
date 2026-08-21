@@ -22,7 +22,7 @@ export const createOrder = async (
       return res.status(400).json({ success: false, error: 'Gatuadress saknas' });
     } 
 
-    if (!orderData.zipCode || (!/^\d{5}$/.test(orderData.zipCode))) {
+    if (!orderData.zipCode || (!/^\d{3}\s?\d{2}$/.test(orderData.zipCode))) {
       return res.status(400).json({ success: false, error: 'Postnumret är ogiltigt eller saknas' });
     } 
 
