@@ -22,7 +22,7 @@ class Product {
   static async create(productData: ProductAttributes): Promise<ProductInstance> {
     const result = await db.query(`
       INSERT INTO products
-        (product_name, category_id, price, in_stock, img_url, description, attributes)
+        (product_name, category_id, price, in_stock, img_url, description, attributes, is_available)
       VALUES 
         ($1, $2, $3, $4, $5, $6, $7)
       RETURNING *;
@@ -33,7 +33,8 @@ class Product {
           productData.inStock,
           productData.imgUrl,
           productData.desc,
-          productData.attributes
+          productData.attributes,
+          productData.isAvailable
         ]
     );
 

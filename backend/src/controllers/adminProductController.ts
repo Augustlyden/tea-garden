@@ -24,6 +24,10 @@ export const createProduct = async (
       return res.status(400).json({ success: false, error: attrValidation.error });
     }
 
+    if (productData.isAvailable !== undefined) {
+      productData.isAvailable = productData.isAvailable === 'true';
+    }
+
     productData.imgUrl = `/uploads/${file.filename}`;
 
     const newProduct = await Product.create(productData);
@@ -92,6 +96,10 @@ export const updateProduct = async (
     const attrValidation = parseProductAttributes(productData);
     if (!attrValidation.valid) {
       return res.status(400).json({ success: false, error: attrValidation.error });
+    }
+
+    if (productData.isAvailable !== undefined) {
+      productData.isAvailable = productData.isAvailable === 'true';
     }
 
     const product = await Product.update(productId, productData);
