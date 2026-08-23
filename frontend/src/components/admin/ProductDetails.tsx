@@ -13,7 +13,7 @@ export const ProductDetails = ( {product, onClick, onDelete, disabled}: ProductD
           {product.imgUrl ? (
             <img 
               className={styles.img} 
-              src={`${import.meta.env.VITE_IMG_URL}${product.imgUrl}`} 
+              src={product.imgUrl} 
               alt={product.productName} 
             />
           ) : (

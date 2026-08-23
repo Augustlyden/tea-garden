@@ -41,7 +41,7 @@ export const CartItem = ({ item }: CartItemProps) => {
       <Link to={`/shop/products/${item.productId}`} className={styles.productLink}>
         <div className={styles.imgContainer}>
           {item.imgUrl ? (
-            <img className={styles.img} src={`${import.meta.env.VITE_IMG_URL}${item.imgUrl}`} alt={item.productName} />
+            <img className={styles.img} src={item.imgUrl} alt={item.productName} />
           ) : (
             <div className={styles.imgPlaceholder}>🍃</div>
           )}

@@ -5,7 +5,11 @@ export const ProductCard = ({ product }: ProductCardProps) => {
   return (
     <>
       <div className={styles.imgContainer}>
-        <img className={styles.img} src={`${import.meta.env.VITE_IMG_URL}${product.imgUrl}`}/>
+        {product.imgUrl ? (
+          <img className={styles.img} src={product.imgUrl} alt={product.productName} />
+        ) : (
+          <div className={styles.imgPlaceholder}>🍃</div>
+        )}
       </div>
 
       <div className={styles.contentContainer}>

@@ -1,7 +1,7 @@
 import express from "express";
 import cors from 'cors';
 import dotenv from 'dotenv';
-import path from "path";
+/* import path from "path"; */
 import { initDatabase } from "./config/dbInit";
 import adminProductRoutes from './routes/adminProductRoutes';
 import userProductRoutes from './routes/userProductRoutes';
@@ -23,7 +23,7 @@ app.use(cors({
 app.use(express.json());
 app.use(cookieParser());
 
-app.use('/uploads', express.static(path.join(process.cwd(), 'public/uploads')));
+/* app.use('/uploads', express.static(path.join(process.cwd(), 'public/uploads'))); */
 
 app.use('/api/admin/products', adminProductRoutes);
 app.use('/api/user/products', userProductRoutes);

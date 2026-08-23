@@ -53,7 +53,7 @@ export const OrderConfirmationPage = () => {
               <Link className={styles.productLink} to={`/shop/products/${p.productId}`}>
                 <div className={styles.imgContainer}>
                   {p.imgUrl ? (
-                    <img className={styles.img} src={`${import.meta.env.VITE_IMG_URL}${p.imgUrl}`} alt={p.productName} />
+                    <img className={styles.img} src={p.imgUrl} alt={p.productName} />
                   ) : (
                     <div className={styles.imgPlaceholder}>🍃</div>
                   )}

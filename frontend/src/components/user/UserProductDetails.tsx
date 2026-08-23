@@ -24,13 +24,9 @@ export const UserProductDetails = ( {product}: UserProductCardProps ) => {
       <section className={styles.mediaColumn}>
         <div className={styles.imgContainer}>
           {product.imgUrl ? (
-            <img 
-              className={styles.img} 
-              src={`${import.meta.env.VITE_IMG_URL}${product.imgUrl}`} 
-              alt={product.productName} 
-            />
+            <img className={styles.img} src={product.imgUrl} alt={product.productName} />
           ) : (
-            <div className={styles.imagePlaceholder}>Ingen bild tillgänglig</div>
+            <div className={styles.imgPlaceholder}>🍃</div>
           )}
         </div>
       </section>
