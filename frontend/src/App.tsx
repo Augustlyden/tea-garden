@@ -12,6 +12,7 @@ import { UserProductPage } from './pages/user/UserProductPage';
 import { UserProductDetailPage } from './pages/user/UserProductDetailPage';
 import { CartProvider } from './context/CartContext';
 import { CheckoutPage } from './pages/user/CheckoutPage';
+import { OrderConfirmationPage } from './pages/user/OrderConfirmationPage';
 
 function App() {
   return (
@@ -56,6 +57,9 @@ function App() {
             }/>
             <Route path='/shop/checkout' element={
               <CheckoutPage />
+            }/>
+            <Route path='/shop/order-confirmation' element={
+              <OrderConfirmationPage />
             }/>
           </Route>
         </Routes>

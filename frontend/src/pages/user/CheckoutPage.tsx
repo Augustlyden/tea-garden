@@ -15,7 +15,6 @@ const emptyCustomer: OrderInput = {
 
 export const CheckoutPage = () => {
   const [customer, setCustomer] = useState<OrderInput>(emptyCustomer);
-  const [order, setOrder] = useState<OrderInputResponse | string>('');
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
   const { cart, totalPrice, totalItems } = useCart();
@@ -39,8 +38,7 @@ export const CheckoutPage = () => {
     setIsLoading(true);
     try {
       const newOrder = await orderService.createOrder(customer);
-      setOrder(newOrder.data);
-      navigate('/order-confirmation', { state: order})
+      navigate('/shop/order-confirmation', { state: newOrder.data});
     } catch (error) {
       setError(error instanceof Error ? error.message : 'Något gick fel');
     } finally {

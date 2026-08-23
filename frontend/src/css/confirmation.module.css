@@ -1,0 +1,232 @@
+.container {
+  max-width: 900px;
+  margin: 4rem auto;
+  padding: 0 1.5rem;
+  font-family: var(--font-body);
+}
+
+.successHeader {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  margin-bottom: 3rem;
+}
+
+.successIcon {
+  color: var(--color-primary);
+  margin-bottom: 1rem;
+  animation: scaleUp 0.4s cubic-bezier(0.175, 0.85, 0.32, 1.275) forwards;
+}
+
+.title {
+  font-family: var(--font-heading);
+  font-size: var(--text-3xl);
+  color: var(--color-primary-dark);
+  margin: 0 0 0.5rem 0;
+}
+
+.orderCard {
+  background-color: #ffffff;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md);
+  display: grid;
+  grid-template-columns: 1fr;
+  overflow: hidden;
+}
+
+.customerInfo {
+  padding: 2.5rem;
+  background-color: var(--color-bg-main);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.orderNumber {
+  font-family: var(--font-heading);
+  font-size: var(--text-xl);
+  color: var(--color-primary-dark);
+  margin: 0 0 2rem 0
+}
+
+.infoGrid {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.infoRow {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.label {
+  font-size: var(--text-xs);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--color-text-muted);
+  font-weight: 600;
+}
+
+.value {
+  font-size: var(--text-base);
+  color: var(--color-text-main);
+  font-weight: 500;
+  line-height: 1.4;
+}
+
+.productInfo {
+  padding: 2.5rem;
+  display: flex;
+  flex-direction: column;
+}
+
+.productsTitle {
+  font-family: var(--font-body);
+  font-size: var(--text-sm);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--color-text-muted);
+  font-weight: 700;
+  margin: 0 0 1.5rem 0;
+}
+
+.productsList {
+  flex-grow: 1;
+}
+
+.itemContainer {
+  padding: 1rem 0;
+  border-bottom: 1px dashed var(--color-border); /* Elegant streckad linje */
+}
+
+.itemContainer:first-child {
+  padding-top: 0;
+}
+
+.itemContainer:last-child {
+  border-bottom: none;
+}
+
+.productLink {
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  color: inherit;
+}
+
+.imgContainer {
+  width: 60px;
+  height: 60px;
+  min-width: 60px;
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  border: 1px solid var(--color-border);
+}
+
+.img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.imgPlaceholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  font-size: 1.2rem;
+  background-color: var(--color-primary-pale);
+}
+
+.infoContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+}
+
+.productName {
+  font-size: var(--text-sm);
+  font-weight: 600;
+  color: var(--color-primary-dark);
+  margin: 0;
+}
+
+.productLink:hover .productName {
+  color: var(--color-primary);
+}
+
+.itemInfo {
+  display: flex;
+  gap: 1rem;
+  font-size: var(--text-xs);
+  color: var(--color-text-muted);
+}
+
+.quantity {
+  font-weight: 600;
+  color: var(--color-text-main);
+}
+
+.totalRow {
+  margin-top: 2rem;
+  padding-top: 1.5rem;
+  border-top: 2px solid var(--color-primary-pale);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: var(--text-base);
+  color: var(--color-text-main);
+}
+
+.totalAmount {
+  font-size: var(--text-xl);
+  color: var(--color-primary);
+  font-weight: 700;
+}
+
+.actionRow {
+  display: flex;
+  justify-content: center;
+  margin-top: 3rem;
+}
+
+.continue {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-family: var(--font-body);
+  font-size: var(--text-sm);
+  font-weight: 600;
+  color: var(--color-primary-dark);
+  background-color: var(--color-accent); /* Din favoritgula färg */
+  text-decoration: none;
+  padding: 0.9rem 2rem;
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+  transition: all 0.2s ease;
+}
+
+.continue:hover {
+  background-color: var(--color-accent-hover);
+  box-shadow: var(--shadow-md);
+  transform: translateY(-1px);
+}
+
+@media (min-width: 768px) {
+  .orderCard {
+    grid-template-columns: 1fr 1.2fr;
+  }
+
+  .customerInfo {
+    border-bottom: none;
+    border-right: 1px solid var(--color-border); /* Vertikal linje på desktop */
+  }
+}
+
+@keyframes scaleUp {
+  0% { transform: scale(0.5); opacity: 0; }
+  100% { transform: scale(1); opacity: 1; }
+}
