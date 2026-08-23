@@ -38,7 +38,7 @@ export const CheckoutPage = () => {
     setIsLoading(true);
     try {
       const newOrder = await orderService.createOrder(customer);
-      navigate('/order-confirmation', { state: newOrder.data});
+      navigate('/shop/order-confirmation', { state: newOrder.data});
     } catch (error) {
       setError(error instanceof Error ? error.message : 'Något gick fel');
     } finally {
