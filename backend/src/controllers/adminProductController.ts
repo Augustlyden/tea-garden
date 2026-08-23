@@ -2,6 +2,7 @@ import Product from "../models/AdminProduct";
 import { Request, Response } from "express";
 import { ProductAttributes } from "../types/productTypes";
 import { parseProductAttributes, validateProductNumbers } from "../utils/productValidator";
+import { uploadToCloudinary } from "../middlewares/upload";
 
 export const createProduct = async (
   req: Request<{}, {}, ProductAttributes>, res: Response
@@ -28,7 +29,8 @@ export const createProduct = async (
       productData.isAvailable = productData.isAvailable === 'true';
     }
 
-    productData.imgUrl = `/uploads/${file.filename}`;
+    const uploadResult = await uploadToCloudinary(file.buffer);
+    productData.imgUrl = uploadResult.secure_url;
 
     const newProduct = await Product.create(productData);
     res.status(201).json({ success: true, data: newProduct });
@@ -85,7 +87,8 @@ export const updateProduct = async (
     const file = req.file as Express.Multer.File;
 
     if (file) {
-      productData.imgUrl = `/uploads/${file.filename}`;
+      const uploadResult = await uploadToCloudinary(file.buffer);
+      productData.imgUrl = uploadResult.secure_url;
     } 
 
     const numValidation = validateProductNumbers(productData, true);

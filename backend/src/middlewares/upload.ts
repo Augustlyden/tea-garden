@@ -1,15 +1,16 @@
 import multer from 'multer';
-import path from 'path';
+import { UploadApiResponse } from 'cloudinary';
+import streamifier from 'streamifier';
+import cloudinary from '../config/cloudinary';
 
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, path.join(process.cwd(), 'public/uploads'));
-  },
-  filename: (req, file, cb) => {
-    const extension = path.extname(file.originalname);
-    const fileName = crypto.randomUUID();
-    cb(null, fileName + extension);
-  }
-});
+export const upload = multer({ storage: multer.memoryStorage() });
 
-export const upload = multer({ storage: storage});
+export const uploadToCloudinary = (buffer: Buffer): Promise<UploadApiResponse> => {
+  return new Promise((resolve, reject) => {
+    const stream = cloudinary.uploader.upload_stream(
+      { folder: 'tea-garden' },
+      (error, result) => error ? reject(error) : resolve(result as UploadApiResponse)
+    );
+    streamifier.createReadStream(buffer).pipe(stream);
+  });
+};
