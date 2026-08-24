@@ -32,7 +32,7 @@ export const OrderDetails = ({ order, onUpdate }: OrderDetailProps) => {
                   onChange={(e) => onUpdate(e.target.value as OrderStatus)}
                 >
                   <option value="Beställd">Beställd</option>
-                  <option value="Behandlad">Behandlad</option>
+                  <option value="Behandlas">Behandlas</option>
                   <option value="Levererad">Levererad</option>
                   <option value="Återbetald">Återbetald</option>
                 </select>
