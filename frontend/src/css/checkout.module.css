@@ -1,7 +1,7 @@
 .container {
   display: flex;
   flex-direction: column;
-  margin: 3rem auto;
+  margin: 1rem auto;
   padding: 2.5rem;
   border: 1px solid var(--color-border);
   border-radius: var(--radius-lg);
@@ -90,6 +90,40 @@
 
 .total {
   color: var(--color-text-muted);
+}
+
+.back {
+  font-family: var(--font-body);
+  font-size: var(--text-base);
+  font-weight: 600;
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+  transition: all 0.2s ease;
+  text-decoration: none;
+  color: var(--color-bg-main);
+  background-color: var(--color-primary);
+  display: inline-flex;
+  margin: 0;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  align-items: center;
+}
+
+.back svg {
+  transition: transform 0.2s ease;
+}
+
+.back:hover svg {
+  transform: translateX(-3px);
+}
+
+.back:hover {
+  color: var(--color-primary-dark);
+  background-color: var(--color-primary-pale);
+}
+
+.back:active {
+  transform: translateY(0);
 }
 
 @media (min-width: 768px) {

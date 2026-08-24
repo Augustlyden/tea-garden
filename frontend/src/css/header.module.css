@@ -83,11 +83,11 @@
 
 .totalItems {
   position: absolute;
-  top: -5px;
-  right: -2px;
+  top: 2px;
+  right: 2px;
   min-width: 1rem;
   height: 1rem;
-  padding: 0 4px;
+  padding: 2px;
   border-radius: var(--radius-full);
   background-color: var(--color-primary-pale);
   color: var(--color-primary);

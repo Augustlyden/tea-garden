@@ -171,7 +171,7 @@
   margin-top: 1rem;
 }
 
-.editButton, .back, .deleteButton {
+.editButton, .back, .deleteButton, .buyButton {
   font-family: var(--font-body);
   font-size: var(--text-base);
   font-weight: 600;
@@ -187,9 +187,39 @@
   width: 100%;
 }
 
-.editButton {
+.editButton, .buyButton {
   color: var(--color-primary-dark);
   background-color: var(--color-accent); 
+}
+
+.buyButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.popEffect {
+  animation: buttonPop 0.3s ease-out forwards;
+  background-color: var(--color-primary-pale) !important; 
+  color: var(--color-primary-dark) !important;
+  border: 1px solid var(--color-primary-light);
+}
+
+.addedText {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  position: relative;
+}
+
+.flyingLeaf {
+  position: absolute;
+  right: -20px;
+  top: 0;
+  display: inline-block;
+  animation: leafFly 0.8s cubic-bezier(0.18, 0.89, 0.32, 1.28) forwards;
 }
 
 .back {
@@ -211,13 +241,13 @@
   transform: translateX(-3px);
 }
 
-.editButton:hover {
+.editButton:hover, .buyButton:hover {
   box-shadow: var(--shadow-md);
   transform: translateY(-1px);
   background-color: var(--color-accent-hover);
 }
 
-.editButton:active, .back:active, .deleteButton:active {
+.editButton:active, .back:active, .deleteButton:active, .buyButton:active {
   transform: translateY(0);
 }
 
@@ -264,5 +294,26 @@
   .buttonContainer {
     margin-bottom: 0.25rem; 
     align-self: flex-end;
+  }
+}
+
+@keyframes buttonPop {
+  0% { transform: scale(1); }
+  30% { transform: scale(0.92); }
+  60% { transform: scale(1.05); }
+  100% { transform: scale(1); }
+}
+
+@keyframes leafFly {
+  0% {
+    transform: translateY(0) rotate(0deg) scale(1);
+    opacity: 1;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(-40px) rotate(45deg) scale(1.4);
+    opacity: 0;
   }
 }
