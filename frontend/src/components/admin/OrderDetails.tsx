@@ -1,4 +1,3 @@
-import { CirclePlus } from 'lucide-react';
 import styles from '../../css/orderDetail.module.css';
 import type { OrderDetailProps, OrderStatus } from '../../types/orderTypes';
 import { formatDate } from '../../utils/formater';
