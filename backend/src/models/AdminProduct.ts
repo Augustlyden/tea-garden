@@ -24,7 +24,7 @@ class Product {
       INSERT INTO products
         (product_name, category_id, price, in_stock, img_url, description, attributes, is_available)
       VALUES 
-        ($1, $2, $3, $4, $5, $6, $7)
+        ($1, $2, $3, $4, $5, $6, $7, $8)
       RETURNING *;
       `, [
           productData.productName, 

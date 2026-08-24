@@ -1,4 +1,4 @@
-import type { OrderInput, OrderInputResponse } from "../../types/orderTypes";
+import type { OrderInput } from "../../types/orderTypes";
 import { orderService } from "../../services/admin/orderService";
 import styles from "../../css/checkout.module.css";
 import { useCart } from "../../context/CartContext";
