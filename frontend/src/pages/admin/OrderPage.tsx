@@ -1,6 +1,6 @@
 import { Sidebar } from "../../components/admin/Sidebar";
 import { orderService } from "../../services/admin/orderService";
-import type { AdminOrderResponse } from "../../types/orderTypes";
+import type { AdminOrderResponse, OrderStatus } from "../../types/orderTypes";
 import { useEffect, useState } from "react";
 import styles from '../../css/product.module.css';
 import { OrderList } from "../../components/admin/OrderList";
@@ -9,7 +9,7 @@ export const OrderPage = () => {
   const [orders, setOrders] = useState<AdminOrderResponse[]>([]);
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(true);
-  const [filter, setFilter] = useState<'all' | 'Beställd' | 'Behandlad' | 'Levererad' | 'Återbetald'>('all');
+  const [filter, setFilter] = useState<OrderStatus | 'all'>('all');
 
   useEffect(() => {
     const fetchAllOrders = async () => {
@@ -61,9 +61,9 @@ export const OrderPage = () => {
             className={styles.radio}
             id="filter-proccessed"
             name="status"
-            onChange={() => setFilter('Behandlad')}
+            onChange={() => setFilter('Behandlas')}
           /> 
-          <label htmlFor="filter-proccessed" className={styles.label}>Behandlad</label>
+          <label htmlFor="filter-proccessed" className={styles.label}>Behandlas</label>
 
           <input 
             type="radio"

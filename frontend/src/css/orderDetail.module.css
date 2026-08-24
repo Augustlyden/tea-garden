@@ -144,13 +144,17 @@
   color: var(--color-text-main);
 }
 
-.quantity {
-  background-color: var(--color-bg-main);
+.price {
+  background-color: var(--color-primary-pale);
   padding: 0.2rem 0.6rem;
   border-radius: var(--radius-sm);
-  font-size: var(--text-sm);
   font-weight: 600;
+  margin: 0.5rem;
+}
+
+.quantity, .price {
   color: var(--color-text-muted);
+  font-size: var(--text-sm);
 }
 
 .timeline {

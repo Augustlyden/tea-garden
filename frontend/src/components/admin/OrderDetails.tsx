@@ -52,7 +52,8 @@ export const OrderDetails = ({ order, onUpdate }: OrderDetailProps) => {
                   key={p.productId}   
                   className={styles.productName}
                 >
-                  {p.productName} <span className={styles.quantity}>{p.quantity} st</span>
+                  <span className={styles.quantity}>{p.quantity} st</span> {p.productName}
+                  <span className={styles.price}>{p.price} kr/st</span>
                 </p>
               ))}
             </div>
