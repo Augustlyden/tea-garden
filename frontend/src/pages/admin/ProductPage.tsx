@@ -16,9 +16,9 @@ export const ProductPage = () => {
   useEffect(() => {
     const fetchAllProducts = async () => {
       try {
+        setError('');
         const productsData = await productService.getAllProducts();
         setProducts(productsData.data);
-        setError('');
       } catch (error) {
         setError(error instanceof Error ? error.message : 'Något gick fel');
       } finally {

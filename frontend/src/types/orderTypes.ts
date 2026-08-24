@@ -1,4 +1,4 @@
-export type OrderStatus = 'Beställd' | 'Behandlad' | 'Levererad' | 'Återbetald';
+export type OrderStatus = 'Beställd' | 'Behandlas' | 'Levererad' | 'Återbetald';
 
 export interface StatusHistoryResponse {
   id: number;

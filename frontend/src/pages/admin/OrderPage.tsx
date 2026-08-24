@@ -14,9 +14,9 @@ export const OrderPage = () => {
   useEffect(() => {
     const fetchAllOrders = async () => {
       try {
+        setError('');
         const data = await orderService.getAllOrders();
         setOrders(data.data);
-        setError('');
       } catch (error) {
         setError(error instanceof Error ? error.message : 'Något gick fel');
       } finally {
