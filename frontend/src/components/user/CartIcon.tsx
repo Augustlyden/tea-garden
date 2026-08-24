@@ -16,7 +16,11 @@ export const CartIcon = () => {
         aria-label='Öppna varukorg'
         aria-expanded={isOpen}
       >
-        {totalItems > 0 && <p className={styles.totalItems}>{totalItems}</p>}
+        {totalItems > 0 && 
+          <span className={styles.totalItems}>
+            {totalItems}
+          </span>
+        }
         <ShoppingBasket className={styles.basket} width={30} strokeWidth={1.5}/>
       </button>
       <MiniCart isOpen={isOpen} onClose={() => setIsOpen(false)}/>
