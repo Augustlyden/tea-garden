@@ -13,6 +13,7 @@ import { UserProductDetailPage } from './pages/user/UserProductDetailPage';
 import { CartProvider } from './context/CartContext';
 import { CheckoutPage } from './pages/user/CheckoutPage';
 import { OrderConfirmationPage } from './pages/user/OrderConfirmationPage';
+import { HomePage } from './pages/user/Homepage';
 
 function App() {
   return (
@@ -60,6 +61,9 @@ function App() {
             }/>
             <Route path='/shop/order-confirmation' element={
               <OrderConfirmationPage />
+            }/>
+            <Route path='/' element={
+              <HomePage />
             }/>
           </Route>
         </Routes>
