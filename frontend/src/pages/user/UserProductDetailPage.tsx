@@ -6,6 +6,7 @@ import { ChevronLeft } from 'lucide-react';
 import styles from '../../css/productDetail.module.css';
 import { UserProductDetails } from "../../components/user/UserProductDetails";
 import { Header } from "../../components/user/Header";
+import { Spinner } from "../../components/shared/Spinner";
 
 export const UserProductDetailPage = () => {
   const { id } = useParams();
@@ -28,10 +29,6 @@ export const UserProductDetailPage = () => {
     fetchProduct();
   }, [id]);
 
-  if (isLoading) {
-    return <div>Laddar...</div>
-  }
-
   if (!product) {
   return <p>Produkten kunde inte hittas.</p>;
   }
@@ -39,15 +36,19 @@ export const UserProductDetailPage = () => {
   return (
     <>
       <Header />
-      <main>
-        <Link className={styles.back} to={'/shop/products'}>
-          <ChevronLeft size={18} strokeWidth={2.5} /> Tillbaka
-        </Link>
-        <section className={styles.detailContainer}>
-          <UserProductDetails product={product}/>
-          {error && <p className="error">{error}</p>}
-        </section>
-      </main>
+      {isLoading ? (
+        <Spinner />
+      ) : (
+        <main>
+          <Link className={styles.back} to={'/shop/products'}>
+            <ChevronLeft size={18} strokeWidth={2.5} /> Tillbaka
+          </Link>
+          <section className={styles.detailContainer}>
+            <UserProductDetails product={product}/>
+            {error && <p className="error">{error}</p>}
+          </section>
+        </main>
+      )}
     </>
   );
 };

@@ -6,7 +6,6 @@ import { useState } from "react";
 import { CartItem } from "../../components/user/CartItem";
 import { Link, useNavigate } from "react-router-dom";
 import { ChevronLeft } from "lucide-react";
-import { Header } from "../../components/user/Header";
 
 const emptyCustomer: OrderInput = {
   customerName: '',
@@ -19,7 +18,7 @@ export const CheckoutPage = () => {
   const [customer, setCustomer] = useState<OrderInput>(emptyCustomer);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
-  const { cart, totalPrice, totalItems } = useCart();
+  const { cart, totalPrice, totalItems, fetchCart } = useCart();
   const navigate = useNavigate();
 
   const handleSubmit = async (e: React.SubmitEvent<HTMLFormElement>) => {
@@ -40,6 +39,7 @@ export const CheckoutPage = () => {
     setIsLoading(true);
     try {
       const newOrder = await orderService.createOrder(customer);
+      fetchCart();
       navigate('/shop/order-confirmation', { state: newOrder.data});
     } catch (error) {
       setError(error instanceof Error ? error.message : 'Något gick fel');

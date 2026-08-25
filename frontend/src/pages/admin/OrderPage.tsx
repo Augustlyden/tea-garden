@@ -4,6 +4,7 @@ import type { AdminOrderResponse, OrderStatus } from "../../types/orderTypes";
 import { useEffect, useState } from "react";
 import styles from '../../css/product.module.css';
 import { OrderList } from "../../components/admin/OrderList";
+import { Spinner } from "../../components/shared/Spinner";
 
 export const OrderPage = () => {
   const [orders, setOrders] = useState<AdminOrderResponse[]>([]);
@@ -28,64 +29,66 @@ export const OrderPage = () => {
 
   const filteredOrders = orders.filter(o => filter === 'all' || filter === o.currentStatus);
 
-  if (isLoading) {
-    return <div>Laddar...</div>
-  }
-
   return (
-    <main>
+    <>
       <Sidebar />
-      <div className={styles.filter}>
-        <div className={styles.inputGroup}>
-          <input 
-            type="radio"
-            className={styles.radio}
-            id="filter-all"
-            name="status"
-            defaultChecked
-            onChange={() => setFilter('all')} 
-          />
-          <label htmlFor="filter-all" className={styles.label}>Alla</label>
+      {isLoading ? (
+        <Spinner />
+      ) : (
+        <main>
+          <div className={styles.filter}>
+            <div className={styles.inputGroup}>
+              <input 
+                type="radio"
+                className={styles.radio}
+                id="filter-all"
+                name="status"
+                defaultChecked
+                onChange={() => setFilter('all')} 
+              />
+              <label htmlFor="filter-all" className={styles.label}>Alla</label>
 
-          <input 
-            type="radio"
-            className={styles.radio}
-            id="filter-ordered"
-            name="status"
-            onChange={() => setFilter('Beställd')}
-          /> 
-          <label htmlFor="filter-ordered" className={styles.label}>Beställd</label>
+              <input 
+                type="radio"
+                className={styles.radio}
+                id="filter-ordered"
+                name="status"
+                onChange={() => setFilter('Beställd')}
+              /> 
+              <label htmlFor="filter-ordered" className={styles.label}>Beställd</label>
 
-          <input 
-            type="radio"
-            className={styles.radio}
-            id="filter-proccessed"
-            name="status"
-            onChange={() => setFilter('Behandlas')}
-          /> 
-          <label htmlFor="filter-proccessed" className={styles.label}>Behandlas</label>
+              <input 
+                type="radio"
+                className={styles.radio}
+                id="filter-proccessed"
+                name="status"
+                onChange={() => setFilter('Behandlas')}
+              /> 
+              <label htmlFor="filter-proccessed" className={styles.label}>Behandlas</label>
 
-          <input 
-            type="radio"
-            className={styles.radio}
-            id="filter-delivered"
-            name="status"
-            onChange={() => setFilter('Levererad')}
-          /> 
-          <label htmlFor="filter-delivered" className={styles.label}>Levererad</label>
+              <input 
+                type="radio"
+                className={styles.radio}
+                id="filter-delivered"
+                name="status"
+                onChange={() => setFilter('Levererad')}
+              /> 
+              <label htmlFor="filter-delivered" className={styles.label}>Levererad</label>
 
-          <input 
-            type="radio"
-            className={styles.radio}
-            id="filter-refunded"
-            name="status"
-            onChange={() => setFilter('Återbetald')}
-          /> 
-          <label htmlFor="filter-refunded" className={styles.label}>Återbetald</label>
-        </div>
-      </div> 
-      <OrderList orders={filteredOrders}/>
-      {error && <p className="error">{error}</p>}
-    </main>
+              <input 
+                type="radio"
+                className={styles.radio}
+                id="filter-refunded"
+                name="status"
+                onChange={() => setFilter('Återbetald')}
+              /> 
+              <label htmlFor="filter-refunded" className={styles.label}>Återbetald</label>
+            </div>
+          </div> 
+          <OrderList orders={filteredOrders}/>
+          {error && <p className="error">{error}</p>}
+        </main>
+      )}
+    </>
   );
 };
