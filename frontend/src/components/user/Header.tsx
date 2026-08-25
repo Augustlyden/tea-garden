@@ -5,7 +5,7 @@ import { CartIcon } from './CartIcon';
 export const Header = () => {
   return (
     <header className={styles.header}>
-      <Link className={`${styles.link} ${styles.logo}`} to={'/shop/'}>Tea Garden</Link>
+      <Link className={`${styles.link} ${styles.logo}`} to={'/'}>Tea Garden</Link>
       <div className={styles.headerLinks}>
         <Link className={styles.link} to={'/shop/products'}>Produkter</Link>
         <CartIcon />
