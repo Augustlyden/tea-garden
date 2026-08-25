@@ -5,6 +5,7 @@ import type { AdminProductResponse } from "../../types/productTypes";
 import styles from '../../css/product.module.css';
 import { CategorySelect } from "../../components/shared/CategorySelect";
 import { Sidebar } from "../../components/admin/Sidebar";
+import { Spinner } from "../../components/shared/Spinner";
 
 export const ProductPage = () => {
   const [products, setProducts] = useState<AdminProductResponse[]>([]);
@@ -28,10 +29,6 @@ export const ProductPage = () => {
     fetchAllProducts();
   }, []);
 
-  if (isLoading) {
-    return <div>Laddar...</div>
-  }
-
   const filteredProducts = products.filter(p => {
     const matchesAvailability = 
       filter === 'all' ||
@@ -45,55 +42,61 @@ export const ProductPage = () => {
   });
 
   return (
-    <main>
+    <>
       <Sidebar />
-      <div className={styles.filterWrapper}>
-        <div className={styles.inputGroup}>
-          <input 
-            className={styles.radio} 
-            type="radio" 
-            id="filter-all" 
-            name="availability" 
-            defaultChecked 
-            onChange={() => setFilter('all')}
-          />
-          <label className={styles.label} htmlFor="filter-all">Alla</label>
-
-          <input 
-            className={styles.radio} 
-            type="radio" 
-            id="filter-available" 
-            name="availability" 
-            onChange={() => setFilter('available')}
-          />
-          <label className={styles.label} htmlFor="filter-available">I lager</label>
-
-          <input 
-            className={styles.radio} 
-            type="radio" 
-            id="filter-unavailable" 
-            name="availability" 
-            onChange={() => setFilter('unavailable')}
-          />
-          <label className={styles.label} htmlFor="filter-unavailable">Ej i lager</label>
+      {isLoading ? (
+        <Spinner />
+      ) : (
+      <main>
+        <div className={styles.filterWrapper}>
+          <div className={styles.inputGroup}>
+            <input 
+              className={styles.radio} 
+              type="radio" 
+              id="filter-all" 
+              name="availability" 
+              defaultChecked 
+              onChange={() => setFilter('all')}
+            />
+            <label className={styles.label} htmlFor="filter-all">Alla</label>
+  
+            <input 
+              className={styles.radio} 
+              type="radio" 
+              id="filter-available" 
+              name="availability" 
+              onChange={() => setFilter('available')}
+            />
+            <label className={styles.label} htmlFor="filter-available">I lager</label>
+  
+            <input 
+              className={styles.radio} 
+              type="radio" 
+              id="filter-unavailable" 
+              name="availability" 
+              onChange={() => setFilter('unavailable')}
+            />
+            <label className={styles.label} htmlFor="filter-unavailable">Ej i lager</label>
+          </div>
+  
+          <div className={styles.selectContainer}>
+            <label htmlFor="category-select" className={styles.visuallyHidden}>
+              Välj kategori
+            </label>
+            <CategorySelect 
+              value={categoryFilter} 
+              onChange={setCategoryFilter} 
+              includeAll={true} 
+              disabled={false}
+            />
+          </div>
+  
         </div>
-
-        <div className={styles.selectContainer}>
-          <label htmlFor="category-select" className={styles.visuallyHidden}>
-            Välj kategori
-          </label>
-          <CategorySelect 
-            value={categoryFilter} 
-            onChange={setCategoryFilter} 
-            includeAll={true} 
-            disabled={false}
-          />
-        </div>
-
-      </div>
-
-      <ProductList products={filteredProducts}/>
-      {error && <p className="error">{error}</p>}
-    </main>
+  
+        <ProductList products={filteredProducts}/>
+        {error && <p className="error">{error}</p>}
+      </main>
+    )}
+    </>
   );
 };

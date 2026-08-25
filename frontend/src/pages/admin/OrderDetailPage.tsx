@@ -8,6 +8,7 @@ import styles from '../../css/productDetail.module.css';
 import { useAuth } from "../../context/AuthContext";
 import { OrderDetails } from "../../components/admin/OrderDetails";
 import { formatDate } from "../../utils/formater";
+import { Spinner } from "../../components/shared/Spinner";
 
 export const OrderDetailPage = () => {
   const { id } = useParams();
@@ -52,27 +53,29 @@ export const OrderDetailPage = () => {
       setError(error instanceof Error ? error.message : 'Något gick fel');
     }
   }
-  
-  if (isLoading) {
-    return <div>Laddar...</div>
-  }
 
   if (!order) {
     return <p>Beställningen kunde inte hittas.</p>;
   }
 
   return (
-    <main>
+    <>
       <Sidebar />
-      <Link className={styles.back} to={'/admin/orders'}>
-        <ChevronLeft size={18} strokeWidth={2.5} /> Tillbaka
-      </Link>
+      {isLoading ? (
+        <Spinner />
+      ) : (
+        <main>
+          <Link className={styles.back} to={'/admin/orders'}>
+            <ChevronLeft size={18} strokeWidth={2.5} /> Tillbaka
+          </Link>
 
-      <section>
-        <OrderDetails order={order} onUpdate={handleUpdate}/>
-        
-        {error && <p className="error">{error}</p>}
-      </section>
-    </main>
+          <section>
+            <OrderDetails order={order} onUpdate={handleUpdate}/>
+            
+            {error && <p className="error">{error}</p>}
+          </section>
+        </main>
+      )}
+    </>
   );
 };

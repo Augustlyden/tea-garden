@@ -5,6 +5,7 @@ import styles from '../../css/product.module.css';
 import { CategorySelect } from "../../components/shared/CategorySelect";
 import { UserProductList } from "../../components/user/UserProductList";
 import { Header } from "../../components/user/Header";
+import { Spinner } from "../../components/shared/Spinner";
 
 export const UserProductPage = () => {
   const [products, setProducts] = useState<UserProductResponse[]>([]);
@@ -27,10 +28,6 @@ export const UserProductPage = () => {
     fetchAllProducts();
   }, []);
 
-  if (isLoading) {
-    return <div>Laddar...</div>
-  }
-
   const filteredProducts = products.filter(p =>
     categoryFilter === 'all' || p.categoryId === categoryFilter
   );
@@ -38,25 +35,29 @@ export const UserProductPage = () => {
   return (
     <>
       <Header />
-      <main>
-        <div className={styles.filter}>
-          <div className={styles.selectContainer}>
-            <label htmlFor="category-select" className={styles.visuallyHidden}>
-              Välj kategori
-            </label>
-            <CategorySelect 
-              value={categoryFilter} 
-              onChange={setCategoryFilter} 
-              includeAll={true} 
-              disabled={false}
-            />
+      {isLoading ? (
+        <Spinner />
+      ) : (
+        <main>
+          <div className={styles.filter}>
+            <div className={styles.selectContainer}>
+              <label htmlFor="category-select" className={styles.visuallyHidden}>
+                Välj kategori
+              </label>
+              <CategorySelect 
+                value={categoryFilter} 
+                onChange={setCategoryFilter} 
+                includeAll={true} 
+                disabled={false}
+              />
+            </div>
           </div>
-        </div>
 
-        <UserProductList products={filteredProducts}/>
+          <UserProductList products={filteredProducts}/>
 
-        {error && <p className="error">{error}</p>}
-      </main>
+          {error && <p className="error">{error}</p>}
+        </main>
+      )}
     </>
   );
 };

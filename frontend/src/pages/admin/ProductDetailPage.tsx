@@ -7,6 +7,7 @@ import styles from '../../css/productDetail.module.css';
 import { ProductForm } from "../../components/admin/ProductForm";
 import { Sidebar } from "../../components/admin/Sidebar";
 import { ChevronLeft } from 'lucide-react';
+import { Spinner } from "../../components/shared/Spinner";
 
 export const ProductDetailPage = () => {
   const { id } = useParams();
@@ -64,28 +65,34 @@ export const ProductDetailPage = () => {
   }
 
   return (
-    <main>
+    <>
       <Sidebar />
-      <Link className={styles.back} to={'/admin/products'}>
-        <ChevronLeft size={18} strokeWidth={2.5} /> Tillbaka
-      </Link>
-      <section className={!isEditing ? `${styles.detailContainer}` : ""}>
-        {!isEditing ? (
-          <>
-            <ProductDetails 
-              product={product}
-              onClick={() => { 
-                setIsEditing(true);
-                setError('');
-              }}
-              onDelete={handleDelete}
-              disabled={isDeleting} />
-          </>
-        ) : (
-          <ProductForm initialData={product} onCancel={() => {setIsEditing(false)}} onSubmit={handleUpdate}/>
-        )}
-        {error && <p className="error">{error}</p>}
-      </section>
-    </main>
+      {isLoading ? (
+        <Spinner />
+      ) : (
+        <main>
+          <Link className={styles.back} to={'/admin/products'}>
+            <ChevronLeft size={18} strokeWidth={2.5} /> Tillbaka
+          </Link>
+          <section className={!isEditing ? `${styles.detailContainer}` : ""}>
+            {!isEditing ? (
+              <>
+                <ProductDetails 
+                  product={product}
+                  onClick={() => { 
+                    setIsEditing(true);
+                    setError('');
+                  }}
+                  onDelete={handleDelete}
+                  disabled={isDeleting} />
+              </>
+            ) : (
+              <ProductForm initialData={product} onCancel={() => {setIsEditing(false)}} onSubmit={handleUpdate}/>
+            )}
+            {error && <p className="error">{error}</p>}
+          </section>
+        </main>
+      )}
+    </>
   );
 };
