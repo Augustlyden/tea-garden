@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import styles from '../../css/homePage.module.css'
 import { Header } from '../../components/user/Header';
 
-export const HomePage = () => {
+export const Homepage = () => {
   const teaGuide = [
     {
       id: 'green',

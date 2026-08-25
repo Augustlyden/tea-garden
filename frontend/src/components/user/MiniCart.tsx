@@ -3,6 +3,7 @@ import { useCart } from "../../context/CartContext";
 import type { MiniCartProps } from "../../types/cartTypes";
 import { Link } from 'react-router-dom';
 import { CartItem } from './CartItem';
+import { Spinner } from '../shared/Spinner';
 
 export const MiniCart = ( {isOpen, onClose }: MiniCartProps ) => {
   const { cart, totalPrice, isLoading } = useCart();
@@ -22,13 +23,12 @@ export const MiniCart = ( {isOpen, onClose }: MiniCartProps ) => {
         </div>
 
         <div className={styles.itemsList}>
-          {isLoading && <div>Laddar...</div>}
-          {cart.length === 0 ? (
+          {isLoading ? (
+            <Spinner />
+          ) : cart.length === 0 ? (
             <p className={styles.emptyCart}>Din varukorg är tom</p>
           ) : (
-            <>
-            {cart.map(item => <CartItem key={item.cartId} item={item} />)}
-            </>
+            cart.map(item => <CartItem key={item.cartId} item={item} />)
           )}
         </div>
 
