@@ -14,13 +14,11 @@ export const Spinner = () => (
         </clipPath>
       </defs>
 
-      {/* Koppens outline */}
       <path
         d="M14 28h32v14a12 12 0 0 1-12 12H26a12 12 0 0 1-12-12V28z"
         className={styles.cupBody}
       />
 
-      {/* Tevätska, klippt till koppens form, animerad nivå */}
       <g clipPath="url(#cupClip)">
         <rect x="14" y="20" width="32" height="34" className={styles.tea} />
         <ellipse cx="30" cy="0" rx="16" ry="2" className={styles.teaSurface} />
@@ -32,5 +30,6 @@ export const Spinner = () => (
       />
       <line x1="10" y1="54" x2="54" y2="54" className={styles.saucer} />
     </svg>
+    <p className={styles.loading}>Laddar...</p>
   </div>
 );

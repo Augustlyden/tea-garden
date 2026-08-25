@@ -36,6 +36,12 @@
   animation: fillCup 2.5s ease-in-out infinite;
 }
 
+.loading {
+  font-size: var(--text-lg);
+  color: var(--color-primary-dark);
+  font-family: var(--font-heading);
+}
+
 @keyframes fillCup {
   0% {
     transform: translateY(34px); 
