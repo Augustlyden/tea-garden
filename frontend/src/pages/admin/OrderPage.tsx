@@ -86,7 +86,7 @@ export const OrderPage = () => {
             </div>
           </div> 
           <OrderList orders={filteredOrders}/>
-          {error && <p className="error">{error}</p>}
+          {error && <p className="error">{error} <br /> Prova att ladda om sidan.</p>}
         </main>
       )}
     </>

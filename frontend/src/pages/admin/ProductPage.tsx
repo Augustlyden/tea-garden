@@ -94,7 +94,7 @@ export const ProductPage = () => {
         </div>
   
         <ProductList products={filteredProducts}/>
-        {error && <p className="error">{error}</p>}
+        {error && <p className="error">{error} <br /> Prova att ladda om sidan.</p>}
       </main>
     )}
     </>
