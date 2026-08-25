@@ -13,7 +13,7 @@ import { UserProductDetailPage } from './pages/user/UserProductDetailPage';
 import { CartProvider } from './context/CartContext';
 import { CheckoutPage } from './pages/user/CheckoutPage';
 import { OrderConfirmationPage } from './pages/user/OrderConfirmationPage';
-import { Homepage } from './pages/user/Homepage.tsx';
+import { HomePage } from './pages/user/HomePage';
 
 function App() {
   return (
@@ -63,7 +63,7 @@ function App() {
               <OrderConfirmationPage />
             }/>
             <Route path='/' element={
-              <Homepage />
+              <HomePage />
             }/>
           </Route>
         </Routes>
