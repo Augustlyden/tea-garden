@@ -36,8 +36,10 @@ export const exchangeCurrency = async (req: Request, res: Response) => {
     if (!allowedCurrencies.includes(base)) {
       return res.status(400).json({ success: false, error: 'Currency not available for exchange.' });
     }
+
+    const rates = await getRates(base);
   
-    res.json(await getRates(base));
+    res.json({ success: true, data: rates});
   } catch (error) {
     console.error('Error while fetching currencies', error);
     res.status(502).json({ success: false, error: 'Error while fetching currencies' });
