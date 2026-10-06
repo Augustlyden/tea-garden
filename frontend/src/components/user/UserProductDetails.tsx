@@ -4,6 +4,7 @@ import styles from '../../css/productDetail.module.css';
 import { ShoppingBasket, ShoppingBag } from 'lucide-react';
 import { useCart } from "../../context/CartContext";
 import { useState } from "react";
+import { PriceCurrency } from "./PriceCurrency";
 
 export const UserProductDetails = ( {product}: UserProductCardProps ) => {
   const productAttributes = attributes(product.attributes, product.categoryName);
@@ -43,10 +44,7 @@ export const UserProductDetails = ( {product}: UserProductCardProps ) => {
             <span className={styles.categoryBadge}>{product.categoryName}</span>
             <h1 className={styles.productTitle}>{product.productName}</h1>
             
-            <div className={styles.priceRow}>
-              <span className={styles.price}>{product.price} kr</span>
-              <span className={styles.vatInfo}>inkl. moms</span>
-            </div>
+            <PriceCurrency price={product.price}/>
             {error && <p className="error">{error}</p>}
             <div className={styles.statusWrapper}>
               {product.inStock > 0 ? (
