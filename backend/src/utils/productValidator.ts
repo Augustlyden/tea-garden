@@ -1,4 +1,5 @@
 import { ValidationResult } from "../types/productTypes";
+import { z } from 'zod';
 
 const fieldTranslation: Record<string, string> = {
   price: 'Priset',
@@ -65,3 +66,13 @@ export const parseProductAttributes = (productData: any): ValidationResult => {
   }
   return { valid: true };
 }
+
+export const ImportedProduct = z.object({
+  sku: z.string().min(1, 'Artikelnummer saknas'),
+  productName: z.string().min(1, 'Produktnamn saknas'),
+  price: z.number('Pris saknas eller är ogiltigt').positive('Priset måste vara större än 0'),
+  inStock: z.number('Lagersaldot saknas eller är ogiltigt').int().nonnegative('Lagersaldot får inte vara negativt'),
+  category: z.string().min(1, 'Kategori saknas'),
+  desc: z.string().optional(),
+  attributes: z.object({ variants: z.array(z.string()) }).optional()
+});
