@@ -76,3 +76,5 @@ export const ImportedProduct = z.object({
   desc: z.string().optional(),
   attributes: z.object({ variants: z.array(z.string()) }).optional()
 });
+
+export type ValidProduct = z.infer<typeof ImportedProduct>;

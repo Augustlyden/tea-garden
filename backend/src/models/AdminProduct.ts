@@ -1,6 +1,7 @@
 import db from '../config/database';
 import { ProductAttributes, ProductInstance } from '../types/productTypes';
 import { formatProduct } from '../utils/productCartFormatter';
+import { ValidProduct } from '../utils/productValidator';
 
 class Product {
   private static readonly BASE_ADMIN_SELECT = `
@@ -19,6 +20,8 @@ class Product {
     FROM products p
     JOIN categories c ON p.category_id = c.id
   `;
+
+  private static readonly PLACEHOLDER_IMG_URL = '';
   static async create(productData: ProductAttributes): Promise<ProductInstance> {
     const result = await db.query(`
       INSERT INTO products
@@ -63,6 +66,49 @@ class Product {
 
     const row = result.rows[0];
     if (!row) return null;
+    return formatProduct(row);
+  }
+
+  static async findBySku(sku: string): Promise<number | null> {
+    const result = await db.query(`
+      SELECT p.id 
+      FROM products p
+      WHERE p.supplier_sku = $1;
+      `, [sku]
+    );
+
+    const row = result.rows[0];
+    if (!row) return null;
+    return row.id;
+  }
+
+  static async upsertBySku(productData: ValidProduct, categoryId: number): Promise<ProductInstance> {
+    const result = await db.query(`
+      INSERT INTO products
+        (supplier_sku, product_name, category_id, price, in_stock, description, attributes, img_url)
+      VALUES
+        ($1, $2, $3, $4, $5, $6, $7, $8)
+      ON CONFLICT (supplier_sku) DO UPDATE SET
+        product_name = EXCLUDED.product_name,
+        category_id = EXCLUDED.category_id,
+        price = EXCLUDED.price,
+        in_stock = EXCLUDED.in_stock,
+        description = EXCLUDED.description,
+        attributes = EXCLUDED.attributes
+      RETURNING *;
+      `, [
+        productData.sku,
+        productData.productName,
+        categoryId,
+        productData.price,
+        productData.inStock,
+        productData.desc,
+        productData.attributes,
+        this.PLACEHOLDER_IMG_URL
+      ]
+    );
+
+    const row = result.rows[0];
     return formatProduct(row);
   }
 
