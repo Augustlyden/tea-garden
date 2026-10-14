@@ -4,7 +4,7 @@ import { Pencil, Trash2 } from 'lucide-react';
 import { attributes } from "../../utils/attributesFormatter";
 
 export const ProductDetails = ( {product, onClick, onDelete, disabled}: ProductDetailProps ) => {
-  const productAttributes = attributes(product.attributes, product.categoryName);
+  const productAttributes = attributes(product.attributes);
   
   return (
     <>
