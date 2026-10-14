@@ -85,3 +85,11 @@ export interface ProductDetailProps {
   onDelete: () => void;
   disabled: boolean;
 }
+
+export interface ImportReport {
+  format: 'csv' | 'xml';
+  total: number;
+  created: number;
+  updated: number;
+  skipped: { sku: string, reason: string }[];
+}
