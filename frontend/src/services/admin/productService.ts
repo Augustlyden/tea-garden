@@ -1,5 +1,5 @@
 import api from "../../config/api";
-import { type ApiResponse, type AdminProductResponse, type CategoryResponse, type UserProductResponse } from "../../types/productTypes";
+import { type ApiResponse, type AdminProductResponse, type CategoryResponse, type UserProductResponse, type ImportReport } from "../../types/productTypes";
 
 export const productService = {
   getAllProducts: async (): Promise<ApiResponse<AdminProductResponse[]>> => {
@@ -39,6 +39,11 @@ export const productService = {
 
   getUserProductById: async (id: number): Promise<ApiResponse<UserProductResponse>> => {
     const response = await api.get<ApiResponse<UserProductResponse>>(`/user/products/${id}`);
+    return response.data;
+  },
+
+  importProducts: async (format: 'csv' | 'xml'): Promise<ApiResponse<ImportReport>> => {
+    const response = await api.post<ApiResponse<ImportReport>>(`/admin/products/import/${format}`);
     return response.data;
   }
 };

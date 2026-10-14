@@ -1,8 +1,10 @@
 import Product from "../models/AdminProduct";
 import { Request, Response } from "express";
 import { ProductAttributes } from "../types/productTypes";
-import { parseProductAttributes, validateProductNumbers } from "../utils/productValidator";
+import { ImportedProduct, parseProductAttributes, validateProductNumbers } from "../utils/productValidator";
 import { uploadToCloudinary } from "../middlewares/upload";
+import { CatalogFormat, getSupplierCatalog } from "../integrations/supplierAdapter";
+import Category from "../models/Catergory";
 
 export const createProduct = async (
   req: Request<{}, {}, ProductAttributes>, res: Response
@@ -136,5 +138,54 @@ export const deleteProduct = async (
   } catch (error) {
     console.error('Error while deleting product', error);
     res.status(500).json({ success: false, error: 'Misslyckades att radera produkt' });
+  }
+};
+
+export const importProducts = async (
+  req: Request<{format: string}>, res: Response
+) => {
+  const format = req.params.format;
+  if (format !== 'csv' && format !== 'xml') {
+    return res.status(400).json({ success: false, error: 'Ogiltigt format. Endast csv och xml stöds.' });
+  }
+  try { 
+    const candidates = await getSupplierCatalog(format);
+
+    const categories = await Category.findAllCategories();
+
+    const categoryIds = new Map<string, number>();
+
+    for (const category of categories) {
+      categoryIds.set(category.type, category.id);
+    }
+
+    let created = 0;
+    let updated = 0;
+    const skipped: { sku: string, reason: string }[] = [];
+
+    for (const candidate of candidates) {
+      const result = ImportedProduct.safeParse(candidate);
+      if (!result.success) {
+        skipped.push({ sku: candidate.sku ?? 'saknas', reason: result.error.issues.map((i) => i.message).join(', ') });
+        continue;
+      }
+      const categoryId = categoryIds.get(result.data.category);
+      if (!categoryId) {
+        skipped.push({ sku: candidate.sku ?? 'saknas', reason: `Kategori "${result.data.category}" saknas i systemet` });
+        continue;
+      }
+
+      const existed = await Product.findBySku(result.data.sku);
+      await Product.upsertBySku(result.data, categoryId);
+
+      if (existed) updated++;
+      else created++;
+
+    }
+    return res.json({ success: true, data: { format, total: candidates.length, created, updated, skipped } });
+
+  } catch (error) {
+    console.error('Error while importing products:', error);
+    res.status(502).json({ success: false, error: 'Misslyckades att importera produkter' });
   }
 };

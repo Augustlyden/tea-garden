@@ -1,38 +1,35 @@
-import type { AccessoriesAttributes, TeaAttributes } from "../types/attributesTypes";
-import { isAccessory, isTea } from "../types/attributesTypes";
+const labels: Record<string, string> = {
+  organic: 'Ekologisk',
+  tea_type: 'Teatyp',
+  brew_temp: 'Bryggtemperatur',
+  brew_time: 'Bryggtid',
+  weight_grams: 'Vikt',
+  taste_profile: 'Smakprofil',
+  variants: 'Varianter',
+  material: 'Material',
+  volume_ml: 'Volym',
+  color: 'Färg'
+};
 
-const teaCategory = (data: TeaAttributes) => ({
-  ekologiskt: data.organic ? 'Ja' : 'Nej',
-  tetyp: data.tea_type,
-  bryggtemperatur: data.brew_temp,
-  bryggtid: data.brew_time,
-  vikt: `${data.weight_grams} gram`,
-  smakprofil: data.taste_profile,
-  kategori: data.category
-});
+const units: Record<string, string> = {
+  weight_grams: 'gram',
+  volume_ml: 'ml'
+};
 
-const accessoriesCategory = (data: AccessoriesAttributes) => ({
-  material: data.material,
-  volym: `${data.volume_ml} ml`,
-  färg: data.color,
-  kategori: data.category
-});
+export const attributes = (data: Record<string, any> | null) => {
+  const result: Record<string, string> = {};
+  if (!data) return result;
 
-export const formatAttributes = (data: AccessoriesAttributes | TeaAttributes) => {
-  if (data.category === 'Tillbehör') {
-    return accessoriesCategory(data);
-  } else if (data.category === 'Te') {
-    return teaCategory(data);
-  }
-}
-
-export const attributes = (attributes: Record<string, any> | null, categoryName: 'Te' | 'Tillbehör') => {
-    if (!attributes) return '';
-    const newAttributes = {...attributes, category: categoryName}
-    
-    if (isTea(newAttributes) || isAccessory(newAttributes)) {
-      return formatAttributes(newAttributes) 
+  for (const [key, label] of Object.entries(labels)) {
+    const value = data[key];
+    if (value === undefined || value === null) continue;
+    if (typeof value === 'boolean') {
+      result[label] = value ? 'Ja' : 'Nej';
+    } else if (Array.isArray(value)) {
+      result[label] = value.join(', ');
     } else {
-      return '';
+      result[label] = units[key] ? `${value} ${units[key]}` : String(value);
     }
-  };
+  }
+  return result;
+};

@@ -7,7 +7,7 @@ import { useState } from "react";
 import { PriceCurrency } from "./PriceCurrency";
 
 export const UserProductDetails = ( {product}: UserProductCardProps ) => {
-  const productAttributes = attributes(product.attributes, product.categoryName);
+  const productAttributes = attributes(product.attributes);
   const { addToCart } = useCart();
   const [error, setError] = useState('');
   const [isAnimating, setIsAnimating] = useState(false);
