@@ -79,6 +79,7 @@
 .select:hover {
   border-color: var(--color-primary-light);
   box-shadow: var(--shadow-md);
+  background-color: var(--color-primary-pale);
 }
 
 .select:focus {
@@ -198,6 +199,72 @@
   font-weight: 600;
   color: var(--color-text-main);
 }
+
+.importButtons {
+  display: flex;
+  gap: 1rem;
+  margin: 2rem auto;
+  justify-content: center;
+}
+
+.importButton {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.6rem 1.2rem;
+  font-family: var(--font-body);
+  font-size: var(--text-sm);
+  font-weight: 500;
+  color: var(--color-primary-dark);
+  background-color: var(--color-bg-main);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.importButton:hover {
+  background-color: var(--color-primary-pale);
+  border-color: var(--color-primary-light);
+  box-shadow: var(--shadow-md);
+}
+
+.importButton:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.importReport {
+  max-width: 800px;
+  margin: 2rem auto;
+  padding: 0 1rem;
+}
+
+.importReport h3 {
+  font-size: var(--text-lg);
+  color: var(--color-primary-dark);
+  margin: 0 0 1rem 0;
+}
+
+.paragraph {
+  font-size: var(--text-sm);
+  color: var(--color-text-muted);
+  margin: 0.25rem 0;
+}
+
+.skippedItem {
+  font-size: var(--text-sm);
+  color: var(--color-text-muted);
+  margin: 0.25rem 0;
+}
+
+.skippedList {
+  list-style-type: disc;
+  padding-left: 1.5rem;
+  margin: 0.5rem 0 0 0;
+}
+
 
 @media (max-width: 550px) {
   .card a {
