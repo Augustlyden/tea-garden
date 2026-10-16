@@ -10,7 +10,7 @@ const adminClient = algoliasearch(APP_ID, ADMIN_KEY);
 type AlgoliaRecord = {
   objectID: string;
   productName: string;
-  category: string;
+  categoryName?: string;
   price: number;
   inStock: number;
   imgUrl: string | null;
@@ -21,7 +21,7 @@ type AlgoliaRecord = {
 export interface AlgoliaProduct {
   productId: number;
   productName: string;
-  category: string;
+  categoryName?: string;
   price: number;
   inStock: number;
   imgUrl: string | null;
@@ -37,7 +37,7 @@ export const indexProducts = async (products: AlgoliaProduct[]) => {
       productName: product.productName,
       price: product.price,
       inStock: product.inStock,
-      category: product.category,
+      categoryName: product.categoryName,
       imgUrl: product.imgUrl,
       desc: product.desc,
       attributes: product.attributes,
