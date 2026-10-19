@@ -5,7 +5,7 @@ import { ImportedProduct, parseProductAttributes, validateProductNumbers } from 
 import { uploadToCloudinary } from "../middlewares/upload";
 import { getSupplierCatalog } from "../integrations/supplierAdapter";
 import Category from "../models/Catergory";
-import { AlgoliaProduct, indexProducts } from "../integrations/searchAdapter";
+import { AlgoliaProduct, indexProducts, removeProducts } from "../integrations/searchAdapter";
 import UserProduct from "../models/UserProduct";
 
 export const createProduct = async (
@@ -129,7 +129,27 @@ export const updateProduct = async (
       return res.status(404).json({ success: false, error: 'Produkten hittades ej' });
     }
 
-    res.json({ success: true, data: product });
+    try {
+      console.log(product.isAvailable);
+      if (product.isAvailable) {
+        const categoryRow = await Category.findAllCategories();
+        const categories = new Map<number, string>();
+        for (const category of categoryRow) {
+          categories.set(category.id, category.type);
+        }
+        const algoliaProduct = {
+          ...product,
+          categoryName: categories.get(product.categoryId) || 'Okänd kategori',
+        };
+        await indexProducts([algoliaProduct]);
+      } else {
+        await removeProducts([product.productId.toString()]);
+      }
+      res.json({ success: true, searchIndexed: true, data: product });
+    } catch (error) {
+      console.warn('Error while indexing product to Algolia:', error);
+      res.json({ success: true, searchIndexed: false, message: 'Produkten uppdaterades men misslyckades att indexera till Algolia', data: product });
+    }
   } catch (error) {
     console.error('Error while updating product:', error);
     res.status(500).json({ success: false, error: 'Misslyckades att uppdatera produkt'})
@@ -151,7 +171,13 @@ export const deleteProduct = async (
       return res.status(404).json({ success: false, error: 'Produkten hittades ej' });
     }
 
-    res.json({ success: true, message: 'Produkten raderad', data: deletedProduct });
+    try {
+      await removeProducts([productId.toString()]);
+      res.json({ success: true, searchIndexed: true, message: 'Produkten raderad', data: deletedProduct });
+    } catch (error) {
+      console.warn('Error while deleting product in Algolia:', error);
+      res.json({ success: true, searchIndexed: false, message: 'Produkten raderades men misslyckades att tas bort från Algolia', data: deletedProduct });
+    }
   } catch (error) {
     console.error('Error while deleting product', error);
     res.status(500).json({ success: false, error: 'Misslyckades att radera produkt' });
