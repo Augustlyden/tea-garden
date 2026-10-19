@@ -1,4 +1,4 @@
-import { algoliasearch } from 'algoliasearch';
+import { algoliasearch, BatchResponse } from 'algoliasearch';
 
 const APP_ID = process.env.ALGOLIA_APP_ID ?? '';
 const ADMIN_KEY = process.env.ALGOLIA_ADMIN_KEY ?? '';
@@ -46,4 +46,12 @@ export const indexProducts = async (products: AlgoliaProduct[]) => {
 
   await adminClient.saveObjects({indexName: INDEX_NAME, objects: records, waitForTasks: true});
   return records.length;
+};
+
+export const removeProducts = async (ids: string[]) => {
+  await adminClient.deleteObjects({
+    indexName: INDEX_NAME,
+    objectIDs: ids,
+    waitForTasks: true
+  });
 };
