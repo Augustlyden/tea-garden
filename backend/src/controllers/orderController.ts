@@ -3,6 +3,8 @@ import { OrderInput } from "../types/orderTypes";
 import { AuthRequest, CartRequest } from "../types/tokenTypes";
 import Order from "../models/Order";
 import { NotFoundError, InsufficientStockError } from "../utils/error";
+import Product from "../models/UserProduct";
+import { AlgoliaProduct, indexProducts } from "../integrations/searchAdapter";
 
 export const createOrder = async (
   req: CartRequest<{}, {}, OrderInput>, res: Response
@@ -31,6 +33,30 @@ export const createOrder = async (
     } 
 
     const order = await Order.create(req.cartToken, orderData);
+
+    try {
+      const algoliaProducts: AlgoliaProduct[] = [];
+      for (const product of order.products) {
+        const productData = await Product.findByIdUser(product.productId);
+        if (!productData) continue;
+
+        algoliaProducts.push({
+          productId: productData.productId,
+          productName: productData.productName,
+          categoryName: productData.categoryName,
+          price: productData.price,
+          inStock: productData.inStock,
+          imgUrl: productData.imgUrl,
+          desc: productData.desc,
+          attributes: productData.attributes
+        });
+      }
+      if (algoliaProducts.length > 0) {
+        await indexProducts(algoliaProducts);
+      }
+    } catch (error) {
+      console.warn('Error while updating quantity in Algolia:', error);
+    }
     res.status(201).json({ success: true, data: order });
   } catch (error) {
     if (error instanceof NotFoundError) {
