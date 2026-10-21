@@ -1,4 +1,5 @@
 import { algoliasearch, BatchResponse } from 'algoliasearch';
+import { success } from 'zod';
 
 const APP_ID = process.env.ALGOLIA_APP_ID ?? '';
 const ADMIN_KEY = process.env.ALGOLIA_ADMIN_KEY ?? '';
@@ -54,4 +55,42 @@ export const removeProducts = async (ids: string[]) => {
     objectIDs: ids,
     waitForTasks: true
   });
+};
+
+const searchClient = algoliasearch(APP_ID, SEARCH_KEY);
+
+type SearchParams = {
+  query: string,
+  page: number,
+  pageSize: number
+}
+
+export const searchProducts = async (params: SearchParams) => {
+  const response = await searchClient.searchSingleIndex<AlgoliaRecord>({ 
+    indexName: INDEX_NAME, 
+    searchParams: {
+      query: params.query,
+      page: params.page - 1, 
+      hitsPerPage: params.pageSize
+    }
+  });
+  
+  const products: AlgoliaProduct[] = [];
+  for (const hit of response.hits) {
+    products.push({
+      productId: Number(hit.objectID),
+      productName: hit.productName,
+      categoryName: hit.categoryName,
+      price: hit.price,
+      inStock: hit.inStock,
+      desc: hit.desc,
+      imgUrl: hit.imgUrl,
+      attributes: hit.attributes
+    });
+  }
+
+  const total = response.nbHits ?? 0
+  return {
+    products, meta: { page: params.page, pageSize: params.pageSize, total: total, totalPages: Math.ceil(total/params.pageSize) }
+  };
 };
