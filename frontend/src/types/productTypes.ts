@@ -17,7 +17,7 @@ export interface AdminProductResponse {
 export interface UserProductResponse {
   productId: number;
   productName: string;
-  categoryId: number;
+  categoryId?: number;
   price: number;
   inStock: number;
   imgUrl: string;
@@ -65,6 +65,7 @@ export interface ApiResponse<T> {
   success: boolean;
   message?: string;
   data: T;
+  searchIndexed?: boolean;
 }
 
 export interface CategoryResponse {
@@ -92,4 +93,22 @@ export interface ImportReport {
   created: number;
   updated: number;
   skipped: { sku: string, reason: string }[];
+}
+
+export type SearchParams = {
+  q: string,
+  page: number,
+  pageSize: number
+}
+
+export type PageMeta = {
+  page: number;
+  pageSize: number;
+  total: number;
+  totalPages: number;
+}
+
+export type SearchResponse = {
+  meta: PageMeta;
+  products: UserProductResponse[];
 }
