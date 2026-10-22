@@ -1,63 +1,85 @@
 import { useEffect, useState } from "react";
-import type { UserProductResponse } from "../../types/productTypes";
+import { type SearchResponse } from "../../types/productTypes";
 import { productService } from "../../services/admin/productService";
 import styles from '../../css/product.module.css';
-import { CategorySelect } from "../../components/shared/CategorySelect";
 import { UserProductList } from "../../components/user/UserProductList";
 import { Header } from "../../components/user/Header";
 import { Spinner } from "../../components/shared/Spinner";
 
+const PAGE_SIZE = 5;
+
 export const UserProductPage = () => {
-  const [products, setProducts] = useState<UserProductResponse[]>([]);
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(true);
-  const [categoryFilter, setCategoryFilter] = useState<number | 'all'>('all');
+  const [page, setPage] = useState(1);
+  const [inputValue, setInputValue] = useState('');
+  const [searchTerm, setSearchTerm] = useState('');
+  const [result, setResult] = useState<SearchResponse | null>(null);
 
   useEffect(() => {
-    const fetchAllProducts = async () => {
+    let ignore = false;
+    const fetchProducts = async () => {
       try {
-        const data = await productService.getAllUserProducts();
-        setProducts(data.data);
-        setError('');
-      } catch (error) {
-        setError(error instanceof Error ? error.message : 'Något gick fel');
+        const response = await productService.searchProducts({ q: searchTerm, page, pageSize: PAGE_SIZE});
+        if (!ignore) {
+          setResult(response.data);
+          setError('');
+        }
+      } catch (err) {
+        if (!ignore) setError(err instanceof Error ? err.message : 'Något gick fel');
       } finally {
-        setIsLoading(false);
+        if (!ignore) setIsLoading(false);
       }
     };
-    fetchAllProducts();
-  }, []);
-
-  const filteredProducts = products.filter(p =>
-    categoryFilter === 'all' || p.categoryId === categoryFilter
-  );
+    fetchProducts();
+    return () => { ignore = true; }
+  }, [searchTerm, page]);
 
   return (
     <>
       <Header />
-      {isLoading ? (
-        <Spinner />
-      ) : (
-        <main>
-          <div className={styles.filter}>
-            <div className={styles.selectContainer}>
-              <label htmlFor="category-select" className={styles.visuallyHidden}>
-                Välj kategori
-              </label>
-              <CategorySelect 
-                value={categoryFilter} 
-                onChange={setCategoryFilter} 
-                includeAll={true} 
-                disabled={false}
-              />
-            </div>
+      <main>
+        <form 
+          className={styles.search}
+          onSubmit={(e) => {
+            e.preventDefault();
+            setSearchTerm(inputValue.trim());
+            setPage(1);
+          }}>
+            <label htmlFor="product-search" className={styles.visuallyHidden}>
+              Sök produkter
+            </label>
+            <input 
+              id="product-search"
+              type="search"
+              value={inputValue}
+              onChange={(e) => setInputValue(e.target.value)} 
+              maxLength={100}
+              className={styles.searchInput}
+            />
+            <button className={styles.searchButton} type="submit">Sök</button>
+          </form>
+        {isLoading ? (
+          <Spinner />
+        ) : result && result.meta.total === 0 ? (
+          <p className={styles.emptySearch}>Inga träffar</p>
+        ) : (
+          <UserProductList products={result?.products ?? []}/> 
+        )}
+
+        {result && result.meta.totalPages > 1 && (
+          <div className={styles.pagination}>
+            <button className={styles.pageButton} type="button" onClick={() => setPage(page - 1)} disabled={page <= 1}>
+              Förgående
+            </button>
+            <span className={styles.pageInfo}>Sida {page} av {result.meta.totalPages}</span>
+            <button className={styles.pageButton} type="button" onClick={() => setPage(page + 1)} disabled={page >= result.meta.totalPages}>
+              Nästa
+            </button>
           </div>
-
-          <UserProductList products={filteredProducts}/>
-
-          {error && <p className="error">{error} <br /> Prova att ladda om sidan.</p>}
-        </main>
-      )}
+        )}
+        {error && <p className="error">{error} <br /> Prova att ladda om sidan.</p>}
+      </main>
     </>
   );
 };
