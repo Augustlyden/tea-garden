@@ -6,7 +6,7 @@ import { UserProductList } from "../../components/user/UserProductList";
 import { Header } from "../../components/user/Header";
 import { Spinner } from "../../components/shared/Spinner";
 
-const PAGE_SIZE = 5;
+const PAGE_SIZE = 10;
 
 export const UserProductPage = () => {
   const [error, setError] = useState('');
