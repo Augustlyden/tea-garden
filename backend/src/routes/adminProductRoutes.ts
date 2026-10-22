@@ -5,6 +5,7 @@ import {
   getAllProductsAdmin, 
   getProductByIdAdmin, 
   importProducts, 
+  indexProductsToAlgolia, 
   updateProduct 
 } from "../controllers/adminProductController";
 import { upload } from "../middlewares/upload";
@@ -20,5 +21,6 @@ router.get('/:id', getProductByIdAdmin);
 router.patch('/:id', upload.single('image'), updateProduct);
 router.delete('/:id', deleteProduct);
 router.post('/import/:format', importProducts);
+router.post('/search/index', indexProductsToAlgolia);
 
 export default router;

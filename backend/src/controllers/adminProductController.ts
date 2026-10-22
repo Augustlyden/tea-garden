@@ -3,8 +3,10 @@ import { Request, Response } from "express";
 import { ProductAttributes } from "../types/productTypes";
 import { ImportedProduct, parseProductAttributes, validateProductNumbers } from "../utils/productValidator";
 import { uploadToCloudinary } from "../middlewares/upload";
-import { CatalogFormat, getSupplierCatalog } from "../integrations/supplierAdapter";
+import { getSupplierCatalog } from "../integrations/supplierAdapter";
 import Category from "../models/Catergory";
+import { AlgoliaProduct, indexProducts, removeProducts } from "../integrations/searchAdapter";
+import UserProduct from "../models/UserProduct";
 
 export const createProduct = async (
   req: Request<{}, {}, ProductAttributes>, res: Response
@@ -35,8 +37,23 @@ export const createProduct = async (
     productData.imgUrl = uploadResult.secure_url;
 
     const newProduct = await Product.create(productData);
-    res.status(201).json({ success: true, data: newProduct });
 
+    try {
+      const categoryRow = await Category.findAllCategories();
+      const categories = new Map<number, string>();
+      for (const category of categoryRow) {
+        categories.set(category.id, category.type);
+      }
+      const algoliaProduct = {
+        ...newProduct,
+        categoryName: categories.get(newProduct.categoryId) || 'Okänd kategori',
+      };
+      await indexProducts([algoliaProduct]);
+      res.status(201).json({ success: true, searchIndexed: true, data: newProduct });
+    } catch (error) {
+      console.warn('Error while indexing product to Algolia:', error);
+      res.status(201).json({ success: true, searchIndexed: false, message: 'Produkten skapades men misslyckades att indexera till Algolia', data: newProduct });
+    }
   } catch (error) {
     console.error('Error while creating product:', error);
     res.status(500).json({ success: false, error: 'Misslyckades att skapa produkt' });
@@ -112,7 +129,27 @@ export const updateProduct = async (
       return res.status(404).json({ success: false, error: 'Produkten hittades ej' });
     }
 
-    res.json({ success: true, data: product });
+    try {
+      console.log(product.isAvailable);
+      if (product.isAvailable) {
+        const categoryRow = await Category.findAllCategories();
+        const categories = new Map<number, string>();
+        for (const category of categoryRow) {
+          categories.set(category.id, category.type);
+        }
+        const algoliaProduct = {
+          ...product,
+          categoryName: categories.get(product.categoryId) || 'Okänd kategori',
+        };
+        await indexProducts([algoliaProduct]);
+      } else {
+        await removeProducts([product.productId.toString()]);
+      }
+      res.json({ success: true, searchIndexed: true, data: product });
+    } catch (error) {
+      console.warn('Error while indexing product to Algolia:', error);
+      res.json({ success: true, searchIndexed: false, message: 'Produkten uppdaterades men misslyckades att indexera till Algolia', data: product });
+    }
   } catch (error) {
     console.error('Error while updating product:', error);
     res.status(500).json({ success: false, error: 'Misslyckades att uppdatera produkt'})
@@ -134,7 +171,13 @@ export const deleteProduct = async (
       return res.status(404).json({ success: false, error: 'Produkten hittades ej' });
     }
 
-    res.json({ success: true, message: 'Produkten raderad', data: deletedProduct });
+    try {
+      await removeProducts([productId.toString()]);
+      res.json({ success: true, searchIndexed: true, message: 'Produkten raderad', data: deletedProduct });
+    } catch (error) {
+      console.warn('Error while deleting product in Algolia:', error);
+      res.json({ success: true, searchIndexed: false, message: 'Produkten raderades men misslyckades att tas bort från Algolia', data: deletedProduct });
+    }
   } catch (error) {
     console.error('Error while deleting product', error);
     res.status(500).json({ success: false, error: 'Misslyckades att radera produkt' });
@@ -159,9 +202,11 @@ export const importProducts = async (
       categoryIds.set(category.type, category.id);
     }
 
+    let searchIndexed = true;
     let created = 0;
     let updated = 0;
     const skipped: { sku: string, reason: string }[] = [];
+    const products: AlgoliaProduct[] = [];
 
     for (const candidate of candidates) {
       const result = ImportedProduct.safeParse(candidate);
@@ -176,16 +221,51 @@ export const importProducts = async (
       }
 
       const existed = await Product.findBySku(result.data.sku);
-      await Product.upsertBySku(result.data, categoryId);
+      const product = await Product.upsertBySku(result.data, categoryId);
+
+      if (product.isAvailable === true && product.isDeleted === false) {
+        products.push({
+          productId: product.productId,
+          productName: product.productName,
+          categoryName: result.data.category,
+          price: product.price,
+          inStock: product.inStock,
+          imgUrl: product.imgUrl,
+          desc: product.desc,
+          attributes: product.attributes,
+        });
+      }
+
 
       if (existed) updated++;
       else created++;
-
     }
-    return res.json({ success: true, data: { format, total: candidates.length, created, updated, skipped } });
+
+    if (products.length > 0) {
+      try {
+        await indexProducts(products);
+      } catch (error) {
+        console.warn('Error while indexing products to Algolia:', error);
+        searchIndexed = false;
+      }
+    }
+
+    return res.json({ success: true, data: { format, total: candidates.length, created, updated, skipped, searchIndexed } });
 
   } catch (error) {
     console.error('Error while importing products:', error);
     res.status(502).json({ success: false, error: 'Misslyckades att importera produkter' });
+  }
+};
+
+export const indexProductsToAlgolia = async (req: Request, res: Response) => {
+  try {
+    const products = await UserProduct.findAllUser();
+
+    const indexed = await indexProducts(products);
+    res.json({ success: true, data: { indexed } });
+  } catch (error) {
+    console.error('Error while indexing products to Algolia:', error);
+    res.status(502).json({ success: false, error: 'Misslyckades att indexera produkter till Algolia' });
   }
 };

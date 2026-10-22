@@ -1,5 +1,13 @@
 import UserProduct from "../models/UserProduct";
 import { Request, Response } from "express";
+import { z } from 'zod';
+import { searchProducts } from '../integrations/searchAdapter';
+
+const SearchQuery = z.object({
+  q: z.string().max(100).default(''),
+  page: z.coerce.number().int().min(1).default(1), 
+  pageSize: z.coerce.number().int().min(1).max(50).default(10), 
+});
 
 export const getAllProductsUser = async (req: Request, res: Response) => {
   try {
@@ -30,5 +38,28 @@ export const getProductByIdUser = async (
   } catch (error) {
     console.error('Error while fetching product:', error);
     res.status(500).json({ success: false, error: 'Misslyckades att hämta produkt' });
+  }
+};
+
+export const userSearch = async (req: Request, res: Response) => {
+  try {
+    const result = SearchQuery.safeParse(req.query);
+    if (!result.success) {
+      res.status(400).json({ success: false, error: `Invalid search parameters: ${z.prettifyError(result.error)}`, });
+      return;
+    }
+
+    const params = {
+      query: result.data.q,
+      page: result.data.page,
+      pageSize: result.data.pageSize
+    };
+
+    const searchResult = await searchProducts(params);
+  
+    res.json({ success: true, data: searchResult});
+  } catch (error) {
+    console.error('Error while searching for product:', error);
+    res.status(502).json({ success: false, error: 'Misslyckades att söka efter produkt' });
   }
 };
