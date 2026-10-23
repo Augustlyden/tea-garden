@@ -199,6 +199,19 @@ class Order {
     const row = result.rows[0];
     return formatStatusUpdate(row);
   }
+
+  static async setStripeSessionId(orderId: number, sessionId: string): Promise<void> {
+    const result = await db.query(`
+      UPDATE orders 
+      SET stripe_session_id = $1 
+      WHERE id = $2;
+      `, [sessionId, orderId]
+    );
+
+    if (!result.rowCount) {
+      throw new Error('Order not found');
+    }
+  }
 }
 
 export default Order;
