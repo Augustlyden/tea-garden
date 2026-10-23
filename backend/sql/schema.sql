@@ -38,7 +38,10 @@ CREATE TABLE IF NOT EXISTS orders (
   customer_name VARCHAR(255) NOT NULL,
   street VARCHAR(255) NOT NULL,
   zip_code VARCHAR(20) NOT NULL,
-  city VARCHAR(255) NOT NULL
+  city VARCHAR(255) NOT NULL,
+  payment_status TEXT NOT NULL DEFAULT 'pending',
+  stripe_session_id TEXT UNIQUE,
+  CHECK (payment_status IN ('pending', 'paid', 'cancelled'))
 );
 
 CREATE TABLE IF NOT EXISTS order_product (

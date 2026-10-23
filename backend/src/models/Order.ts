@@ -100,18 +100,15 @@ class Order {
         `, [cartToken]
       );
 
-       const stockUpdateResult = await client.query(`
-        UPDATE products p
-        SET in_stock = p.in_stock - c.quantity
+       const lowStockResult = await client.query(`
+        SELECT p.product_name
         FROM cart c
-        WHERE c.product_id = p.id 
-          AND c.cart_token = $1
-          AND p.in_stock >= c.quantity
-        RETURNING p.id;
+        JOIN products p ON c.product_id = p.id
+        WHERE c.cart_token = $1 AND p.in_stock < c.quantity
         `, [cartToken]
       );
 
-      if (stockUpdateResult.rowCount !== productsResult.rows.length) {
+      if (lowStockResult.rows.length > 0) {
         throw new InsufficientStockError('Insufficient stock');
       }
 
