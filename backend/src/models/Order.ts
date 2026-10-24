@@ -212,6 +212,50 @@ class Order {
       throw new Error('Order not found');
     }
   }
+
+  static async markPaid(orderId: number): Promise<boolean> {
+    const client = await db.connect();
+    try {
+      await client.query('BEGIN');
+
+      const payment = await client.query(`
+        UPDATE orders
+        SET payment_status = 'Betald' 
+        WHERE id = $1 AND payment_status = 'Väntande'
+        RETURNING id;
+        `, [orderId]
+      );
+
+      if (!payment.rowCount) {
+        await client.query('ROLLBACK');
+        return false;
+      }
+
+      await client.query(`
+        UPDATE products p
+        SET in_stock = p.in_stock - op.quantity
+        FROM order_product op
+        WHERE op.order_id = $1 AND op.product_id = p.id;
+        `, [orderId]
+      );
+
+      await client.query('COMMIT');
+      return true;
+    } catch (error) {
+      await client.query('ROLLBACK');
+      throw error;
+    } finally {
+      client.release();
+    }
+  }
+
+  static async markCancelled(orderId: number): Promise<void> {
+    await db.query(`
+      UPDATE orders SET payment_status = 'Avbruten'
+      WHERE id = $1 AND payment_status = 'Väntande';
+      `, [orderId]
+    );
+  }
 }
 
 export default Order;
