@@ -11,6 +11,7 @@ import adminRoutes from './routes/adminRoutes';
 import cookieParser from "cookie-parser";
 import categoryRoutes from './routes/categoryRoutes';
 import currencyRoutes from './routes/currencyRoutes';
+import stripeWebhookRouter from './routes/stripeWebhookRouter';
 
 dotenv.config();
 
@@ -23,6 +24,8 @@ app.use(cors({
   : 'http://localhost:5173',
   credentials: true 
 }));
+
+app.use('/api/stripe/webhook', stripeWebhookRouter);
 
 app.use(express.json());
 app.use(cookieParser());

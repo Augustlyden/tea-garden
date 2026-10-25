@@ -100,18 +100,15 @@ class Order {
         `, [cartToken]
       );
 
-       const stockUpdateResult = await client.query(`
-        UPDATE products p
-        SET in_stock = p.in_stock - c.quantity
+       const lowStockResult = await client.query(`
+        SELECT p.product_name
         FROM cart c
-        WHERE c.product_id = p.id 
-          AND c.cart_token = $1
-          AND p.in_stock >= c.quantity
-        RETURNING p.id;
+        JOIN products p ON c.product_id = p.id
+        WHERE c.cart_token = $1 AND p.in_stock < c.quantity
         `, [cartToken]
       );
 
-      if (stockUpdateResult.rowCount !== productsResult.rows.length) {
+      if (lowStockResult.rows.length > 0) {
         throw new InsufficientStockError('Insufficient stock');
       }
 
@@ -201,6 +198,63 @@ class Order {
 
     const row = result.rows[0];
     return formatStatusUpdate(row);
+  }
+
+  static async setStripeSessionId(orderId: number, sessionId: string): Promise<void> {
+    const result = await db.query(`
+      UPDATE orders 
+      SET stripe_session_id = $1 
+      WHERE id = $2;
+      `, [sessionId, orderId]
+    );
+
+    if (!result.rowCount) {
+      throw new Error('Order not found');
+    }
+  }
+
+  static async markPaid(orderId: number): Promise<boolean> {
+    const client = await db.connect();
+    try {
+      await client.query('BEGIN');
+
+      const payment = await client.query(`
+        UPDATE orders
+        SET payment_status = 'Betald' 
+        WHERE id = $1 AND payment_status = 'Väntande'
+        RETURNING id;
+        `, [orderId]
+      );
+
+      if (!payment.rowCount) {
+        await client.query('ROLLBACK');
+        return false;
+      }
+
+      await client.query(`
+        UPDATE products p
+        SET in_stock = p.in_stock - op.quantity
+        FROM order_product op
+        WHERE op.order_id = $1 AND op.product_id = p.id;
+        `, [orderId]
+      );
+
+      await client.query('COMMIT');
+      return true;
+    } catch (error) {
+      await client.query('ROLLBACK');
+      throw error;
+    } finally {
+      client.release();
+    }
+  }
+
+  static async markCancelled(orderId: number): Promise<void> {
+    await db.query(`
+      UPDATE orders SET payment_status = 'Avbruten'
+      WHERE id = $1 AND payment_status = 'Väntande';
+      `, [orderId]
+    );
   }
 }
 

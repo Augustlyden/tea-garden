@@ -1,4 +1,5 @@
 export type OrderStatus = 'Beställd' | 'Behandlad' | 'Levererad' | 'Återbetald';
+export type PaymentStatus = 'Väntande' | 'Betald' | 'Avbruten'
 
 export interface OrderProductItem {
   productId: number;
@@ -31,6 +32,7 @@ export interface OrderSummary {
   zipCode: string;
   city: string;
   currentStatus: OrderStatus;
+  paymentStatus: PaymentStatus;
 }
 
 export interface OrderInstance extends OrderSummary {
@@ -59,6 +61,7 @@ export interface OrderDatabaseRow {
   zip_code: string;
   city: string;
   current_status: OrderStatus;
+  payment_status: PaymentStatus;
 }
 
 export interface ItemDatabaseRow {
