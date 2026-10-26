@@ -4,7 +4,7 @@ import styles from "../../css/checkout.module.css";
 import { useCart } from "../../context/CartContext";
 import { useState } from "react";
 import { CartItem } from "../../components/user/CartItem";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { ChevronLeft } from "lucide-react";
 
 const emptyCustomer: OrderInput = {
@@ -19,7 +19,6 @@ export const CheckoutPage = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
   const { cart, totalPrice, totalItems, fetchCart } = useCart();
-  const navigate = useNavigate();
 
   const handleSubmit = async (e: React.SubmitEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -38,10 +37,10 @@ export const CheckoutPage = () => {
 
     setIsLoading(true);
     try {
-      const newOrder = await orderService.createOrder(customer);
-      fetchCart();
-      navigate('/shop/order-confirmation', { state: newOrder.data});
+      const response = await orderService.createOrder(customer);
+      window.location.href = response.data.url
     } catch (error) {
+      fetchCart();
       setError(error instanceof Error ? error.message : 'Något gick fel');
     } finally {
       setIsLoading(false);
