@@ -24,6 +24,7 @@
   font-size: var(--text-3xl);
   color: var(--color-primary-dark);
   margin: 0 0 0.5rem 0;
+  text-wrap: balance;
 }
 
 .orderCard {
@@ -213,6 +214,37 @@
   background-color: var(--color-accent-hover);
   box-shadow: var(--shadow-md);
   transform: translateY(-1px);
+}
+
+.message {
+  max-width: 32rem;
+  margin: 0 auto;
+  font-size: var(--text-base);
+  line-height: 1.5;
+  color: var(--color-text-muted);
+}
+
+.successHeader[data-status='Avbruten'] .title {
+  color: var(--color-error, #b3261e);
+}
+
+.statePage {
+  min-height: 40vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.stateText {
+  margin: 0;
+  font-size: var(--text-base);
+  color: var(--color-text-muted);
+}
+
+.statePage .actionRow {
+  margin-top: 1.5rem;
 }
 
 @media (min-width: 768px) {
