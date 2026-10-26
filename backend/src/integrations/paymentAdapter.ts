@@ -29,7 +29,7 @@ export async function createHostedCheckout(orderId: string, items: CheckoutItem[
       locale: 'sv',
     })),
     client_reference_id: orderId,
-    success_url: `${CLIENT_URL}/return?session_id={CHECKOUT_SESSION_ID}`,
+    success_url: `${CLIENT_URL}/shop/order-confirmation?session_id={CHECKOUT_SESSION_ID}`,
     cancel_url: `${CLIENT_URL}/`,
     expires_at: Math.floor(Date.now() / 1000) + 31 * 60,
   });

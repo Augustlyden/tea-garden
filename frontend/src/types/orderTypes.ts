@@ -1,4 +1,5 @@
 export type OrderStatus = 'Beställd' | 'Behandlas' | 'Levererad' | 'Återbetald';
+export type PaymentStatus = 'Väntande' | 'Betald' | 'Avbruten';
 
 export interface StatusHistoryResponse {
   id: number;
@@ -40,6 +41,7 @@ export interface AdminOrderDetail extends AdminOrderResponse {
 
 export interface OrderInputResponse extends AdminOrderResponse {
   products: OrderProductItem[];
+  paymentStatus: PaymentStatus;
 }
 
 export interface OrderListProps {
@@ -53,4 +55,8 @@ export interface OrderCardProps {
 export interface OrderDetailProps {
   order: AdminOrderDetail;
   onUpdate: (status: OrderStatus) => void;
+}
+
+export interface CheckputSessionResponse {
+  url: string;
 }
