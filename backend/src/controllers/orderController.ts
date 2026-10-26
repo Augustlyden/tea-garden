@@ -149,3 +149,24 @@ export const updateStatus = async (
     res.status(500).json({ success: false, error: 'Misslyckades att uppdatera status' });
   }
 };
+
+export const getOrderByStripeSessionId = async (req: Request<{ sessionId: string}>, res: Response) => {
+  try {
+    const sessionId = req.params.sessionId;
+
+    if (!sessionId) {
+      return res.status(400).json({ success: false, error: 'Sessions ID saknas' });
+    }
+
+    const order = await Order.findByStripeSessionId(sessionId);
+
+    if (!order) {
+      return res.status(404).json({ success: false, error: 'Kunde inte hitta ordern' });
+    }
+
+    res.json({ success: true, data: order });
+  } catch (error) {
+    console.error('Error while fetching order:', error);
+    res.status(500).json({ success: false, error: 'Misslyckades att hämta orderinfo' });
+  }
+};
