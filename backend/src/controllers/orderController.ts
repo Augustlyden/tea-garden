@@ -40,7 +40,7 @@ export const createOrder = async (
     }));
 
     let checkout;
-
+    
     try {
       checkout = await createHostedCheckout(String(order.orderId), items);
     } catch (error) {
@@ -53,7 +53,7 @@ export const createOrder = async (
 
     await Order.setStripeSessionId(order.orderId, checkout.sessionId);
 
-    res.json({ success: true, data: { url: checkout.sessionId }});
+    res.json({ success: true, data: { url: checkout.url }});
   } catch (error) {
     if (error instanceof NotFoundError) {
       return res.status(404).json({ success: false, error: 'Varukorgen kunde inte hittas' });
@@ -147,5 +147,26 @@ export const updateStatus = async (
   } catch (error) {
     console.error('Error while updating status:', error);
     res.status(500).json({ success: false, error: 'Misslyckades att uppdatera status' });
+  }
+};
+
+export const getOrderByStripeSessionId = async (req: Request<{ sessionId: string}>, res: Response) => {
+  try {
+    const sessionId = req.params.sessionId;
+
+    if (!sessionId) {
+      return res.status(400).json({ success: false, error: 'Sessions ID saknas' });
+    }
+
+    const order = await Order.findByStripeSessionId(sessionId);
+
+    if (!order) {
+      return res.status(404).json({ success: false, error: 'Kunde inte hitta ordern' });
+    }
+
+    res.json({ success: true, data: order });
+  } catch (error) {
+    console.error('Error while fetching order:', error);
+    res.status(500).json({ success: false, error: 'Misslyckades att hämta orderinfo' });
   }
 };

@@ -19,6 +19,7 @@ const stripe = new Stripe(SECRET_KEY, { timeout: 10_000 });
 export async function createHostedCheckout(orderId: string, items: CheckoutItem[]) {
   const session = await stripe.checkout.sessions.create({
     mode: 'payment',
+    locale: 'sv',
     line_items: items.map((item) => ({
       quantity: item.quantity,
       price_data: {
@@ -26,10 +27,9 @@ export async function createHostedCheckout(orderId: string, items: CheckoutItem[
         unit_amount: Math.round(item.price * 100),
         product_data: { name: item.name }
       },
-      locale: 'sv',
     })),
     client_reference_id: orderId,
-    success_url: `${CLIENT_URL}/return?session_id={CHECKOUT_SESSION_ID}`,
+    success_url: `${CLIENT_URL}/shop/order-confirmation?session_id={CHECKOUT_SESSION_ID}`,
     cancel_url: `${CLIENT_URL}/`,
     expires_at: Math.floor(Date.now() / 1000) + 31 * 60,
   });

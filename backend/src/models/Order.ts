@@ -256,6 +256,35 @@ class Order {
       `, [orderId]
     );
   }
+
+  static async findByStripeSessionId(sessionId: string): Promise<OrderInstance | null> {
+    const orderResult = await db.query(`
+      SELECT * FROM orders WHERE stripe_session_id = $1;
+      `, [sessionId]
+    );
+
+    const orderRow = orderResult.rows[0];
+
+    if (!orderRow) {
+      return null;
+    }
+
+    const productsResult = await db.query(`
+      SELECT 
+        p.id AS product_id,
+        p.product_name,
+        p.img_url,
+        op.quantity,
+        op.price
+      FROM order_product op
+      JOIN products p ON p.id = op.product_id
+      WHERE op.order_id = $1;
+      `, [orderRow.id]
+    );
+
+    const productRows = productsResult.rows;
+    return formatOrder(orderRow, productRows);
+  }
 }
 
 export default Order;
