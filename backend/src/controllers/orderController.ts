@@ -40,7 +40,7 @@ export const createOrder = async (
     }));
 
     let checkout;
-
+    
     try {
       checkout = await createHostedCheckout(String(order.orderId), items);
     } catch (error) {
@@ -53,7 +53,7 @@ export const createOrder = async (
 
     await Order.setStripeSessionId(order.orderId, checkout.sessionId);
 
-    res.json({ success: true, data: { url: checkout.sessionId }});
+    res.json({ success: true, data: { url: checkout.url }});
   } catch (error) {
     if (error instanceof NotFoundError) {
       return res.status(404).json({ success: false, error: 'Varukorgen kunde inte hittas' });
