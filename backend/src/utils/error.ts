@@ -11,3 +11,10 @@ export class InsufficientStockError extends Error {
     this.name = 'InsufficientStockError';
   }
 }
+
+export class InvalidFileTypeError extends Error {
+  constructor(message: string) {
+    super(message);
+    this.name = 'InvalidFileTypeError';
+  }
+}
