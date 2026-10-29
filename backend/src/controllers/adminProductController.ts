@@ -1,5 +1,5 @@
 import Product from "../models/AdminProduct";
-import { Request, Response } from "express";
+import { type NextFunction, Request, Response } from "express";
 import { ProductAttributes } from "../types/productTypes";
 import { ImportedProduct, parseProductAttributes, validateProductNumbers } from "../utils/productValidator";
 import { uploadToCloudinary } from "../middlewares/upload";
@@ -7,13 +7,46 @@ import { getSupplierCatalog } from "../integrations/supplierAdapter";
 import Category from "../models/Catergory";
 import { AlgoliaProduct, indexProducts, removeProducts } from "../integrations/searchAdapter";
 import UserProduct from "../models/UserProduct";
+import multer, { FileFilterCallback } from 'multer';
+import { removeProductImage, uploadProductImage } from "../integrations/storageAdapter";
+import { InvalidFileTypeError } from "../utils/error";
+
+const MAX_SIZE = 4 * 1024 * 1024;
+const ALLOWED_TYPES = ['image/jpeg', 'image/png'];
+
+const upload = multer({
+  limits: {fileSize: MAX_SIZE},
+  fileFilter: (req: Request, file: Express.Multer.File, cb: FileFilterCallback) => {
+    if (ALLOWED_TYPES.includes(file.mimetype)) {
+      cb(null, true);
+    } else {
+      cb(new InvalidFileTypeError('Wrong image file type'));
+    }
+  }
+});
+
+export const recieveImage = (req: Request, res: Response, next: NextFunction) => {
+  upload.single('image')(req, res, function (err) {
+    if (err instanceof multer.MulterError && err.code === 'LIMIT_FILE_SIZE') {
+      res.status(400).json({success: false, error: `Bilden är för stor. Max ${MAX_SIZE/(1024 * 1024)} MB.`});
+      return;
+    } else if (err instanceof InvalidFileTypeError) {
+      res.status(400).json({success: false, error: 'Filen måste vara en JPEG- eller PNG-bild.'});
+      return;
+    } else  if (err) {
+      res.status(400).json({ success: false, error: 'Kunde inte läsa filen. Skicka en bildfil.' });
+      return;
+    }
+    next();
+  });
+};
 
 export const createProduct = async (
   req: Request<{}, {}, ProductAttributes>, res: Response
 ) => {
   try {
     const productData = req.body;
-    const file = req.file as Express.Multer.File;
+    const file = req.file;
 
     if (!file) {
       return res.status(400).json({ success: false, error: 'Produktbild krävs.' })
@@ -103,12 +136,8 @@ export const updateProduct = async (
     }
 
     const productData = req.body;
-    const file = req.file as Express.Multer.File;
-
-    if (file) {
-      const uploadResult = await uploadToCloudinary(file.buffer);
-      productData.imgUrl = uploadResult.secure_url;
-    } 
+    delete productData.imgUrl;
+    delete productData.imgPath;
 
     const numValidation = validateProductNumbers(productData, true);
     if (!numValidation.valid) {
@@ -124,31 +153,60 @@ export const updateProduct = async (
       productData.isAvailable = productData.isAvailable === 'true';
     }
 
-    const product = await Product.update(productId, productData);
+    const file = req.file;
+
+    const product = await Product.findByIdAdmin(productId);
+
     if (!product) {
       return res.status(404).json({ success: false, error: 'Produkten hittades ej' });
     }
 
+    const oldImgPath = product.imgPath;
+
+    if (file) {
+      try {
+        const uploadResult = await uploadProductImage(productId, { buffer: file.buffer, mimeType: file.mimetype});
+        productData.imgUrl = uploadResult.url;
+        productData.imgPath = uploadResult.path;
+      } catch (error) {
+        console.error('Error while uploading image to Supabase:', error);
+        return res.status(502).json({ success: false, error: 'Bildtjänsten svarar inte just nu' });
+      }
+    } 
+
+    const updatedProduct = await Product.update(productId, productData);
+
+    if (!updatedProduct) {
+      return res.status(404).json({ success: false, error: 'Produkten hittades ej' });
+    }
+
+    if (file && oldImgPath) {
+      try {
+        await removeProductImage(oldImgPath);
+      } catch (error) {
+        console.error('Error while removing image from Supabase:', error);
+      }
+    }
+
     try {
-      console.log(product.isAvailable);
-      if (product.isAvailable) {
+      if (updatedProduct.isAvailable) {
         const categoryRow = await Category.findAllCategories();
         const categories = new Map<number, string>();
         for (const category of categoryRow) {
           categories.set(category.id, category.type);
         }
         const algoliaProduct = {
-          ...product,
-          categoryName: categories.get(product.categoryId) || 'Okänd kategori',
+          ...updatedProduct,
+          categoryName: categories.get(updatedProduct.categoryId) || 'Okänd kategori',
         };
         await indexProducts([algoliaProduct]);
       } else {
-        await removeProducts([product.productId.toString()]);
+        await removeProducts([updatedProduct.productId.toString()]);
       }
-      res.json({ success: true, searchIndexed: true, data: product });
+      res.json({ success: true, searchIndexed: true, data: updatedProduct });
     } catch (error) {
       console.warn('Error while indexing product to Algolia:', error);
-      res.json({ success: true, searchIndexed: false, message: 'Produkten uppdaterades men misslyckades att indexera till Algolia', data: product });
+      res.json({ success: true, searchIndexed: false, message: 'Produkten uppdaterades men misslyckades att indexera till Algolia', data: updatedProduct });
     }
   } catch (error) {
     console.error('Error while updating product:', error);

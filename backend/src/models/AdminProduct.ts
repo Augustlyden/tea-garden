@@ -12,6 +12,7 @@ class Product {
       p.category_id,
       p.in_stock,
       p.img_url,
+      p.img_path,
       p.description,
       p.attributes,
       p.is_available,
