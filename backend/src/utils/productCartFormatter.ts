@@ -17,6 +17,7 @@ export const formatProduct = (data: ProductDatabaseRow): ProductInstance => ({
   price: Number(data.price),
   inStock: data.in_stock,
   imgUrl: data.img_url,
+  imgPath: data.img_path,
   desc: data.description,
   attributes: data.attributes,
   isAvailable: data.is_available,

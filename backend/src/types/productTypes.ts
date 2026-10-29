@@ -4,6 +4,7 @@ export interface ProductAttributes {
   price: number;
   inStock: number;
   imgUrl: string | null;
+  imgPath: string;
   desc: string | null;
   attributes: Record<string, any> | null;
   isAvailable?: boolean | string;
@@ -17,6 +18,7 @@ export interface ProductInstance {
   price: number;
   inStock: number;
   imgUrl: string | null;
+  imgPath: string;
   desc: string | null;
   attributes: Record<string, any> | null;
   isAvailable: boolean;
@@ -43,6 +45,7 @@ export interface ProductDatabaseRow {
   price: string | number;
   in_stock: number;
   img_url: string | null;
+  img_path: string;
   description: string | null;
   attributes: Record<string, any> | null;
   is_available: boolean;
