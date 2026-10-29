@@ -27,9 +27,9 @@ const EXTENSIONS: Record<string, string> = {
   'image/jpeg': 'jpg'
 }
 
-export const uploadProductImage = async (id: number, image: ImageFileType) => {
+export const uploadProductImage = async (image: ImageFileType) => {
   const extension = EXTENSIONS[image.mimeType];
-  const path = `products/${id}/${randomUUID()}.${extension}`;
+  const path = `products/${randomUUID()}.${extension}`;
 
   const { error } = await supabase.storage.from(BUCKET).upload(path, image.buffer, {
     contentType: image.mimeType,

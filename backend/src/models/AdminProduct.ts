@@ -26,9 +26,9 @@ class Product {
   static async create(productData: ProductAttributes): Promise<ProductInstance> {
     const result = await db.query(`
       INSERT INTO products
-        (product_name, category_id, price, in_stock, img_url, description, attributes, is_available)
+        (product_name, category_id, price, in_stock, img_url, description, attributes, is_available, img_path)
       VALUES 
-        ($1, $2, $3, $4, $5, $6, $7, $8)
+        ($1, $2, $3, $4, $5, $6, $7, $8, $9)
       RETURNING *;
       `, [
           productData.productName, 
@@ -38,7 +38,8 @@ class Product {
           productData.imgUrl,
           productData.desc,
           productData.attributes,
-          productData.isAvailable
+          productData.isAvailable,
+          productData.imgPath
         ]
     );
 
@@ -124,8 +125,9 @@ class Product {
         img_url = COALESCE($5, img_url),
         description = COALESCE($6, description),
         attributes = COALESCE($7, attributes),
-        is_available = COALESCE($8, is_available)
-      WHERE id = $9
+        is_available = COALESCE($8, is_available),
+        img_path = COALESCE($9, img_path)
+      WHERE id = $10
       RETURNING *;
       `, [
           productData.productName, 
@@ -136,6 +138,7 @@ class Product {
           productData.desc,
           productData.attributes,
           productData.isAvailable,
+          productData.imgPath,
           id
         ]
     );

@@ -2,7 +2,6 @@ import Product from "../models/AdminProduct";
 import { type NextFunction, Request, Response } from "express";
 import { ProductAttributes } from "../types/productTypes";
 import { ImportedProduct, parseProductAttributes, validateProductNumbers } from "../utils/productValidator";
-import { uploadToCloudinary } from "../middlewares/upload";
 import { getSupplierCatalog } from "../integrations/supplierAdapter";
 import Category from "../models/Catergory";
 import { AlgoliaProduct, indexProducts, removeProducts } from "../integrations/searchAdapter";
@@ -66,10 +65,31 @@ export const createProduct = async (
       productData.isAvailable = productData.isAvailable === 'true';
     }
 
-    const uploadResult = await uploadToCloudinary(file.buffer);
-    productData.imgUrl = uploadResult.secure_url;
+    let image;
 
-    const newProduct = await Product.create(productData);
+    try {
+      image = await uploadProductImage({ buffer: file.buffer, mimeType: file.mimetype});
+    } catch (error) {
+      console.error('Error while uploading image to Supabase:', error);
+      return res.status(502).json({ success: false, error: 'Bildtjänsten svarar inte just nu' });
+    }
+
+    productData.imgUrl = image.url;
+    productData.imgPath = image.path;
+
+    let newProduct;
+
+    try {
+      newProduct = await Product.create(productData);
+    } catch (error) {
+      try {
+        await removeProductImage(productData.imgPath);
+
+      } catch (removeError) {
+        console.error('Error while cleaning up image:', removeError);
+      }
+        throw error;
+    }
 
     try {
       const categoryRow = await Category.findAllCategories();
@@ -165,7 +185,7 @@ export const updateProduct = async (
 
     if (file) {
       try {
-        const uploadResult = await uploadProductImage(productId, { buffer: file.buffer, mimeType: file.mimetype});
+        const uploadResult = await uploadProductImage({ buffer: file.buffer, mimeType: file.mimetype});
         productData.imgUrl = uploadResult.url;
         productData.imgPath = uploadResult.path;
       } catch (error) {

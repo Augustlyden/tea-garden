@@ -17,7 +17,6 @@ export const ProductForm = ({ initialData, onSubmit, onCancel }: ProductFormProp
   const [formValues, setFormValues] = useState<AdminProductInput>(initialData ?? emptyProduct);
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [isLoading, setIsLoading] = useState(false);
-  /* const [attributes, setAttributes] = useState([]); */
   const [error, setError] = useState('');
 
   const handleSubmit = async (e: React.SubmitEvent<HTMLFormElement>) => {
