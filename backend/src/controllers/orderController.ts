@@ -2,8 +2,9 @@ import { Request, Response } from "express";
 import { OrderInput } from "../types/orderTypes";
 import { AuthRequest, CartRequest } from "../types/tokenTypes";
 import Order from "../models/Order";
-import { NotFoundError, InsufficientStockError } from "../utils/error";
+import { NotFoundError, InsufficientStockError, NoServicePointsError } from "../utils/error";
 import { CheckoutItem, createHostedCheckout } from "../integrations/paymentAdapter";
+import { findServicePoints, ServicePoint } from "../integrations/shippingAdapter";
 
 export const createOrder = async (
   req: CartRequest<{}, {}, OrderInput>, res: Response
@@ -31,13 +32,50 @@ export const createOrder = async (
       return res.status(400).json({ success: false, error: 'Postort saknas' });
     } 
 
-    const order = await Order.create(req.cartToken, orderData);
+    if (orderData.shippingMethod !== 'servicePoint' && orderData.shippingMethod !== 'homeDelivery') {
+      return res.status(400).json({ success: false, error: 'Fraktalternativ saknas' });
+    }
+
+    let servicePoint: ServicePoint | null = null;
+
+    if (orderData.shippingMethod === 'servicePoint') {
+      if (!orderData.servicePointId) {
+        return res.status(400).json({ success: false, error: 'Ombud saknas' });
+      }
+
+      try {
+        const points = await findServicePoints(orderData.zipCode.replace(/\s/g, ''));
+        servicePoint = points.find((p) => p.id === orderData.servicePointId) ?? null;
+      } catch (error) {
+        if (!(error instanceof NoServicePointsError)) {
+          console.error('Could not verify the service point:', error);
+          return res.status(502).json({
+            success: false,
+            error: 'Kunde inte kontrollera ombudet just nu. Du kan välja hemleverans.',
+          });
+        }
+      }
+
+      if (!servicePoint) {
+        return res.status(400).json({ success: false, error: 'Det valda ombudet finns inte för postnumret' });
+      }
+    }
+
+    const order = await Order.create(req.cartToken, orderData, servicePoint);
 
     const items: CheckoutItem[] = order.products.map((p) => ({
       name: p.productName,
       price: Number(p.price),
       quantity: p.quantity,
     }));
+
+    if (order.shippingPrice > 0) {
+      items.push({
+        name: order.shippingMethod === 'servicePoint' ? 'Frakt – ombud' : 'Frakt – hemleverans',
+        price: order.shippingPrice,
+        quantity: 1,
+      });
+    }
 
     let checkout;
     
