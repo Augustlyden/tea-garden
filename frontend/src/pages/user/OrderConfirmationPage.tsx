@@ -112,6 +112,20 @@ export const OrderConfirmationPage = () => {
                   {order.zipCode} {order.city}
                 </span>
               </div>
+              {order.shippingMethod && (
+                <div className={styles.infoRow}>
+                  <span className={styles.label}>Leveranssätt</span>
+                  <span className={styles.value}>
+                    {order.shippingMethod === 'servicePoint' ? 'Ombud' : 'Hemleverans'}
+                    {order.servicePointName && (
+                      <>
+                        <br />{order.servicePointName}
+                        <br />{order.servicePointAddress}
+                      </>
+                    )}
+                  </span>
+                </div>
+              )}
               <div className={styles.infoRow}>
                 <span className={styles.label}>Orderdatum</span>
                 <span className={styles.value}>{formatDate(order.orderDate)}</span>
@@ -144,9 +158,16 @@ export const OrderConfirmationPage = () => {
             ))}
             </div>
 
+            {order.shippingMethod && (
+              <div className={styles.totalRow}>
+                <span>Frakt:</span>
+                <strong>{order.shippingPrice === 0 ? 'Fri frakt' : `${order.shippingPrice} kr`}</strong>
+              </div>
+            )}
+
             <div className={styles.totalRow}>
               <span>{label}:</span>
-              <strong className={styles.totalAmount}>{order.totalAmount} kr</strong>
+              <strong className={styles.totalAmount}>{order.totalAmount + order.shippingPrice} kr</strong>
             </div>
           </section>
 
