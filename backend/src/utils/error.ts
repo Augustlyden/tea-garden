@@ -18,3 +18,6 @@ export class InvalidFileTypeError extends Error {
     this.name = 'InvalidFileTypeError';
   }
 }
+
+export class NoServicePointsError extends Error {}
+

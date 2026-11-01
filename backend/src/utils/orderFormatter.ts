@@ -37,7 +37,12 @@ export const orderSummary = (data: OrderDatabaseRow): OrderSummary => ({
   zipCode: data.zip_code,
   city: data.city,
   currentStatus: data.current_status,
-  paymentStatus: data.payment_status
+  paymentStatus: data.payment_status,
+  shippingMethod: data.shipping_method,
+  shippingPrice: Number(data.shipping_price),
+  servicePointId: data.service_point_id,
+  servicePointName: data.service_point_name,
+  servicePointAddress: data.service_point_address,
 });
 
 export const formatOrder = (
