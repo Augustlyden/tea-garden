@@ -1,4 +1,5 @@
 import { z } from 'zod'
+import { NoServicePointsError } from '../utils/error'
 
 const API_KEY = process.env.POSTNORD_API_KEY ?? ''
 
@@ -41,6 +42,10 @@ export async function findServicePoints(postalCode: string): Promise<ServicePoin
   const response = await fetch(`${SERVICE_POINTS_URL}?${params}`, {
     signal: AbortSignal.timeout(5_000),
   })
+
+  if (response.status === 400) {
+    throw new NoServicePointsError()
+  }
   if (!response.ok) {
     throw new Error(`PostNord svarade ${response.status}`)
   }
@@ -55,4 +60,62 @@ export async function findServicePoints(postalCode: string): Promise<ServicePoin
     name: p.name,
     address: `${p.visitingAddress.streetName} ${p.visitingAddress.streetNumber ?? ''}, ${p.visitingAddress.city}`.replace(' ,', ','),
   }))
+}
+
+const TRANSIT_TIME_URL =
+  'https://atapi2.postnord.com/rest/transport/v2/transittime/addresstoaddress' 
+const SHOP_POSTAL_CODE = '11138'
+
+const TransitTimeAnswer = z.array(
+  z.object({
+    service: z.object({
+      basicServiceCode: z.string(),
+      additionalServices: z.unknown().optional(),
+    }),
+    estimatedTimeOfArrival: z
+      .object({ timeOfArrival: z.string().optional() })
+      .optional(),
+    isBookable: z.boolean(),
+  }),
+)
+
+export type DeliveryEstimates = { homeDelivery: string | null; servicePoint: string | null }
+
+function stockholmNow(): string {
+  return new Date()
+    .toLocaleString('sv-SE', { timeZone: 'Europe/Stockholm' })
+    .replace(' ', 'T')
+    .slice(0, 16)
+}
+
+export async function fetchDeliveryEstimates(postalCode: string): Promise<DeliveryEstimates> {
+  const params = new URLSearchParams({
+    apikey: API_KEY,
+    startTime: stockholmNow(),
+    originCountryCode: 'SE',
+    originPostalCode: SHOP_POSTAL_CODE,
+    destinationCountryCode: 'SE',
+    destinationPostalCode: postalCode,
+  })
+
+  const response = await fetch(`${TRANSIT_TIME_URL}?${params}`, {
+    signal: AbortSignal.timeout(5_000),
+  })
+  if (!response.ok) {
+    throw new Error(`PostNord svarade ${response.status}`)
+  }
+
+  const answer = TransitTimeAnswer.safeParse(await response.json())
+  if (!answer.success) {
+    throw new Error(`Oväntat svar från PostNord: ${z.prettifyError(answer.error)}`)
+  }
+
+  const arrivalDate = (serviceCode: string): string | null => {
+    const match = answer.data.find(
+      (t) => t.service.basicServiceCode === serviceCode && !t.service.additionalServices && t.isBookable,
+    )
+    return match?.estimatedTimeOfArrival?.timeOfArrival?.slice(0, 10) ?? null
+  }
+
+  return { homeDelivery: arrivalDate('17'), servicePoint: arrivalDate('19') }
 }
