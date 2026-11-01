@@ -1,6 +1,7 @@
 import api from "../../config/api";
 import type { AdminOrderDetail, AdminOrderResponse, CheckputSessionResponse, OrderInput, OrderInputResponse, StatusHistoryResponse } from "../../types/orderTypes";
 import type { ApiResponse } from "../../types/productTypes";
+import type { ShippingChoice } from "../../types/shippingTypes";
 
 export const orderService = {
   getAllOrders: async (): Promise<ApiResponse<AdminOrderResponse[]>> => {
@@ -23,7 +24,7 @@ export const orderService = {
     return response.data;
   },
 
-  createOrder: async (data: OrderInput): Promise<ApiResponse<CheckputSessionResponse>> => {
+  createOrder: async (data: OrderInput & ShippingChoice): Promise<ApiResponse<CheckputSessionResponse>> => {
     const response = await api.post<ApiResponse<CheckputSessionResponse>>('/orders/', data);
     return response.data;
   },

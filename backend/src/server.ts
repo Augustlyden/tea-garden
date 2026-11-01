@@ -11,7 +11,8 @@ import adminRoutes from './routes/adminRoutes';
 import cookieParser from "cookie-parser";
 import categoryRoutes from './routes/categoryRoutes';
 import currencyRoutes from './routes/currencyRoutes';
-import stripeWebhookRouter from './routes/stripeWebhookRouter';
+import stripeWebhookRoutes from './routes/stripeWebhookRoutes';
+import shippingRoutes from './routes/shippingRoutes';
 
 dotenv.config();
 
@@ -25,7 +26,7 @@ app.use(cors({
   credentials: true 
 }));
 
-app.use('/api/stripe/webhook', stripeWebhookRouter);
+app.use('/api/stripe/webhook', stripeWebhookRoutes);
 
 app.use(express.json());
 app.use(cookieParser());
@@ -37,6 +38,7 @@ app.use('/api/orders', orderRoutes);
 app.use('/api/admin', adminRoutes);
 app.use('/api/categories', categoryRoutes);
 app.use('/api/currency', currencyRoutes);
+app.use('/api/shipping', shippingRoutes);
 
 app.get('/api/health', (req, res) => {
   res.json({ success: true, message: 'Server is running' });

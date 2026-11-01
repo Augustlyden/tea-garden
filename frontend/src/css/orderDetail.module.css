@@ -236,6 +236,35 @@
   color: var(--color-text-muted);
 }
 
+.shippingInfo {
+  margin-top: 2rem;
+}
+
+.shippingRow {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  margin: 0;
+  padding: 0.75rem 0;
+  border-bottom: 1px solid var(--color-bg-main);
+  font-size: var(--text-sm);
+  color: var(--color-text-main);
+}
+
+.shippingRow:last-child {
+  border-bottom: none;
+}
+
+.shippingRow > span:last-child {
+  text-align: right;
+  font-weight: 500;
+}
+
+.shippingLabel {
+  color: var(--color-text-muted);
+  font-weight: 600;
+}
+
 @media (min-width: 768px) {
   .columnsContainer {
     grid-template-columns: 1.2fr 0.8fr; 

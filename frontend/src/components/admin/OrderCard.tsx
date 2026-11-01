@@ -66,7 +66,7 @@ export const OrderCard = ({ order }: OrderCardProps) => {
 
             <div className={styles.productInfo}>
               <p className={styles.paragraph}> Namn: <span className={styles.span}>{order.customerName}</span></p>
-              <p className={styles.paragraph}> Summa: <span className={styles.totalSpan}>{order.totalAmount} kr</span></p>
+              <p className={styles.paragraph}> Summa: <span className={styles.totalSpan}>{order.totalAmount + order.shippingPrice} kr</span></p>
             </div>
           </div>
         </Link>

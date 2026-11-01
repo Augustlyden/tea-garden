@@ -1,3 +1,5 @@
+import type { ShippingMethod } from "./shippingTypes";
+
 export type OrderStatus = 'Beställd' | 'Behandlas' | 'Levererad' | 'Återbetald';
 export type PaymentStatus = 'Väntande' | 'Betald' | 'Avbruten';
 
@@ -17,6 +19,11 @@ export interface AdminOrderResponse {
   zipCode: string;
   city: string;
   currentStatus: OrderStatus;
+  shippingMethod: ShippingMethod | null;
+  shippingPrice: number;
+  servicePointId: string | null;
+  servicePointName: string | null;
+  servicePointAddress: string | null;
 }
 
 export interface OrderProductItem {

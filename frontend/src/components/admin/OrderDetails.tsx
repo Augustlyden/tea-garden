@@ -13,14 +13,14 @@ export const OrderDetails = ({ order, onUpdate }: OrderDetailProps) => {
               <span className={styles.orderIdBadge}>Beställning #{order.orderId}</span>
               <div className={styles.dateAndPrice}>
                 <p className={styles.metaText}>Datum <span className={styles.metaValue}>{formatDate(order.orderDate)}</span></p>
-                <p className={styles.metaText}>Totalt <span className={styles.totalValue}>{order.totalAmount} kr</span></p>
+                <p className={styles.metaText}>Totalt <span className={styles.totalValue}>{order.totalAmount + order.shippingPrice} kr</span></p>
               </div>
             </div>
 
             <div className={styles.customerGrid}>
               <div>
                 <h1 className={styles.customerName}>{order.customerName}</h1>
-                <p className={styles.adress}>{order.street}, {order.zipCode} {order.city}</p>
+                <p className={styles.address}>{order.street}, {order.zipCode} {order.city}</p>
               </div>
               <div className={styles.selectContainer}>
                 <label className={styles.selectLabel}>
@@ -57,6 +57,25 @@ export const OrderDetails = ({ order, onUpdate }: OrderDetailProps) => {
                 </p>
               ))}
             </div>
+            {order.shippingMethod && (
+              <div className={styles.shippingInfo}>
+                <h2 className={styles.sectionTitle}>Frakt</h2>
+                <p className={styles.shippingRow}>
+                  <span className={styles.shippingLabel}>Leveranssätt</span>
+                  <span>{order.shippingMethod === 'servicePoint' ? 'Ombud' : 'Hemleverans'}</span>
+                </p>
+                {order.servicePointName && (
+                  <p className={styles.shippingRow}>
+                    <span className={styles.shippingLabel}>Ombud</span>
+                    <span>{order.servicePointName}<br />{order.servicePointAddress}</span>
+                  </p>
+                )}
+                <p className={styles.shippingRow}>
+                  <span className={styles.shippingLabel}>Fraktpris</span>
+                  <span>{order.shippingPrice === 0 ? 'Fri frakt' : `${order.shippingPrice} kr`}</span>
+                </p>
+              </div>
+            )}
           </article>
 
           <article className={styles.historyContainer}>

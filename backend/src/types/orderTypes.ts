@@ -1,3 +1,5 @@
+import { ShippingMethod } from "../utils/shippingPrices";
+
 export type OrderStatus = 'Beställd' | 'Behandlad' | 'Levererad' | 'Återbetald';
 export type PaymentStatus = 'Väntande' | 'Betald' | 'Avbruten'
 
@@ -21,6 +23,8 @@ export interface OrderInput {
   street: string;
   zipCode: string;
   city: string;
+  shippingMethod: ShippingMethod;
+  servicePointId?: string;
 }
 
 export interface OrderSummary {
@@ -33,6 +37,11 @@ export interface OrderSummary {
   city: string;
   currentStatus: OrderStatus;
   paymentStatus: PaymentStatus;
+  shippingMethod: ShippingMethod | null;
+  shippingPrice: number;
+  servicePointId: string | null;
+  servicePointName: string | null;
+  servicePointAddress: string | null;
 }
 
 export interface OrderInstance extends OrderSummary {
@@ -62,6 +71,11 @@ export interface OrderDatabaseRow {
   city: string;
   current_status: OrderStatus;
   payment_status: PaymentStatus;
+  shipping_method: ShippingMethod | null;
+  shipping_price: number | string;         
+  service_point_id: string | null;
+  service_point_name: string | null;
+  service_point_address: string | null;
 }
 
 export interface ItemDatabaseRow {
