@@ -80,6 +80,17 @@ class Cart {
     if (!row) return null;
     return formatCart(row);
   }
+
+  static async getGoodsTotal(cartToken: string): Promise<number> {
+    const result = await db.query(`
+      SELECT COALESCE(SUM(p.price * c.quantity), 0) AS total
+      FROM cart c
+      JOIN products p ON c.product_id = p.id
+      WHERE c.cart_token = $1;
+      `, [cartToken]
+    );
+    return Number(result.rows[0].total);
+  }
 }
 
 export default Cart;

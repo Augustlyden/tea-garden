@@ -1,4 +1,5 @@
 import db from '../config/database';
+import { ServicePoint } from '../integrations/shippingAdapter';
 import { 
   AdminOrderDetail, 
   OrderInput, 
@@ -15,6 +16,7 @@ import {
   mapStatusRows, 
   orderSummary 
 } from '../utils/orderFormatter';
+import { calculateShippingPrice } from '../utils/shippingPrices';
 
 class Order {
   private static readonly BASE_ORDER_SELECT = `
@@ -26,6 +28,11 @@ class Order {
       o.street,
       o.zip_code,
       o.city,
+      o.shipping_method,
+      o.shipping_price,
+      o.service_point_id,
+      o.service_point_name,
+      o.service_point_address,
       os.current_status
     FROM orders o
     LEFT JOIN (
@@ -42,7 +49,7 @@ class Order {
     LEFT JOIN admin a ON os.admin_id = a.id
   `;
   
-  static async create(cartToken: string, orderData: OrderInput): Promise<OrderInstance> {
+  static async create(cartToken: string, orderData: OrderInput, servicePoint: ServicePoint | null): Promise<OrderInstance> {
     const client = await db.connect();
     try {
       await client.query('BEGIN');
@@ -71,6 +78,25 @@ class Order {
       }
 
       const orderId = orderResult.rows[0].id;
+
+      const goodsTotal = Number(orderResult.rows[0].total_amount);
+      const shippingPrice = calculateShippingPrice(orderData.shippingMethod, goodsTotal);
+
+      const shippingResult = await client.query(`
+        UPDATE orders
+        SET shipping_method = $1, shipping_price = $2,
+            service_point_id = $3, service_point_name = $4, service_point_address = $5
+        WHERE id = $6
+        RETURNING *;
+      `, [
+          orderData.shippingMethod, 
+          shippingPrice,
+          servicePoint?.id ?? null, 
+          servicePoint?.name ?? null, 
+          servicePoint?.address ?? null,
+          orderId
+        ]
+      );
 
       await client.query(`
         INSERT INTO order_product 
@@ -119,7 +145,7 @@ class Order {
 
       await client.query('COMMIT');
 
-      const orderRow = orderResult.rows[0];
+      const orderRow = shippingResult.rows[0];
       const productRows = productsResult.rows;
 
       return formatOrder(orderRow, productRows);
