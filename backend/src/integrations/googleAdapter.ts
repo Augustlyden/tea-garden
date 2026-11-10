@@ -10,8 +10,8 @@ if (!CLIENT_ID || !CLIENT_SECRET || !CALLBACK_URL) {
 }
 
 const IdTokenClaims = z.object({
-  iss: z.enum(['https://accounts.google.com', 'accounts.google.com']), // issued by Google
-  aud: z.literal(CLIENT_ID), // issued to OUR app
+  iss: z.enum(['https://accounts.google.com', 'accounts.google.com']),
+  aud: z.literal(CLIENT_ID),
   exp: z.number(),
   sub: z.string().min(1),
   email: z.email(),
