@@ -14,6 +14,7 @@ import currencyRoutes from './routes/currencyRoutes';
 import stripeWebhookRoutes from './routes/stripeWebhookRoutes';
 import shippingRoutes from './routes/shippingRoutes';
 import userRoutes from './routes/userRoutes';
+import customerRoutes from "./routes/customerRoutes";
 
 dotenv.config();
 
@@ -41,6 +42,7 @@ app.use('/api/categories', categoryRoutes);
 app.use('/api/currency', currencyRoutes);
 app.use('/api/shipping', shippingRoutes);
 app.use('/api/auth', userRoutes);
+app.use('/api/account', customerRoutes);
 
 app.get('/api/health', (req, res) => {
   res.json({ success: true, message: 'Server is running' });

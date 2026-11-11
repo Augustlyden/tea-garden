@@ -14,11 +14,13 @@ if (!SESSION_TOKEN_SECRET || !CLIENT_URL) {
 const SESSION_SECONDS = 8 * 60 * 60;
 const COOKIE: CookieOptions = { 
   httpOnly: true, 
-  sameSite: 'lax', 
-  secure: process.env.NODE_ENV === 'production' 
+  sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax', 
+  secure: process.env.NODE_ENV === 'production'
 };
 const FLOW_COOKIE: CookieOptions = { 
-  ...COOKIE, path: '/api/auth/google', 
+  ...COOKIE, 
+  sameSite: 'lax',
+  path: '/api/auth/google', 
   maxAge: 10 * 60 * 1000 
 };
 

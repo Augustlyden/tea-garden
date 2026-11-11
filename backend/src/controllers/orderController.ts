@@ -36,6 +36,8 @@ export const createOrder = async (
       return res.status(400).json({ success: false, error: 'Fraktalternativ saknas' });
     }
 
+    const customerId = res.locals.customer?.id ?? null;
+
     let servicePoint: ServicePoint | null = null;
 
     if (orderData.shippingMethod === 'servicePoint') {
@@ -61,7 +63,7 @@ export const createOrder = async (
       }
     }
 
-    const order = await Order.create(req.cartToken, orderData, servicePoint);
+    const order = await Order.create(req.cartToken, orderData, servicePoint, customerId);
 
     const items: CheckoutItem[] = order.products.map((p) => ({
       name: p.productName,
@@ -110,6 +112,41 @@ export const getAllOrders = async (req: Request, res: Response) => {
   try {
     const orders = await Order.findAll();
     res.json({ success: true, data: orders });
+  } catch (error) {
+    console.error('Error while fetching orders:', error);
+    res.status(500).json({ success: false, error: 'Misslyckades att hämta beställningar' });
+  }
+};
+
+export const getOrdersByCustomer = async (req: Request, res: Response) => {
+  try {
+    const customerId = res.locals.customer?.id;
+
+    const orders = await Order.findAllOrdersByCustomer(customerId);
+    res.json({ success: true, data: orders });
+  } catch (error) {
+    console.error('Error while fetching orders:', error);
+    res.status(500).json({ success: false, error: 'Misslyckades att hämta beställningar' });
+  }
+};
+
+export const getOrderByCustomer = async (req: Request<{ id: string }>, res: Response) => {
+  try {
+    const customerId = res.locals.customer?.id;
+
+    const orderId = Number(req.params.id);
+    if (Number.isNaN(orderId) || Number.isInteger(orderId) === false) {
+      return res.status(400).json({ success: false, error: 'Ogiltigt order-ID' });
+    }
+
+    const order = await Order.findOrderByCustomerId(orderId, customerId);
+    
+    if (!order) {
+      return res.status(404).json({ success: false, error: 'Beställningen hittades ej' });
+    }
+
+    res.json({ success: true, data: order });
+  
   } catch (error) {
     console.error('Error while fetching orders:', error);
     res.status(500).json({ success: false, error: 'Misslyckades att hämta beställningar' });
