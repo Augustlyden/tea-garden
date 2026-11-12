@@ -73,7 +73,7 @@ export const handleGoogleCallback = async (req: Request, res: Response) => {
 };
 
 export const getMe = (req: Request, res: Response) => {
-  res.json({ customer: res.locals.customer });
+  res.json({ success: true, data: res.locals.customer });
 };
 
 export const logoutUser = (req: Request, res: Response) => {
