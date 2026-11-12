@@ -14,6 +14,7 @@ import { CartProvider } from './context/CartContext';
 import { CheckoutPage } from './pages/user/CheckoutPage';
 import { OrderConfirmationPage } from './pages/user/OrderConfirmationPage';
 import { HomePage } from './pages/user/HomePage';
+import { CustomerAuthProvider } from './context/CustomerContext';
 
 function App() {
   return (
@@ -49,7 +50,14 @@ function App() {
             }/>
           </Route>
           
-          <Route element={<CartProvider><Outlet /></CartProvider>}>
+          <Route element={
+            <CustomerAuthProvider>
+              <CartProvider>
+                <Outlet />
+              </CartProvider>
+            </CustomerAuthProvider>
+            }>
+              
             <Route path='/shop/products' element={
               <UserProductPage />
             }/>
