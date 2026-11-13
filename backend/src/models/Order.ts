@@ -2,6 +2,7 @@ import db from '../config/database';
 import { ServicePoint } from '../integrations/shippingAdapter';
 import { 
   AdminOrderDetail, 
+  CustomerOrderDetail, 
   OrderInput, 
   OrderInstance, 
   OrderSummary, 
@@ -10,6 +11,7 @@ import {
 } from '../types/orderTypes';
 import { InsufficientStockError, NotFoundError } from '../utils/error';
 import { 
+  formatCustomerOrder,
   formatOrder, 
   formatOrderDetail, 
   formatStatusUpdate, 
@@ -181,7 +183,7 @@ class Order {
     return rows.map(orderSummary);
   }
 
-  static async findOrderByCustomerId(id: number, customerId: number): Promise<AdminOrderDetail | null> {
+  static async findOrderByCustomerId(id: number, customerId: number): Promise<CustomerOrderDetail | null> {
     const orders = await db.query(`
       ${this.BASE_ORDER_SELECT}
       WHERE o.id = $1 AND o.customer_id = $2 AND payment_status = 'Betald';
@@ -216,7 +218,7 @@ class Order {
     const productRows = products.rows;
     const statusRows = status.rows;
 
-    return formatOrderDetail(orderData, productRows, statusRows);
+    return formatCustomerOrder(orderData, productRows, statusRows);
   }
 
   static async findHistoryByOrderId(id: number): Promise<StatusHistoryItem[]> {
