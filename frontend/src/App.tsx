@@ -15,6 +15,9 @@ import { CheckoutPage } from './pages/user/CheckoutPage';
 import { OrderConfirmationPage } from './pages/user/OrderConfirmationPage';
 import { HomePage } from './pages/user/HomePage';
 import { CustomerAuthProvider } from './context/CustomerContext';
+import { CustomerProtectedRoute } from './routes/CustomerProtectedRoute';
+import MyOrdersPage from './pages/user/MyOrdersPage';
+import MyOrderDetailPage from './pages/user/MyOrderDetailPage';
 
 function App() {
   return (
@@ -57,7 +60,7 @@ function App() {
               </CartProvider>
             </CustomerAuthProvider>
             }>
-              
+          
             <Route path='/shop/products' element={
               <UserProductPage />
             }/>
@@ -73,6 +76,16 @@ function App() {
             <Route path='/' element={
               <HomePage />
             }/>
+            <Route path='/shop/my-pages' element={
+              <CustomerProtectedRoute>
+                <MyOrdersPage />
+              </CustomerProtectedRoute>
+            }/>
+            <Route path='/shop/my-pages/:id' element={
+              <CustomerProtectedRoute>
+                <MyOrderDetailPage />
+              </CustomerProtectedRoute>
+            } />
           </Route>
         </Routes>
       </BrowserRouter>

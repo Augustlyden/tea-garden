@@ -23,7 +23,7 @@ export const Header = () => {
         {!isLoading && (
           customer ? (
             <>
-              <span className={styles.customerName}>{customer.name.split(' ')[0]}</span>
+              <Link to={'/shop/my-pages'} className={styles.link}>{customer.name.split(' ')[0]}</Link>
               <button type='button' className={styles.logoutButton} onClick={handleLogout}>
                 Logga ut
               </button>
