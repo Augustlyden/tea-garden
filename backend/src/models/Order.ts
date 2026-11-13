@@ -172,7 +172,7 @@ class Order {
   static async findAllOrdersByCustomer(customerId: number): Promise<OrderSummary[]> {
     const result = await db.query(`
       ${this.BASE_ORDER_SELECT}
-      WHERE o.customer_id = $1
+      WHERE o.customer_id = $1 AND o.payment_status = 'Betald'
       ORDER BY o.order_date DESC;
       `, [customerId]
     );
@@ -184,7 +184,7 @@ class Order {
   static async findOrderByCustomerId(id: number, customerId: number): Promise<AdminOrderDetail | null> {
     const orders = await db.query(`
       ${this.BASE_ORDER_SELECT}
-      WHERE o.id = $1 AND o.customer_id = $2;
+      WHERE o.id = $1 AND o.customer_id = $2 AND payment_status = 'Betald';
       `, [id, customerId]
     );
 
