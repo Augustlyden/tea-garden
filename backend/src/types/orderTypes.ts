@@ -18,6 +18,12 @@ export interface StatusHistoryItem {
   admin: string | null;
 }
 
+export interface CustomerStatusHistory {
+  id: number;
+  status: OrderStatus;
+  changedAt: Date;
+}
+
 export interface OrderInput {
   customerName: string;
   street: string;
@@ -51,6 +57,11 @@ export interface OrderInstance extends OrderSummary {
 export interface AdminOrderDetail extends OrderSummary {
   products: OrderProductItem[];
   history: StatusHistoryItem[];
+}
+
+export interface CustomerOrderDetail extends OrderSummary {
+  products: OrderProductItem[];
+  history: CustomerStatusHistory[];
 }
 
 export interface StatusUpdateResult {

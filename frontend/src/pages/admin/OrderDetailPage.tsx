@@ -54,6 +54,13 @@ export const OrderDetailPage = () => {
     }
   }
 
+  if (isLoading) {
+    <>
+      <Sidebar />
+      <Spinner />
+    </>
+  }
+
   if (!order) {
     return <p>Beställningen kunde inte hittas.</p>;
   }
@@ -61,21 +68,17 @@ export const OrderDetailPage = () => {
   return (
     <>
       <Sidebar />
-      {isLoading ? (
-        <Spinner />
-      ) : (
-        <main>
-          <Link className={styles.back} to={'/admin/orders'}>
-            <ChevronLeft size={18} strokeWidth={2.5} /> Tillbaka
-          </Link>
+      <main>
+        <Link className={styles.back} to={'/admin/orders'}>
+          <ChevronLeft size={18} strokeWidth={2.5} /> Tillbaka
+        </Link>
 
-          <section>
-            <OrderDetails order={order} onUpdate={handleUpdate}/>
-            
-            {error && <p className="error">{error}</p>}
-          </section>
-        </main>
-      )}
+        <section>
+          <OrderDetails order={order} onUpdate={handleUpdate}/>
+          
+          {error && <p className="error">{error}</p>}
+        </section>
+      </main>
     </>
   );
 };

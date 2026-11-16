@@ -1,5 +1,6 @@
 import { 
   AdminOrderDetail,
+  CustomerOrderDetail,
   ItemDatabaseRow, 
   OrderDatabaseRow, 
   OrderInstance, 
@@ -61,6 +62,20 @@ export const formatOrderDetail = (
   ...orderSummary(orderData),
   products: mapProductRows(productRows),
   history: mapStatusRows(statusRows)
+});
+
+export const formatCustomerOrder = (
+  orderData: OrderDatabaseRow,
+  productRows: ItemDatabaseRow[],
+  statusRows: StatusHistoryDatabaseRow[]
+): CustomerOrderDetail => ({
+  ...orderSummary(orderData),
+  products: mapProductRows(productRows),
+  history: statusRows.map(item => ({
+    id: item.id,
+    status: item.status,
+    changedAt: item.changed_at
+  }))
 });
 
 export const formatStatusUpdate = (

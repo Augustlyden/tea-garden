@@ -2,6 +2,7 @@ import db from '../config/database';
 import { ServicePoint } from '../integrations/shippingAdapter';
 import { 
   AdminOrderDetail, 
+  CustomerOrderDetail, 
   OrderInput, 
   OrderInstance, 
   OrderSummary, 
@@ -10,6 +11,7 @@ import {
 } from '../types/orderTypes';
 import { InsufficientStockError, NotFoundError } from '../utils/error';
 import { 
+  formatCustomerOrder,
   formatOrder, 
   formatOrderDetail, 
   formatStatusUpdate, 
@@ -49,19 +51,19 @@ class Order {
     LEFT JOIN admin a ON os.admin_id = a.id
   `;
   
-  static async create(cartToken: string, orderData: OrderInput, servicePoint: ServicePoint | null): Promise<OrderInstance> {
+  static async create(cartToken: string, orderData: OrderInput, servicePoint: ServicePoint | null, customerId: number | null): Promise<OrderInstance> {
     const client = await db.connect();
     try {
       await client.query('BEGIN');
 
       const orderResult = await client.query(`
         INSERT INTO orders
-          (customer_name, street, zip_code, city, total_amount)
+          (customer_name, street, zip_code, city, customer_id, total_amount)
         SELECT
-          $1, $2, $3, $4, SUM(p.price * c.quantity)
+          $1, $2, $3, $4, $5, SUM(p.price * c.quantity)
         FROM cart c
         JOIN products p ON c.product_id = p.id
-        WHERE c.cart_token = $5
+        WHERE c.cart_token = $6
         GROUP BY c.cart_token
         RETURNING *;
         `, [
@@ -69,6 +71,7 @@ class Order {
             orderData.street,
             orderData.zipCode,
             orderData.city,
+            customerId,
             cartToken
           ]
       );
@@ -168,28 +171,33 @@ class Order {
     return rows.map(orderSummary);
   }
 
-  static async findHistoryByOrderId(id: number): Promise<StatusHistoryItem[]> {
+  static async findAllOrdersByCustomer(customerId: number): Promise<OrderSummary[]> {
     const result = await db.query(`
-      ${this.BASE_STATUS_SELECT}
-      WHERE os.order_id = $1;
-      `, [id]
+      ${this.BASE_ORDER_SELECT}
+      WHERE o.customer_id = $1 AND o.payment_status = 'Betald'
+      ORDER BY o.order_date DESC;
+      `, [customerId]
     );
 
     const rows = result.rows;
-    return mapStatusRows(rows);
+    return rows.map(orderSummary);
   }
 
-  static async findById(id: number): Promise<AdminOrderDetail | null> {
+  static async findOrderByCustomerId(id: number, customerId: number): Promise<CustomerOrderDetail | null> {
+    const orders = await db.query(`
+      ${this.BASE_ORDER_SELECT}
+      WHERE o.id = $1 AND o.customer_id = $2 AND payment_status = 'Betald';
+      `, [id, customerId]
+    );
+
+    if (orders.rows.length === 0) {
+      return null;
+    }
+    
     const status = await db.query(`
       ${this.BASE_STATUS_SELECT}
       WHERE os.order_id = $1
       ORDER BY os.order_id, os.changed_at DESC;
-      `, [id]
-    );
-
-    const orders = await db.query(`
-      ${this.BASE_ORDER_SELECT}
-      WHERE o.id = $1;
       `, [id]
     );
 
@@ -207,7 +215,55 @@ class Order {
     );
 
     const orderData = orders.rows[0];
-    if (!orderData) return null;
+    const productRows = products.rows;
+    const statusRows = status.rows;
+
+    return formatCustomerOrder(orderData, productRows, statusRows);
+  }
+
+  static async findHistoryByOrderId(id: number): Promise<StatusHistoryItem[]> {
+    const result = await db.query(`
+      ${this.BASE_STATUS_SELECT}
+      WHERE os.order_id = $1;
+      `, [id]
+    );
+
+    const rows = result.rows;
+    return mapStatusRows(rows);
+  }
+
+  static async findById(id: number): Promise<AdminOrderDetail | null> {
+    const orders = await db.query(`
+      ${this.BASE_ORDER_SELECT}
+      WHERE o.id = $1;
+      `, [id]
+    );
+
+    if (orders.rows.length === 0) {
+      return null;
+    }
+    
+    const status = await db.query(`
+      ${this.BASE_STATUS_SELECT}
+      WHERE os.order_id = $1
+      ORDER BY os.order_id, os.changed_at DESC;
+      `, [id]
+    );
+
+    const products = await db.query(`
+      SELECT 
+        p.id AS product_id,
+        p.product_name,
+        p.img_url,
+        op.quantity,
+        op.price
+      FROM order_product op
+      JOIN products p ON op.product_id = p.id
+      WHERE op.order_id = $1
+      `, [id]
+    );
+
+    const orderData = orders.rows[0];
     const productRows = products.rows;
     const statusRows = status.rows;
 
