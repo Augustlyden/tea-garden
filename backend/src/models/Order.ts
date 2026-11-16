@@ -35,6 +35,7 @@ class Order {
       o.service_point_id,
       o.service_point_name,
       o.service_point_address,
+      o.customer_email,
       os.current_status
     FROM orders o
     LEFT JOIN (
@@ -58,12 +59,12 @@ class Order {
 
       const orderResult = await client.query(`
         INSERT INTO orders
-          (customer_name, street, zip_code, city, customer_id, total_amount)
+          (customer_name, street, zip_code, city, customer_id, total_amount, customer_email)
         SELECT
-          $1, $2, $3, $4, $5, SUM(p.price * c.quantity)
+          $1, $2, $3, $4, $5, SUM(p.price * c.quantity), $6
         FROM cart c
         JOIN products p ON c.product_id = p.id
-        WHERE c.cart_token = $6
+        WHERE c.cart_token = $7
         GROUP BY c.cart_token
         RETURNING *;
         `, [
@@ -72,6 +73,7 @@ class Order {
             orderData.zipCode,
             orderData.city,
             customerId,
+            orderData.customerEmail,
             cartToken
           ]
       );

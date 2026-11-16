@@ -44,6 +44,7 @@ export const orderSummary = (data: OrderDatabaseRow): OrderSummary => ({
   servicePointId: data.service_point_id,
   servicePointName: data.service_point_name,
   servicePointAddress: data.service_point_address,
+  customerEmail: data.customer_email,
 });
 
 export const formatOrder = (

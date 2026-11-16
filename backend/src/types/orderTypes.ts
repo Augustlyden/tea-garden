@@ -31,6 +31,7 @@ export interface OrderInput {
   city: string;
   shippingMethod: ShippingMethod;
   servicePointId?: string;
+  customerEmail: string | null;
 }
 
 export interface OrderSummary {
@@ -48,6 +49,7 @@ export interface OrderSummary {
   servicePointId: string | null;
   servicePointName: string | null;
   servicePointAddress: string | null;
+  customerEmail: string | null;
 }
 
 export interface OrderInstance extends OrderSummary {
@@ -87,6 +89,7 @@ export interface OrderDatabaseRow {
   service_point_id: string | null;
   service_point_name: string | null;
   service_point_address: string | null;
+  customer_email: string | null;
 }
 
 export interface ItemDatabaseRow {

@@ -36,6 +36,10 @@ export const createOrder = async (
       return res.status(400).json({ success: false, error: 'Fraktalternativ saknas' });
     }
 
+    if (!orderData.customerEmail || !orderData.customerEmail.includes('@')) {
+      return res.status(400).json({ success: false, error: 'Ogiltig e-postadress' });
+    }
+
     const customerId = res.locals.customer?.id ?? null;
 
     let servicePoint: ServicePoint | null = null;
