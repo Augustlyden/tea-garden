@@ -99,3 +99,41 @@ Med **PostNord** skickas kundens postnummer till en extern part, och adress och 
 **Kontroll:** Jag jämförde med portalen och körde varje anrop i Postman, både mot PostNord och via min server, inklusive felfall (fel nyckel, okänt postnummer, ombud som inte hör till postnumret). Servern sparar ombudets namn och adress från PostNords svar, aldrig från React.
 
 **Reflektion:** AI:n gav en bra struktur snabbt, men koden var inte färdig. Den hade en namnkrock och saknade fält i mina typer, och den byggde på en föråldrad endpoint tills jag läste portalen. Därför är kontrollen mot dokumentationen den viktigaste delen. Nästa gång läser jag dokumentationen först och ber sedan AI:n skriva koden.
+
+## Autentisering med Google (Labb 6)
+
+Kunder loggar in med sitt Google-konto via OAuth 2.0 och OpenID Connect. 
+
+### Inloggningsflödet
+1. Kunden klickar på "Logga in med Google". Länken går till min server (`/api/auth/google`).
+2. Servern skapar `state` och en PKCE-verifier, sparar dem i httpOnly-cookies (10 minuter) och skickar kunden till Google med scope `openid email profile`.
+3. Kunden loggar in hos Google, som skickar tillbaka kunden till `/api/auth/google/callback` med en engångskod och `state`.
+4. Servern kontrollerar att `state` matchar och byter koden mot tokens, med client secret och PKCE-verifier.
+5. Servern läser ID-token och kontrollerar att den är utfärdad av Google (`iss`), till min app (`aud`) och inte har gått ut (`exp`), och validerar uppgifterna med Zod.
+6. Kunden hittas via Googles `sub`, eller skapas vid första inloggningen. E-postadressen används inte för att känna igen kunden, och konton slås inte ihop.
+7. Servern skapar shoppens egen JWT, lägger den i en httpOnly-cookie och skickar kunden tillbaka till shoppen.
+
+**Jag använder både `state` och PKCE.**
+- **`state`** skyddar mot att någon lurar min callback att slutföra en inloggning som kunden aldrig startade (CSRF). Matchar värdet inte det som sparades vid start avvisas inloggningen.
+- **PKCE** skyddar mot att en stulen eller avlyssnad kod används av någon annan. Google får bara en hash av verifiern vid start, och originalet visas först när koden byts. Utan verifiern är koden värdelös.
+
+### Tokens
+| Token | Används till | Sparas | Giltighet |
+|---|---|---|---|
+| Googles kod | Bytas mot tokens | Sparas inte | Kort och kan bara användas en gång |
+| Googles ID-token (JWT) | Läsa `sub`, e-post och namn | Sparas inte, kastas efter inloggningen | Ca 1 timme (jag använder den bara en gång) |
+| Googles access token | Behövs inte, shoppen anropar inga Google-API:er | Sparas inte | Ca 1 timme |
+| Shoppens egen JWT | Hålla kunden inloggad | httpOnly-cookie `session` i webbläsaren | 8 timmar |
+| `state` och PKCE-verifier | Skydda en inloggning | httpOnly-cookies, raderas i callbacken | 10 minuter |
+
+Jag ber inte om någon refresh token, eftersom shoppen inte behöver Googles data efter inloggningen. Signaturen på ID-token kontrolleras inte separat, eftersom den hämtas direkt från Googles token-endpoint över HTTPS med min client secret, och i stället valideras innehållet enligt punkt 5.
+
+### Session eller JWT
+Jag valde en **JWT i en httpOnly-cookie**. Den innehåller kundens eget id från min databas (inte Googles `sub`), e-post och namn. Servern verifierar den vid varje anrop till skyddade routes, och utan giltig cookie svarar Mina sidor 401.
+
+**Varför JWT:**
+- **Ingen sessionslagring.** Servern kör på Renders gratisnivå och startar om efter inaktivitet. Sessioner i serverns minne skulle försvinna, och server-sessioner hade krävt en tabell i databasen. JWT kräver bara att servern kan verifiera signaturen.
+- **Samma mönster som admin.** Admin använder redan JWT i en httpOnly-cookie, så koden för att verifiera och skydda routes är densamma.
+- **Skydd mot XSS.** En httpOnly-cookie kan inte läsas av JavaScript. Den är `secure` i produktion, och eftersom frontend (Vercel) och backend (Render) ligger på olika domäner har den `SameSite=None` där (lokalt `Lax`).
+
+**Nackdel jag har accepterat:** en JWT går inte att återkalla före utgångstiden. Utloggningen raderar cookien i webbläsaren, men en stulen token skulle gälla i upp till 8 timmar. Jag bedömde att det var rimligt eftersom tokenen inte innehåller känsliga uppgifter och kunden bara kan läsa sina egna ordrar. Med server-sessioner hade jag kunnat stänga en session direkt, men det krävde mer komplexitet än butiken motiverar.
