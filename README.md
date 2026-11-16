@@ -32,12 +32,14 @@ Alla hemligheter ligger i `backend/.env` (gitignorerad). `.env.example` visar vi
 | Stripe | Testläge | `STRIPE_SECRET_KEY`, `STRIPE_WEBHOOK_SECRET` |
 | Supabase | Projekt med publik bucket | `SUPABASE_URL`, `SUPABASE_SECRET_KEY`, `SUPABASE_BUCKET` |
 | PostNord | Developer-portalen (sandbox) | `POSTNORD_API_KEY` |
+| Google (OAuth) | OAuth-klient av typen Web application i Google Cloud Console | `GOOGLE_CLIENT_ID`, `GOOGLE_CLIENT_SECRET`, `GOOGLE_CALLBACK_URL`, `SESSION_TOKEN_SECRET`, `CLIENT_URL` |
 
 ### Testa integrationerna lokalt
 - **Leverantör + Algolia:** Logga in som admin och anropa `POST /api/admin/products/import/csv` (eller `/xml`) för att hämta leverantörens katalog. Produkterna sparas i databasen och indexeras i Algolia. Om indexeringen misslyckas står det i svaret (`searchIndexed: false`), och då kan man köra om den separata omindexeringsrouten.
 - **Stripe:** kör `stripe listen --forward-to localhost:<port>/api/stripe/webhook` och använd testkortet 4242 4242 4242 4242.
 - **Supabase:** ladda upp en bild som admin på en produkt (JPEG/PNG, max 4 MB).
 - **PostNord:** sandbox-nyckeln räcker. Testa med ett giltigt svenskt postnummer, t.ex. 111 22.
+- **Google:** lägg callback-adressen (t.ex. `http://localhost:3000/api/auth/google/callback`) som *Authorized redirect URI* i Google Cloud och samma adress i `GOOGLE_CALLBACK_URL`. Gå sedan till shoppen och klicka på "Logga in". Se avsnittet om kundinloggning nedan.
 
 ## 2. Reflektion
 
