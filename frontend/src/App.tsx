@@ -16,8 +16,8 @@ import { OrderConfirmationPage } from './pages/user/OrderConfirmationPage';
 import { HomePage } from './pages/user/HomePage';
 import { CustomerAuthProvider } from './context/CustomerContext';
 import { CustomerProtectedRoute } from './routes/CustomerProtectedRoute';
-import MyOrdersPage from './pages/user/MyOrdersPage';
-import MyOrderDetailPage from './pages/user/MyOrderDetailPage';
+import { MyOrdersPage } from './pages/user/MyOrdersPage';
+import { MyOrderDetailPage } from './pages/user/MyOrderDetailPage';
 
 function App() {
   return (

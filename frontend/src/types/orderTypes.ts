@@ -64,6 +64,10 @@ export interface OrderDetailProps {
   onUpdate: (status: OrderStatus) => void;
 }
 
+export interface CustomerDetailProps {
+  order: AdminOrderDetail;
+}
+
 export interface CheckputSessionResponse {
   url: string;
 }
