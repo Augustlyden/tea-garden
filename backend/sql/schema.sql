@@ -44,6 +44,7 @@ CREATE TABLE IF NOT EXISTS orders (
   total_amount NUMERIC(10, 2) NOT NULL,
   order_date TIMESTAMPTZ DEFAULT NOW(),
   customer_name VARCHAR(255) NOT NULL,
+  customer_email VARCHAR(255),
   street VARCHAR(255) NOT NULL,
   zip_code VARCHAR(20) NOT NULL,
   city VARCHAR(255) NOT NULL,

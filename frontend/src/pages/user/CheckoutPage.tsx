@@ -14,6 +14,7 @@ const emptyCustomer: OrderInput = {
   street: '',
   zipCode: '',
   city: '',
+  customerEmail: '',
 };
 
 const formatDate = (isoDate: string) =>
@@ -143,6 +144,20 @@ export const CheckoutPage = () => {
               id="customerName"
               disabled={isLoading}
               className={styles.input} 
+              onChange={handleChange}
+            />
+          </div>
+
+          <div className={styles.inputGroup}>
+            <label className={styles.label} htmlFor="customerEmail">
+              <span className={styles.important}>*</span> E-postadress
+            </label>
+            <input 
+              type="email"
+              name="customerEmail"
+              id="customerEmail"
+              disabled={isLoading}
+              className={styles.input}
               onChange={handleChange}
             />
           </div>

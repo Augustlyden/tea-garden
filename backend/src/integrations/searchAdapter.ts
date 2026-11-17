@@ -1,5 +1,5 @@
-import { algoliasearch, BatchResponse } from 'algoliasearch';
-import { success } from 'zod';
+import { algoliasearch } from 'algoliasearch';
+import { z } from 'zod';
 
 const APP_ID = process.env.ALGOLIA_APP_ID ?? '';
 const ADMIN_KEY = process.env.ALGOLIA_ADMIN_KEY ?? '';
@@ -29,6 +29,17 @@ export interface AlgoliaProduct {
   desc: string | null;
   attributes: Record<string, any> | null;
 }
+
+const SearchHit = z.object({
+  objectID: z.string().regex(/^\d+$/),
+  productName: z.string(),
+  categoryName: z.string().nullish(),
+  price: z.number(),
+  inStock: z.number(),
+  imgUrl: z.string().nullish(),
+  desc: z.string().nullish(),
+  attributes: z.record(z.string(), z.any()).nullish(),
+});
 
 export const indexProducts = async (products: AlgoliaProduct[]) => {
   const records: AlgoliaRecord[] = [];
@@ -77,15 +88,21 @@ export const searchProducts = async (params: SearchParams) => {
   
   const products: AlgoliaProduct[] = [];
   for (const hit of response.hits) {
+    const parsed = SearchHit.safeParse(hit);
+    if (!parsed.success) {
+      console.error('Invalid Algolia hit skipped:', parsed.error.issues);
+      continue;
+    }
+    const h = parsed.data;
     products.push({
-      productId: Number(hit.objectID),
-      productName: hit.productName,
-      categoryName: hit.categoryName,
-      price: hit.price,
-      inStock: hit.inStock,
-      desc: hit.desc,
-      imgUrl: hit.imgUrl,
-      attributes: hit.attributes
+      productId: Number(h.objectID),
+      productName: h.productName,
+      categoryName: h.categoryName ?? undefined,
+      price: h.price,
+      inStock: h.inStock,
+      imgUrl: h.imgUrl ?? null,
+      desc: h.desc ?? null,
+      attributes: h.attributes ?? null,
     });
   }
 

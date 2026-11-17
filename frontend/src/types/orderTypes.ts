@@ -24,6 +24,7 @@ export interface AdminOrderResponse {
   servicePointId: string | null;
   servicePointName: string | null;
   servicePointAddress: string | null;
+  customerEmail: string | null;
 }
 
 export interface OrderProductItem {
@@ -36,6 +37,7 @@ export interface OrderProductItem {
 
 export interface OrderInput {
   customerName: string;
+  customerEmail: string;
   street: string;
   zipCode: string;
   city: string;

@@ -3,6 +3,9 @@ import { verifyWebhook } from "../integrations/paymentAdapter";
 import Order from "../models/Order";
 import Product from "../models/UserProduct";
 import { AlgoliaProduct, indexProducts } from "../integrations/searchAdapter";
+import { AdminOrderDetail } from "../types/orderTypes";
+import { orderConfirmation } from "../lib/orderConfirmation";
+import { sendEmail } from "../integrations/emailAdapter";
 
 export const stripeWebhook = async (req: Request, res: Response) => {
   const signature = req.headers['stripe-signature'];
@@ -41,15 +44,39 @@ export const stripeWebhook = async (req: Request, res: Response) => {
           console.warn('Order already handled or not found:', orderId);
           break;
         }
+
+        let order: AdminOrderDetail | null = null;
+
+        try {
+          order = await Order.findById(orderId);
+        } catch (error) {
+          console.error('Could not fetch order after payment:', error);
+        }
+
+        if (!order) {
+          console.warn('Order not found', orderId);
+          break;
+        }
+
+        try {
+          if (!order.customerEmail) {
+            console.warn('[EMAIL] No customer email on order', orderId);
+          } else {
+            const { subject, html, text } = orderConfirmation(order);
+            const emailId = await sendEmail({
+              to: order.customerEmail,
+              subject,
+              html,
+              text,
+              idempotencyKey: `order-confirmation/${order.orderId}`,
+            });
+            console.log('[EMAIL] Sent', subject, '- Resend id:', emailId);
+          }
+        } catch (error) {
+          console.error('[EMAIL] Failed:', error);
+        }
   
         try {
-          const order = await Order.findById(orderId);
-
-          if (!order) {
-            console.warn('Order not found', orderId);
-            break;
-          }
-  
           const algoliaProducts: AlgoliaProduct[] = [];
           for (const product of order.products) {
             const productData = await Product.findByIdUser(product.productId);

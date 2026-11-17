@@ -24,7 +24,7 @@ export const Header = () => {
           customer ? (
             <>
               <Link to={'/shop/my-pages'} className={styles.link}>{customer.name.split(' ')[0]}</Link>
-              <button type='button' className={styles.logoutButton} onClick={handleLogout}>
+              <button type='button' className={`${styles.logoutButton} ${styles.link}`} onClick={handleLogout}>
                 Logga ut
               </button>
             </>
