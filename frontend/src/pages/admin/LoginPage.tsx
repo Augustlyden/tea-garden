@@ -69,8 +69,8 @@ export const LoginPage = () => {
               </div>
               {error && <p className="error">{error} <br /> Prova att ladda om sidan.</p>}
               <button className={styles.button} type="submit"> Logga in </button>
+              <a className={styles.link} href={LOGIN_URL}>Logga in med GitHub</a>
             </form>
-            <a className={`${styles.link} ${styles.button}`} href={LOGIN_URL}>Logga in med GitHub</a>
           </div>
         </div>
       )}

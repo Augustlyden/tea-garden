@@ -123,7 +123,7 @@ export const handleGithubCallback = async (req: Request, res: Response) => {
     const token = generateToken(loggedUser.id, loggedUser.username);
     
     res.cookie('token', token, { ...COOKIE, maxAge: COOKIE_MAX_AGE });
-    res.redirect(CLIENT_URL);
+    res.redirect(CLIENT_URL + '/admin/products');
   } catch (err) {
     console.error(err);
     res.redirect(CLIENT_URL + '/admin/login/?error=github');
