@@ -2,7 +2,7 @@ import { ArrowRight, Leaf } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import styles from '../../css/homePage.module.css'
 import { Header } from '../../components/user/Header';
-import { LoginErrorBanner } from '../../components/user/LoginErrorBanner';
+import { LoginErrorBanner } from '../../components/shared/LoginErrorBanner';
 
 export const HomePage = () => {
   const teaGuide = [

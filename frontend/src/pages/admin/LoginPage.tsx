@@ -3,6 +3,10 @@ import { useAuth } from "../../context/AuthContext";
 import { Navigate } from "react-router-dom";
 import styles from "../../css/login.module.css";
 import { Spinner } from "../../components/shared/Spinner";
+import api from '../../config/api';
+import { LoginErrorBanner } from "../../components/shared/LoginErrorBanner";
+
+const LOGIN_URL = `${api.defaults.baseURL}/admin/github`;
 
 export const LoginPage = () => {
   const [username, setUsername] = useState('');
@@ -27,6 +31,7 @@ export const LoginPage = () => {
 
   return (
     <>
+      <LoginErrorBanner />
       {isLoading ? (
         <Spinner />
       ) : (
@@ -63,8 +68,9 @@ export const LoginPage = () => {
                 />
               </div>
               {error && <p className="error">{error} <br /> Prova att ladda om sidan.</p>}
-              <button className={styles.button} type="submit"> Login </button>
+              <button className={styles.button} type="submit"> Logga in </button>
             </form>
+            <a className={`${styles.link} ${styles.button}`} href={LOGIN_URL}>Logga in med GitHub</a>
           </div>
         </div>
       )}

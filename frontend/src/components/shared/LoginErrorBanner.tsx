@@ -7,6 +7,8 @@ const ERROR_MESSAGE = new Map<string, string>([
   ['state', 'Inloggningen kunde inte säkerställas av särkerhetsskäl. Försök logga in igen.'],
   ['not-verified', 'Din Google e-postadress är inte verifierad, så vi kan inte logga in dig med den.'],
   ['google', 'Något gick fel vid inloggningen med Google. Försök igen om en stund.'],
+  ['not-admin', 'Detta konto har inte administratör behörighet.'],
+  ['github', 'Något gick fel vid inloggningen med GitHub. Försök igen om en stund.']
 ]);
 
 export const LoginErrorBanner = () => {
