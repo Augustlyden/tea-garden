@@ -4,7 +4,8 @@ import bcrypt from 'bcrypt';
 import { generateToken } from "../utils/jwt";
 import { AuthRequest } from "../types/tokenTypes";
 import { randomString, toCodeChallenge } from "../lib/pkce";
-import { exchangeCode, getAuthorizeUrl, getUser } from "../integrations/githubAdapter";
+import { exchangeCode, getAuthorizeUrl, getUser, listOpenIssues, createIssue } from "../integrations/githubAdapter";
+import { z } from 'zod';
 
 const ADMINS = process.env.ADMIN_GITHUB_LOGINS?.split(',') ?? [];
 const CLIENT_URL = process.env.CLIENT_URL;
@@ -127,5 +128,38 @@ export const handleGithubCallback = async (req: Request, res: Response) => {
   } catch (err) {
     console.error(err);
     res.redirect(CLIENT_URL + '/admin/login/?error=github');
+  }
+};
+
+export const getIssues = async (req: Request, res: Response) => {
+  try {
+    const issues = await listOpenIssues();
+    res.json({ success: true, data: issues });
+  } catch (error) {
+    console.error('Error while retrieving issues from GitHub:', error);
+    res.status(502).json({ success: false, error: 'Misslyckades att hämta Issues från GitHub' });
+  }
+};
+
+const IssueBody = z.object({
+  title: z.string().trim().min(1).max(100),
+  description: z.string().trim().min(1).max(2000)
+});
+
+export const openIssue = async (req: AuthRequest, res: Response) => {
+  const username = req.admin!.username;
+  const parsed = IssueBody.safeParse(req.body);
+
+  if (!parsed.success) {
+    res.status(400).json({ success: false, error: 'Title or Description has the wrong format' });
+    return;
+  }
+  
+  try {
+    const issue = await createIssue(parsed.data.title, `${parsed.data.description}\n\n---\nReported by admin ${username} in the admin panel.`);
+    res.status(201).json({ success: true, data: issue });
+  } catch (error) {
+    console.error('Error while creating issue in GitHub', error);
+    res.status(502).json({ success: false, error: 'GitHub did not create the issue. Check GITHUB_ISSUES_TOKEN and GITHUB_REPO.' })
   }
 };
