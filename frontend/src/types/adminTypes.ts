@@ -15,3 +15,18 @@ export interface AuthContextType {
   login: (username: string, password: string) => Promise<{ success: boolean; error?: string }>;
   logout: () => Promise<void>;
 }
+
+export interface Issue {
+  number: number;
+  title: string;
+  url: string;
+}
+
+export interface IssueListItem extends Issue {
+  author: string;
+}
+
+export interface IssueInput {
+  title: string;
+  description: string;
+}

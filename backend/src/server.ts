@@ -1,7 +1,6 @@
 import express from "express";
 import cors from 'cors';
 import dotenv from 'dotenv';
-/* import path from "path"; */
 import { initDatabase } from "./config/dbInit";
 import adminProductRoutes from './routes/adminProductRoutes';
 import userProductRoutes from './routes/userProductRoutes';
