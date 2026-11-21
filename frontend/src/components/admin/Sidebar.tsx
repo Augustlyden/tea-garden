@@ -51,6 +51,7 @@ export const Sidebar = () => {
           <Link className={styles.link} to="/admin/products">Produkter</Link>
           <Link className={styles.link} to="/admin/products/create">Skapa Produkt</Link>
           <Link className={styles.link} to="/admin/orders">Beställningar</Link>
+          <Link className={styles.link} to="/admin/issues">GitHub Issues</Link>
           <button disabled={isLoading} onClick={logoutAdmin} className={styles.logout}>
             Logga Ut
           </button>

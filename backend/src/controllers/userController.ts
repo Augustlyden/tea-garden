@@ -64,7 +64,6 @@ export const handleGoogleCallback = async (req: Request, res: Response) => {
       { expiresIn: SESSION_SECONDS }
     )
     res.cookie('session', token, { ...COOKIE, maxAge: SESSION_SECONDS * 1000 });
-    console.log('[OAUTH] 3. Logged in – the shop\'s own cookie is set');
     res.redirect(CLIENT_URL);
   } catch (err) {
     console.error(err);
