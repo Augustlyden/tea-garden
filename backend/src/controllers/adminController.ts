@@ -21,8 +21,8 @@ const COOKIE: CookieOptions = {
 };
 
 const COOKIE_MAX_AGE = process.env.NODE_ENV === 'production'
-  ? 24 * 60 * 60 * 1000
-  : 7 * 24 * 60 * 60 * 1000;
+  ? 8 * 60 * 60 * 1000
+  : 24 * 60 * 60 * 1000;
 
 const FLOW_COOKIE: CookieOptions = { 
   ...COOKIE, 

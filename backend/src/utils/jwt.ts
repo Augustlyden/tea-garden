@@ -12,9 +12,9 @@ export const generateToken = (adminId: number, username: string) => {
   return jwt.sign(
     { id: adminId, username },
     jwtSecret,
-    { expiresIn: (process.env.JWT_EXPIRES_IN || '24h') as SignOptions['expiresIn'] }
+    { expiresIn: (process.env.JWT_EXPIRES_IN || '8h') as SignOptions['expiresIn'] }
   );
-}
+};
 
 export const verifyToken = (token: string): AdminPayload | null => {
   try {
@@ -22,4 +22,4 @@ export const verifyToken = (token: string): AdminPayload | null => {
   } catch (error) {
     return null;
   }
-}
+};
