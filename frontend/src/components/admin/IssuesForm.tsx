@@ -1,19 +1,17 @@
 import React, { useState } from "react";
-import type { IssueInput } from "../../types/adminTypes";
+import type { IssueInput, IssuesFormProps } from "../../types/adminTypes";
 import { adminService } from "../../services/admin/adminService";
-import styles from "../../css/issues.module.css";
-import { useNavigate } from "react-router-dom";
+import styles from "../../css/issuesForm.module.css";
 
 const emptyIssue: IssueInput = {
   title: '',
   description: '',
 };
 
-export const IssuesForm = () => {
+export const IssuesForm = ({ onCreated }: IssuesFormProps) => {
   const [formValues, setFormValues] = useState<IssueInput>(emptyIssue);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
-  const navigate = useNavigate();
 
   const handleSubmit = async (e: React.SubmitEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -40,12 +38,14 @@ export const IssuesForm = () => {
     setIsLoading(true);
     try {
       await adminService.createIssue(data);
+      setFormValues(emptyIssue);
+      onCreated();
     } catch (error) {
       setError(error instanceof Error ? error.message : 'Något gick fel');
     } finally {
       setIsLoading(false);
     }
-  }
+  };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
@@ -74,7 +74,7 @@ export const IssuesForm = () => {
         </div>
 
         <div className={styles.inputGroup}>
-          <label className={styles.label} htmlFor="description">Titel</label>
+          <label className={styles.label} htmlFor="description">Beskrivning</label>
           <textarea 
             name="description"
             onChange={handleChange}
@@ -92,8 +92,8 @@ export const IssuesForm = () => {
           <button className={styles.button} disabled={isLoading} type="submit">
             Skapa Issue
           </button>
-          <button className={styles.cancel} disabled={isLoading} onClick={() => navigate('/admin/issues')}>
-            Avbryt
+          <button type="button" className={styles.clear} disabled={isLoading} onClick={() => setFormValues(emptyIssue)}>
+            Rensa
           </button>
         </div>
       </form>
