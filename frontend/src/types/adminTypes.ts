@@ -30,3 +30,11 @@ export interface IssueInput {
   title: string;
   description: string;
 }
+
+export interface IssuesListProps {
+  issues: IssueListItem[];
+}
+
+export interface IssuesFormProps {
+  onCreated: () => void | Promise<void>
+}

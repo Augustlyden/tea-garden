@@ -18,6 +18,7 @@ import { CustomerAuthProvider } from './context/CustomerContext';
 import { CustomerProtectedRoute } from './routes/CustomerProtectedRoute';
 import { MyOrdersPage } from './pages/user/MyOrdersPage';
 import { MyOrderDetailPage } from './pages/user/MyOrderDetailPage';
+import { IssuesPage } from './pages/admin/IssuesPage';
 
 function App() {
   return (
@@ -49,6 +50,11 @@ function App() {
             <Route path='/admin/orders/:id' element={
               <ProtectedRoute>
                 <OrderDetailPage />
+              </ProtectedRoute>
+            }/>
+            <Route path='/admin/issues' element={
+              <ProtectedRoute>
+                <IssuesPage />
               </ProtectedRoute>
             }/>
           </Route>
